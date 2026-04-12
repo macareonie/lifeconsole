@@ -2,7 +2,7 @@
 
 > Track job applications and their different phases i.e interview rounds, offer status etc.
 
-Personal full-stack project bui;t with React (Vite) + Typescript frontend and Node.js/Express + Typescript backend.
+Personal full-stack project built with React (Vite) + Typescript frontend and Node.js/Express + Typescript backend.
 
 ## Features (Tentative)
 
