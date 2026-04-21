@@ -29,7 +29,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "User already exists" });
   }
 
-  let { error } = await db.auth.signUp({
+  let { data, error } = await db.auth.signUp({
     email: email,
     password: password,
   });
@@ -50,6 +50,7 @@ export const register = async (req: Request, res: Response) => {
       message: `User ${username} registered successfully`,
       success: true,
       redirect: "/test",
+      access_token: data.session?.access_token,
     });
   }
 };
@@ -57,7 +58,7 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  let { error } = await db.auth.signInWithPassword({
+  let { data, error } = await db.auth.signInWithPassword({
     email: email,
     password: password,
   });
@@ -69,6 +70,7 @@ export const login = async (req: Request, res: Response) => {
       message: "User logged in successfully",
       success: true,
       redirect: "/test",
+      access_token: data.session?.access_token,
     });
   }
 };

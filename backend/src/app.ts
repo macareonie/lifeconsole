@@ -1,15 +1,15 @@
 import express from "express";
 import { env } from "./config/env.js";
 import authRouter from "./modules/auth/auth.routes.js";
+import { authMiddleware } from "./middleware/auth.middleware.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
 app.use(express.json());
-
 app.use("/auth", authRouter);
 app.use(errorMiddleware);
 
-app.get("/test", (req, res) => {
+app.get("/test", authMiddleware, (req, res) => {
   res.send("Test endpoint");
 });
 app.get("/", (req, res) => {
