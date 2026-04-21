@@ -32,6 +32,9 @@ export const register = async (req: Request, res: Response) => {
   let { data, error } = await db.auth.signUp({
     email: email,
     password: password,
+    options: {
+      data: { display_name: username },
+    },
   });
 
   if (error) {
@@ -56,10 +59,20 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+
+  let { data: userData, error: userError } = await db
+    .from("users")
+    .select("email")
+    .eq("username", username)
+    .single();
+
+  if (userError) {
+    return res.status(400).json({ error: "Invalid username or password" });
+  }
 
   let { data, error } = await db.auth.signInWithPassword({
-    email: email,
+    email: userData?.email,
     password: password,
   });
 
@@ -67,10 +80,10 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ error: error.message });
   } else {
     return res.status(200).json({
-      message: "User logged in successfully",
+      message: `User ${username} logged in successfully`,
       success: true,
       redirect: "/test",
-      access_token: data.session?.access_token,
+      session: data.session,
     });
   }
 };
