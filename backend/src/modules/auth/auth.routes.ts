@@ -5,13 +5,14 @@ import { register, login } from "./auth.controller.js";
 
 const authRouter = Router();
 
-const validateUser = [
+const validateNewUser = [
   body("email")
     .notEmpty()
     .withMessage("Email is required")
     .bail()
     .isEmail()
     .withMessage("Invalid email format"),
+  body("username").notEmpty().withMessage("Username is required"),
   body("password")
     .notEmpty()
     .withMessage("Password is required")
@@ -20,8 +21,13 @@ const validateUser = [
     .withMessage("Password must be at least 8 characters long"),
 ];
 
-authRouter.post("/register", validateInputs(validateUser), register);
+const validateExistingUser = [
+  body("username").notEmpty().withMessage("Username is required"),
+  body("password").notEmpty().withMessage("Password is required"),
+];
 
-authRouter.post("/login", validateInputs(validateUser), login);
+authRouter.post("/register", validateInputs(validateNewUser), register);
+
+authRouter.post("/login", validateInputs(validateExistingUser), login);
 
 export default authRouter;

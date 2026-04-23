@@ -8,7 +8,7 @@ async function checkUserExists(email: string): Promise<[boolean, boolean]> {
     .from("users")
     .select("*")
     .eq("email", email)
-    .single();
+    .maybeSingle();
   if (error) {
     hasError = true;
     return [false, hasError];
@@ -22,7 +22,9 @@ export const register = async (req: Request, res: Response) => {
   const [userExists, hasError] = await checkUserExists(email);
 
   if (hasError) {
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error: Checking user existence" });
   }
 
   if (userExists) {
@@ -49,7 +51,7 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ error: userError.message });
     }
 
-    return res.status(201).json({
+    return res.status(200).json({
       message: `User ${username} registered successfully`,
       success: true,
       redirect: "/test",
@@ -71,10 +73,14 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Invalid username or password" });
   }
 
+  const email = userData?.email;
+  console.log(email);
   let { data, error } = await db.auth.signInWithPassword({
-    email: userData?.email,
+    email: email,
     password: password,
   });
+
+  console.log("Login - auth data:", data, "auth error:", error);
 
   if (error) {
     return res.status(400).json({ error: error.message });
