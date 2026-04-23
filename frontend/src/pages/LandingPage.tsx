@@ -1,8 +1,8 @@
 const LandingPage = () => {
   return (
-    <div>
-      <h1>Landing page</h1>
-    </div>
+    <>
+      <h1>Welcome to LifeConsole</h1>
+    </>
   );
 };
 
