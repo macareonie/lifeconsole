@@ -4,73 +4,92 @@ import SignupForm from "../features/auth/SignupForm";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
+type SignupFormValues = {
+  email: string;
+  username: string;
+  password: string;
+};
+
+type LoginFormValues = {
+  username: string;
+  password: string;
+};
+
 const LoginPage = () => {
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [signupLoading, setSignupLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [signupError, setSignupError] = useState<string | null>(null);
 
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupUsername, setSignupUsername] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleLogin = async () => {
-    setLoading(true);
-    setError(null);
+  const handleLogin = async (data: LoginFormValues) => {
+    setLoginLoading(true);
+    setLoginError(null);
     try {
-      await login({ username: loginUsername, password: loginPassword });
+      await login(data);
       navigate("/");
     } catch (err) {
-      setError((err as Error).message);
+      setLoginError((err as Error).message);
     } finally {
-      setLoading(false);
+      setLoginLoading(false);
     }
   };
 
-  const handleSignup = async () => {
-    setLoading(true);
-    setError(null);
+  const handleSignup = async (data: SignupFormValues) => {
+    setSignupLoading(true);
+    setSignupError(null);
 
     try {
-      await signup({
-        email: signupEmail,
-        username: signupUsername,
-        password: signupPassword,
-      });
+      await signup(data);
       navigate("/");
     } catch (err) {
-      setError((err as Error).message);
+      setSignupError((err as Error).message);
     } finally {
-      setLoading(false);
+      setSignupLoading(false);
     }
   };
 
   return (
-    <div>
-      <LoginForm
-        username={loginUsername}
-        setUsername={setLoginUsername}
-        password={loginPassword}
-        setPassword={setLoginPassword}
-        onSubmit={handleLogin}
-        loading={loading}
-        error={error}
-      />
-      <SignupForm
-        email={signupEmail}
-        setEmail={setSignupEmail}
-        username={signupUsername}
-        setUsername={setSignupUsername}
-        password={signupPassword}
-        setPassword={setSignupPassword}
-        onSubmit={handleSignup}
-        loading={loading}
-        error={error}
-      />
+    <div className="min-h-screen bg-neutral-100 px-4 py-8">
+      <div className="mx-auto grid min-h-[80vh] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-2xl md:grid-cols-2">
+        <div className="flex items-center justify-center bg-neutral-50 p-8 md:p-12">
+          <div className="w-full max-w-md space-y-8">
+            <div className="space-y-2 text-center">
+              <h1 className="text-5xl font-bold tracking-tight text-neutral-900">
+                life console
+              </h1>
+              <p className="text-sm text-neutral-500">
+                Sign in to access features
+              </p>
+            </div>
+
+            <LoginForm
+              onSubmit={handleLogin}
+              loading={loginLoading}
+              error={loginError}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center bg-cyan-400 p-8 text-white md:p-12">
+          <div className="w-full max-w-md space-y-8">
+            <div className="space-y-2 text-center">
+              <h2 className="text-4xl font-bold tracking-tight">Sign Up</h2>
+              <p className="text-sm text-rose-100">
+                Create an account to get started
+              </p>
+            </div>
+
+            <SignupForm
+              onSubmit={handleSignup}
+              loading={signupLoading}
+              error={signupError}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

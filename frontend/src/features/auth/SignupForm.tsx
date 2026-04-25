@@ -1,49 +1,85 @@
-const SignupForm = ({
-  email,
-  setEmail,
-  username,
-  setUsername,
-  password,
-  setPassword,
-  onSubmit,
-  loading,
-  error,
-}: {
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+type SignupFormValues = {
   email: string;
-  setEmail: (email: string) => void;
   username: string;
-  setUsername: (username: string) => void;
   password: string;
-  setPassword: (password: string) => void;
-  onSubmit: () => void;
+};
+
+type SignupFormProps = {
+  onSubmit: (data: SignupFormValues) => void;
   loading: boolean;
   error: string | null;
-}) => {
+};
+
+const SignupForm = ({ onSubmit, loading, error }: SignupFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormValues>({
+    defaultValues: { email: "", username: "", password: "" },
+  });
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={onSubmit} disabled={loading}>
-        {loading ? "Signing up..." : "Sign Up"}
-      </button>
-      {error && <p>{error}</p>}
-    </div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-full max-w-md flex-col gap-4"
+    >
+      <div className="space-y-2">
+        <Label htmlFor="signup-email">Email</Label>
+        <Input
+          id="signup-email"
+          type="email"
+          placeholder="Enter your email"
+          {...register("email", { required: "Email is required" })}
+        />
+        {errors.email && (
+          <p className="text-sm text-red-500">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="signup-username">Username</Label>
+        <Input
+          id="signup-username"
+          type="text"
+          placeholder="Choose a username"
+          {...register("username", { required: "Username is required" })}
+        />
+        {errors.username && (
+          <p className="text-sm text-red-500">{errors.username.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="signup-password">Password</Label>
+        <Input
+          id="signup-password"
+          type="password"
+          placeholder="Create a password"
+          {...register("password", {
+            required: "Password is required",
+            minLength: {
+              value: 8,
+              message: "Password must be at least 8 characters",
+            },
+          })}
+        />
+        {errors.password && (
+          <p className="text-sm text-red-500">{errors.password.message}</p>
+        )}
+      </div>
+
+      {error && <p className="text-sm text-red-500">{error}</p>}
+
+      <Button type="submit" disabled={loading} className="w-full">
+        {loading ? "Signing up..." : "Sign up"}
+      </Button>
+    </form>
   );
 };
 
