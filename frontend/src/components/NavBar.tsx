@@ -1,8 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
+import { Moon, Sun } from "lucide-react";
 
 const NavBar = () => {
   const { session, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,9 +26,11 @@ const NavBar = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <button onClick={toggleTheme}>
+            {theme ? <Moon className="h-6 w-6" /> : <Sun className="h-6 w-6" />}
+          </button>
           {session ? (
             <>
-              <NavLink to="/board">Board</NavLink>
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (

@@ -37,7 +37,9 @@ const LoginForm = ({ onSubmit, loading, error }: LoginFormProps) => {
           {...register("username", { required: "Username is required" })}
         />
         {errors.username && (
-          <p className="text-sm text-red-500">{errors.username.message}</p>
+          <p className="text-sm text-red-500 dark:text-red-400">
+            {errors.username.message}
+          </p>
         )}
       </div>
 
@@ -56,11 +58,15 @@ const LoginForm = ({ onSubmit, loading, error }: LoginFormProps) => {
           })}
         />
         {errors.password && (
-          <p className="text-sm text-red-500">{errors.password.message}</p>
+          <p className="text-sm text-red-500 dark:text-red-400">
+            {errors.password.message}
+          </p>
         )}
       </div>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
+      )}
 
       <Button type="submit" disabled={loading} className="w-full">
         {loading ? "Logging in..." : "Log in"}
