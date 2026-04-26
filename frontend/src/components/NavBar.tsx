@@ -15,7 +15,7 @@ const NavBar = () => {
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <div className="flex items-center gap-8">
           <NavLink to="/" className="font-bold text-2xl">
-            lifeconsole
+            <span className="text-cyan-600">life</span>console
           </NavLink>
           <div className="flex items-center gap-6">
             <NavLink to="/">Home</NavLink>
