@@ -52,15 +52,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-100 px-4 py-8">
-      <div className="mx-auto grid min-h-[80vh] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-2xl md:grid-cols-2">
-        <div className="flex items-center justify-center bg-neutral-50 p-8 md:p-12">
+    <div className="min-h-screen bg-neutral-100 px-4 py-8 dark:bg-neutral-900">
+      <div className="mx-auto grid min-h-[80vh] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-2xl md:grid-cols-2 dark:bg-neutral-800">
+        <div className="flex items-center justify-center bg-neutral-50 p-8 md:p-12 dark:bg-neutral-800">
           <div className="w-full max-w-md space-y-8">
             <div className="space-y-2 text-center">
-              <h1 className="text-5xl font-bold tracking-tight text-neutral-900">
+              <h1 className="text-5xl font-bold tracking-tight text-neutral-900 dark:text-white">
                 life console
               </h1>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
                 Sign in to access features
               </p>
             </div>
@@ -73,11 +73,11 @@ const LoginPage = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-center bg-cyan-400 p-8 text-white md:p-12">
+        <div className="flex items-center justify-center bg-cyan-400 p-8 text-white md:p-12 dark:bg-cyan-600">
           <div className="w-full max-w-md space-y-8">
             <div className="space-y-2 text-center">
               <h2 className="text-4xl font-bold tracking-tight">Sign Up</h2>
-              <p className="text-sm text-rose-100">
+              <p className="text-sm text-rose-100 dark:text-rose-200">
                 Create an account to get started
               </p>
             </div>
