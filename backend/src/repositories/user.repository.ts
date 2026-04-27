@@ -8,6 +8,18 @@ export const addUser = async (username: string, email: string) => {
   return { data, error };
 };
 
+export const getUserIdByEmail = async (email: string) => {
+  const { data, error } = await db
+    .from("users")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+  if (error) {
+    return { userId: null as number | null, hasError: true };
+  }
+  return { userId: data?.id, hasError: false };
+};
+
 export const checkUserExists = async (email: string) => {
   const { data, error } = await db
     .from("users")
@@ -33,5 +45,5 @@ export const getUserEmailByUsername = async (username: string) => {
     return { email: null as string | null, hasError: true };
   }
 
-  return { email: data?.email ?? null, hasError: false };
+  return { email: data?.email, hasError: false };
 };

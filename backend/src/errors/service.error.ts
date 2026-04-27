@@ -1,10 +1,11 @@
-export class AuthServiceError extends Error {
+export class ServiceError extends Error {
   constructor(
+    name: string,
     message: string,
     public statusCode: number,
   ) {
     super(message);
-    this.name = "AuthServiceError";
+    this.name = name;
     this.statusCode = statusCode;
   }
 }
