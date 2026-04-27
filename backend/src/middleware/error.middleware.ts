@@ -9,5 +9,5 @@ export const errorMiddleware = (
   console.error(err);
   res
     .status(err.statusCode || 500)
-    .send(err.message || "Internal Server Error");
+    .json({ error: err.message || "Internal Server Error" });
 };

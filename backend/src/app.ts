@@ -10,7 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRouter);
-// app.use(errorMiddleware);
 
 app.get("/test", authMiddleware, (req, res) => {
   res.send("Test endpoint");
@@ -18,6 +17,8 @@ app.get("/test", authMiddleware, (req, res) => {
 app.get("/", (req, res) => {
   res.send("Landing page");
 });
+
+app.use(errorMiddleware);
 
 app.listen(env.PORT, () => {
   console.log(`Server is running on port ${env.PORT}`);
