@@ -5,7 +5,7 @@ import {
   getUserEmailByUsername,
 } from "../../repositories/user.repository.js";
 
-import { AuthServiceError } from "../../errors/auth.service.error.js";
+import { ServiceError } from "../../errors/service.error.js";
 
 export const registerUser = async (
   username: string,
@@ -15,14 +15,15 @@ export const registerUser = async (
   const { exists, hasError } = await checkUserExists(email);
 
   if (hasError) {
-    throw new AuthServiceError(
+    throw new ServiceError(
+      "AuthServiceError",
       "Internal server error: Checking user existence",
       500,
     );
   }
 
   if (exists) {
-    throw new AuthServiceError("User already exists", 400);
+    throw new ServiceError("AuthServiceError", "User already exists", 400);
   }
 
   const { data, error } = await db.auth.signUp({
@@ -34,20 +35,20 @@ export const registerUser = async (
   });
 
   if (error) {
-    throw new AuthServiceError(error.message, 400);
+    throw new ServiceError("AuthServiceError", error.message, 400);
   }
 
   const { error: userError } = await addUser(username, email);
 
   if (userError) {
-    throw new AuthServiceError(userError.message, 400);
+    throw new ServiceError("AuthServiceError", userError.message, 400);
   }
 
   return {
     message: `User ${username} registered successfully`,
     success: true,
-    redirect: "/test",
-    access_token: data.session?.access_token,
+    redirect: "/",
+    session: data.session,
   };
 };
 
@@ -55,14 +56,19 @@ export const loginUser = async (username: string, password: string) => {
   const { email, hasError } = await getUserEmailByUsername(username);
 
   if (hasError) {
-    throw new AuthServiceError(
+    throw new ServiceError(
+      "AuthServiceError",
       "Internal server error: Getting user email",
       500,
     );
   }
 
   if (!email) {
-    throw new AuthServiceError("Invalid username or password", 400);
+    throw new ServiceError(
+      "AuthServiceError",
+      "Invalid username or password",
+      400,
+    );
   }
 
   let { data, error } = await db.auth.signInWithPassword({
@@ -71,13 +77,13 @@ export const loginUser = async (username: string, password: string) => {
   });
 
   if (error) {
-    throw new AuthServiceError(error.message, 400);
+    throw new ServiceError("AuthServiceError", error.message, 400);
   }
 
   return {
     message: `User ${username} logged in successfully`,
     success: true,
-    redirect: "/test",
+    redirect: "/",
     session: data.session,
   };
 };
