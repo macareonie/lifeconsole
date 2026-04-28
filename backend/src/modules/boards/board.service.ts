@@ -72,7 +72,7 @@ export const getAllBoards = async () => {
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     throw boardNotFoundError;
   }
   return {

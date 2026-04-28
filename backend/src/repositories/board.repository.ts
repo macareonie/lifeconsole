@@ -34,15 +34,3 @@ export const deleteBoardById = async (id: number) => {
   const { data, error } = await db.from("boards").delete().eq("id", id);
   return { data, error };
 };
-
-export const checkBoardExists = async (id: number) => {
-  const { data, error } = await db
-    .from("boards")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
-  if (error) {
-    return { exists: false, hasError: true };
-  }
-  return { exists: !!data, hasError: false };
-};

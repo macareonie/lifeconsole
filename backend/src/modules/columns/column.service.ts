@@ -1,1 +1,102 @@
-export const createColumnService = async () => {};
+import {
+  addColumn,
+  getColumnById as getColumnByIdRepo,
+  getAllColumns as getAllColumnsRepo,
+  updateColumnById as updateColumnByIdRepo,
+  deleteColumnById as deleteColumnByIdRepo,
+} from "../../repositories/column.repository.js";
+
+import { ServiceError } from "../../errors/service.error.js";
+
+const columnNotFoundError = new ServiceError(
+  "ColumnServiceError",
+  "Column not found! Time to create one!",
+  404,
+);
+
+export const createColumn = async (
+  title: string,
+  boardId: number,
+  position: number,
+) => {
+  //title should probably be optional here? position should not though
+  if (!position || position < 0) {
+    throw new ServiceError(
+      "ColumnServiceError",
+      "Position is required and must be a non-negative integer",
+      400,
+    );
+  }
+  const { data, error } = await addColumn(title, boardId, position);
+  if (error) {
+    throw new ServiceError("ColumnServiceError", error.message, 400);
+  }
+  return {
+    message: "Column created successfully",
+    success: true,
+  };
+};
+
+export const getColumnById = async (id: number) => {
+  const { data, error } = await getColumnByIdRepo(id);
+  if (error) {
+    throw new ServiceError("ColumnServiceError", error.message, 400);
+  }
+  if (!data) {
+    throw columnNotFoundError;
+  }
+  return {
+    data: data,
+    message: "Column retrieved successfully",
+    success: true,
+  };
+};
+
+export const getAllColumns = async () => {
+  const { data, error } = await getAllColumnsRepo();
+  if (error) {
+    throw columnNotFoundError;
+  }
+  if (!data || data.length === 0) {
+    throw columnNotFoundError;
+  }
+  return {
+    data: data,
+    message: "Columns retrieved successfully",
+    success: true,
+  };
+};
+
+export const updateColumnById = async (
+  id: number,
+  title: string,
+  position: number,
+) => {
+  if (position !== undefined && position < 0) {
+    throw new ServiceError(
+      "ColumnServiceError",
+      "Position must be a non-negative integer",
+      400,
+    );
+  }
+
+  const { data, error } = await updateColumnByIdRepo(id, { title, position });
+  if (error) {
+    throw new ServiceError("ColumnServiceError", error.message, 400);
+  }
+  return {
+    message: "Column updated successfully",
+    success: true,
+  };
+};
+
+export const deleteColumnById = async (id: number) => {
+  const { data, error } = await deleteColumnByIdRepo(id);
+  if (error) {
+    throw new ServiceError("ColumnServiceError", error.message, 400);
+  }
+  return {
+    message: "Column deleted successfully",
+    success: true,
+  };
+};
