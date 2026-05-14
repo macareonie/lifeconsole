@@ -5,6 +5,7 @@ import {
   getCardById,
   updateCardById,
   deleteCardById,
+  getAllCardsByBoardId,
 } from "./card.service.js";
 
 export const createNewCard = async (
@@ -77,6 +78,20 @@ export const deleteCard = async (
   const { id } = req.params;
   try {
     const result = await deleteCardById(Number(id));
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCardsByBoardId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { boardId } = req.params;
+  try {
+    const result = await getAllCardsByBoardId(Number(boardId));
     res.status(200).json(result);
   } catch (error) {
     next(error);

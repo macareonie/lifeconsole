@@ -47,3 +47,11 @@ export const deleteCardById = async (id: number) => {
   const { data, error } = await db.from("cards").delete().eq("id", id);
   return { data, error };
 };
+
+export const getCardsByBoardId = async (boardId: number) => {
+  const { data, error } = await db
+    .from("cards")
+    .select("*, columns!inner(*)")
+    .eq("columns.board_id", boardId);
+  return { data, error };
+};

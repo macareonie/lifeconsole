@@ -4,6 +4,7 @@ import {
   getAllCards as getAllCardsRepo,
   updateCardById as updateCardByIdRepo,
   deleteCardById as deleteCardByIdRepo,
+  getCardsByBoardId as getCardsByBoardIdRepo,
 } from "../../repositories/card.repository.js";
 
 import type { JsonValue } from "../../types/json.js";
@@ -98,6 +99,25 @@ export const deleteCardById = async (id: number) => {
   }
   return {
     message: "Card deleted successfully",
+    success: true,
+  };
+};
+
+export const getAllCardsByBoardId = async (boardId: number) => {
+  const { data, error } = await getCardsByBoardIdRepo(boardId);
+  if (error) {
+    throw new ServiceError("CardServiceError", error.message, 400);
+  }
+
+  // additional column data can be removed
+  const truncatedData = data!.map((card) => {
+    const { columns, ...rest } = card;
+    return { ...rest };
+  });
+
+  return {
+    data: truncatedData,
+    message: "Cards retrieved successfully",
     success: true,
   };
 };
