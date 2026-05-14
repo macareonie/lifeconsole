@@ -5,6 +5,7 @@ import {
   createColumn,
   updateColumnById,
   deleteColumnById,
+  getAllColumnsByBoardId,
 } from "./column.service.js";
 
 export const createNewColumn = async (
@@ -72,6 +73,20 @@ export const deleteColumn = async (
   const { id } = req.params;
   try {
     const result = await deleteColumnById(Number(id));
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getColumnsByBoardId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { boardId } = req.params;
+  try {
+    const result = await getAllColumnsByBoardId(Number(boardId));
     res.status(200).json(result);
   } catch (error) {
     next(error);

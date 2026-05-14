@@ -117,7 +117,7 @@ export const getAllCardsByBoardId = async (boardId: number) => {
 
   return {
     data: truncatedData,
-    message: "Cards retrieved successfully",
+    message: `Cards in board ${boardId} retrieved successfully`,
     success: true,
   };
 };
