@@ -1,6 +1,6 @@
 import { useState } from "react";
-import LoginForm from "../features/auth/LoginForm";
-import SignupForm from "../features/auth/SignupForm";
+import LoginForm from "../components/auth/LoginForm";
+import SignupForm from "../components/auth/SignupForm";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
