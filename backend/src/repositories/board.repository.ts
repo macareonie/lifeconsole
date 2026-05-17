@@ -11,14 +11,14 @@ export const addBoard = async (title: string, userId: number) => {
 export const getBoardById = async (id: number) => {
   const { data, error } = await db
     .from("boards")
-    .select("*")
+    .select("id, title")
     .eq("id", id)
     .maybeSingle();
   return { data, error };
 };
 
 export const getAllBoards = async () => {
-  const { data, error } = await db.from("boards").select("*");
+  const { data, error } = await db.from("boards").select("id, title");
   return { data, error };
 };
 

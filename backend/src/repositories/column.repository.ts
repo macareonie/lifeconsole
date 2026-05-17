@@ -1,4 +1,5 @@
 import { db } from "../config/db.js";
+import { getColumns } from "./../modules/columns/column.controller";
 
 export const addColumn = async (
   title: string,
@@ -37,5 +38,13 @@ export const updateColumnById = async (
 
 export const deleteColumnById = async (id: number) => {
   const { data, error } = await db.from("columns").delete().eq("id", id);
+  return { data, error };
+};
+
+export const getColumnsByBoardId = async (boardId: number) => {
+  const { data, error } = await db
+    .from("columns")
+    .select("*")
+    .eq("board_id", boardId);
   return { data, error };
 };

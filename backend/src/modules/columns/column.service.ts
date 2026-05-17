@@ -4,6 +4,7 @@ import {
   getAllColumns as getAllColumnsRepo,
   updateColumnById as updateColumnByIdRepo,
   deleteColumnById as deleteColumnByIdRepo,
+  getColumnsByBoardId as getColumnsByBoardIdRepo,
 } from "../../repositories/column.repository.js";
 
 import { ServiceError } from "../../errors/service.error.js";
@@ -97,6 +98,18 @@ export const deleteColumnById = async (id: number) => {
   }
   return {
     message: "Column deleted successfully",
+    success: true,
+  };
+};
+
+export const getAllColumnsByBoardId = async (boardId: number) => {
+  const { data, error } = await getColumnsByBoardIdRepo(boardId);
+  if (error) {
+    throw new ServiceError("ColumnServiceError", error.message, 400);
+  }
+  return {
+    data: data,
+    message: `Columns in board ${boardId} retrieved successfully`,
     success: true,
   };
 };

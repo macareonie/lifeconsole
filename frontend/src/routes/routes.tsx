@@ -6,6 +6,7 @@ import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import BoardPage from "../pages/BoardPage";
 import ErrorPage from "../pages/ErrorPage";
+import BoardListPage from "../pages/BoardListPage";
 
 const routes: RouteObject[] = [
   {
@@ -26,7 +27,16 @@ const routes: RouteObject[] = [
         children: [
           {
             path: "board",
-            element: <BoardPage />,
+            children: [
+              {
+                index: true,
+                element: <BoardListPage />,
+              },
+              {
+                path: ":id",
+                element: <BoardPage />,
+              },
+            ],
           },
         ],
       },
