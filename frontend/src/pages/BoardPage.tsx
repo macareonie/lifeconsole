@@ -3,10 +3,11 @@ import { useBoardContent } from "../hooks/kanban/useBoardContent";
 import { BoardItem } from "../components/board/BoardItem";
 
 const BoardPage = () => {
-  const { boardId } = useParams();
+  const { id } = useParams();
+  const boardId = Number(id);
   const { data, isPending, isError, error } = useBoardContent(Number(boardId));
 
-  if (!boardId || !Number.isFinite(boardId)) {
+  if (!id || !Number.isFinite(boardId)) {
     return <div>Invalid Board ID</div>;
   }
 
@@ -22,7 +23,12 @@ const BoardPage = () => {
     return <div>Board not found</div>;
   }
 
-  return <BoardItem board={data} />;
+  return (
+    <div>
+      <h2> board item </h2>
+      <BoardItem board={data} />
+    </div>
+  );
 };
 
 export default BoardPage;

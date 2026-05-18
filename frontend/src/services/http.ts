@@ -9,7 +9,7 @@ export const backendApi = axios.create({
   timeout: 5000,
 });
 
-backendApi.interceptors.response.use(
+backendApi.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
     if (token) {
