@@ -68,12 +68,13 @@ export const getBoardById = async (id: number) => {
 };
 
 export const getAllBoards = async () => {
-  const { data, error } = await getAllBoardsRepo();
+  let { data, error } = await getAllBoardsRepo();
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }
+
   if (!data || data.length === 0) {
-    throw boardNotFoundError;
+    data = [];
   }
   return {
     data: data,

@@ -10,7 +10,13 @@ import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    origin: env.FRONTEND_DEV_URL,
+  }),
+);
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/boards", authMiddleware, boardsRouter);

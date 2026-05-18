@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error(data.error || "Failed to login");
     }
 
+    localStorage.setItem("accessToken", data.session.access_token);
     setSession(data.session);
   };
 
@@ -38,10 +39,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error(data.error || "Failed to signup");
     }
 
+    localStorage.setItem("accessToken", data.session.access_token);
     setSession(data.session);
   };
 
   const logout = () => {
+    localStorage.removeItem("accessToken");
     setSession(null);
   };
 
