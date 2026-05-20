@@ -1,7 +1,7 @@
 const LandingPage = () => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 text-center px-4">
         <h1 className="text-5xl font-bold mb-4">
           Welcome to <span className="text-cyan-600">life</span>console
         </h1>

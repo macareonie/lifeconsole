@@ -24,8 +24,7 @@ const BoardPage = () => {
   }
 
   return (
-    <div>
-      <h2> board item </h2>
+    <div className="min-h-screen bg-gray-100 p-6 dark:bg-gray-900">
       <BoardItem board={data} />
     </div>
   );

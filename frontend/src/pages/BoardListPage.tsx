@@ -13,8 +13,10 @@ const BoardListPage = () => {
     return <div>No boards yet, time to create one!</div>;
   }
   return (
-    <div>
-      <h1>Board List</h1>
+    <div className="min-h-screen bg-gray-100 p-6 dark:bg-gray-900">
+      <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
+        Your Boards
+      </h1>
       <BoardList boards={data} />
     </div>
   );
