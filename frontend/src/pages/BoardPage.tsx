@@ -20,11 +20,11 @@ const BoardPage = () => {
   }
 
   if (!data) {
-    return <div>Board not found</div>;
+    return <div className="p-6 text-muted-foreground">Board not found</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 dark:bg-gray-900">
+    <div className="min-h-screen bg-background p-6 text-foreground">
       <BoardItem board={data} />
     </div>
   );

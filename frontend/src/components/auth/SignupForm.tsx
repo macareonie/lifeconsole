@@ -38,9 +38,7 @@ const SignupForm = ({ onSubmit, loading, error }: SignupFormProps) => {
           {...register("email", { required: "Email is required" })}
         />
         {errors.email && (
-          <p className="text-sm text-red-500 dark:text-red-400">
-            {errors.email.message}
-          </p>
+          <p className="text-sm text-destructive">{errors.email.message}</p>
         )}
       </div>
 
@@ -53,9 +51,7 @@ const SignupForm = ({ onSubmit, loading, error }: SignupFormProps) => {
           {...register("username", { required: "Username is required" })}
         />
         {errors.username && (
-          <p className="text-sm text-red-500 dark:text-red-400">
-            {errors.username.message}
-          </p>
+          <p className="text-sm text-destructive">{errors.username.message}</p>
         )}
       </div>
 
@@ -74,15 +70,11 @@ const SignupForm = ({ onSubmit, loading, error }: SignupFormProps) => {
           })}
         />
         {errors.password && (
-          <p className="text-sm text-red-500 dark:text-red-400">
-            {errors.password.message}
-          </p>
+          <p className="text-sm text-destructive">{errors.password.message}</p>
         )}
       </div>
 
-      {error && (
-        <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" disabled={loading} className="w-full">
         {loading ? "Signing up..." : "Sign up"}
