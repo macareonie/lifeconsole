@@ -1,21 +1,46 @@
 import type { Card } from "../../types/kanban";
 
-export function CardItem({ card }: { card: Card }) {
+export function CardItem({
+  card,
+  onClick,
+}: {
+  card: Card;
+  onClick?: (card: Card) => void;
+}) {
+  const metadataEntries = card.metadata ? Object.entries(card.metadata) : [];
+  const previewEntries = metadataEntries.slice(0, 3);
+  const remainingCount = metadataEntries.length - previewEntries.length;
+
   return (
-    <div className="bg-white rounded shadow p-2 mb-2">
-      <strong>{card.title}</strong>
+    <button
+      type="button"
+      onClick={() => onClick?.(card)}
+      className="w-full rounded-xl border border-border bg-card p-4 text-left text-card-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+    >
+      <h3 className="text-sm font-semibold">{card.title}</h3>
+
       {card.subtitle && (
-        <p className="text-sm text-gray-500">{card.subtitle}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{card.subtitle}</p>
       )}
-      {card.metadata && (
-        <div className="mt-2">
-          {Object.entries(card.metadata).map(([field, description]) => (
-            <p key={field} className="text-xs text-gray-400">
-              {field}: {description}
-            </p>
+
+      {previewEntries.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {previewEntries.map(([field, description]) => (
+            <span
+              key={field}
+              className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground"
+            >
+              {field}: {String(description)}
+            </span>
           ))}
+
+          {remainingCount > 0 && (
+            <span className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
+              +{remainingCount} more
+            </span>
+          )}
         </div>
       )}
-    </div>
+    </button>
   );
 }

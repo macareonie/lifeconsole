@@ -10,11 +10,15 @@ const BoardListPage = () => {
     return <div>Error loading boards: {error.message}</div>;
   }
   if (!data || data.length === 0) {
-    return <div>No boards yet, time to create one!</div>;
+    return (
+      <div className="p-6 text-muted-foreground">
+        No boards yet, time to create one!
+      </div>
+    );
   }
   return (
-    <div>
-      <h1>Board List</h1>
+    <div className="min-h-screen bg-background p-6 text-foreground">
+      <h1 className="mb-6 text-2xl font-bold tracking-tight">Your Boards</h1>
       <BoardList boards={data} />
     </div>
   );
