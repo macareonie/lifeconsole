@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from "express";
-import { db } from "../config/db.js";
+import { createFreshClient } from "../config/db.js";
 import { getAuthCookieTokens } from "../utils/auth-cookies.js";
 
 export const authMiddleware = async (
@@ -13,7 +13,8 @@ export const authMiddleware = async (
     return res.status(401).json({ error: "Authentication token missing" });
   }
 
-  const { data, error } = await db.auth.getUser(accessToken);
+  const authClient = createFreshClient();
+  const { data, error } = await authClient.auth.getUser(accessToken);
 
   if (error || !data) {
     return res.status(401).json({ error: "Invalid or expired token" });
