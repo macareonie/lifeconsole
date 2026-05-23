@@ -3,24 +3,13 @@ import { env } from "../config/env";
 
 export const backendApi = axios.create({
   baseURL: env.BACKEND_DEV_API,
+  // Cookies carry the auth state, so every request must include credentials.
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
   timeout: 5000,
 });
-
-backendApi.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
 
 backendApi.interceptors.response.use(
   (response) => response,

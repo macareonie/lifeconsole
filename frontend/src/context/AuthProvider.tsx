@@ -1,55 +1,65 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { type Session } from "@supabase/supabase-js";
 import { AuthContext, type LoginInput, type SignupInput } from "./AuthContext";
+import backendApi from "../services/http";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadSession = async () => {
+      try {
+        const { data } = await backendApi.get("/auth/session");
+        if (isMounted) {
+          setSession(data.session ?? null);
+        }
+      } catch {
+        if (isMounted) {
+          setSession(null);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const login = async ({ username, password }: LoginInput) => {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
+    const { data } = await backendApi.post("/auth/login", {
+      username,
+      password,
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Failed to login");
-    }
-
-    localStorage.setItem("accessToken", data.session.access_token);
-    setSession(data.session);
+    setSession(data.session ?? null);
   };
 
   const signup = async ({ email, username, password }: SignupInput) => {
-    const response = await fetch("http://localhost:3000/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, username, password }),
+    const { data } = await backendApi.post("/auth/register", {
+      email,
+      username,
+      password,
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Failed to signup");
-    }
-
-    localStorage.setItem("accessToken", data.session.access_token);
-    setSession(data.session);
+    setSession(data.session ?? null);
   };
 
-  const logout = () => {
-    localStorage.removeItem("accessToken");
+  const logout = async () => {
+    await backendApi.post("/auth/logout");
     setSession(null);
   };
 
   return (
-    <AuthContext.Provider value={{ session, login, signup, logout }}>
+    <AuthContext.Provider value={{ session, isLoading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

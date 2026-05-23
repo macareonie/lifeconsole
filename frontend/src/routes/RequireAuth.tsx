@@ -2,10 +2,14 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const RequireAuth = () => {
-  const { session } = useAuth();
+  const { session, isLoading } = useAuth();
+
+  // Wait for the cookie-backed session bootstrap before redirecting.
+  if (isLoading) {
+    return null;
+  }
 
   if (!session) {
-    console.log("User not authenticated, redirecting to login...");
     return <Navigate to="/login" replace />;
   }
 
