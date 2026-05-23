@@ -14,9 +14,10 @@ export type SignupInput = {
 
 export type AuthContextType = {
   session: Session | null;
+  isLoading: boolean;
   login: (input: LoginInput) => Promise<void>;
   signup: (input: SignupInput) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
