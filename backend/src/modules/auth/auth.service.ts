@@ -1,4 +1,4 @@
-import { db } from "../../config/db.js";
+import { createFreshClient } from "../../config/db.js";
 import {
   addUser,
   checkUserExists,
@@ -26,7 +26,8 @@ export const registerUser = async (
     throw new ServiceError("AuthServiceError", "User already exists", 400);
   }
 
-  const { data, error } = await db.auth.signUp({
+  const authClient = createFreshClient();
+  const { data, error } = await authClient.auth.signUp({
     email: email,
     password: password,
     options: {
@@ -71,7 +72,8 @@ export const loginUser = async (username: string, password: string) => {
     );
   }
 
-  let { data, error } = await db.auth.signInWithPassword({
+  const authClient = createFreshClient();
+  let { data, error } = await authClient.auth.signInWithPassword({
     email: email,
     password: password,
   });
@@ -89,7 +91,8 @@ export const loginUser = async (username: string, password: string) => {
 };
 
 export const logoutUser = async () => {
-  const { error } = await db.auth.signOut();
+  const authClient = createFreshClient();
+  const { error } = await authClient.auth.signOut();
   if (error) {
     throw new ServiceError("AuthServiceError", error.message, 500);
   }
@@ -101,7 +104,8 @@ export const logoutUser = async () => {
 };
 
 export const getUserFromAccessToken = async (accessToken: string) => {
-  const { data, error } = await db.auth.getUser(accessToken);
+  const authClient = createFreshClient();
+  const { data, error } = await authClient.auth.getUser(accessToken);
   if (error) {
     throw new ServiceError("AuthServiceError", error.message, 400);
   }
