@@ -6,7 +6,12 @@ import {
   getAuthCookieTokens,
   setAuthCookies,
 } from "../../utils/auth-cookies.js";
-import { loginUser, registerUser } from "./auth.service.js";
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  getUserFromAccessToken,
+} from "./auth.service.js";
 
 export const register = async (
   req: Request,
@@ -20,7 +25,7 @@ export const register = async (
     if (result.session) {
       setAuthCookies(res, result.session as Session);
     }
-
+    console.log(result.message);
     return res.status(200).json(result);
   } catch (error) {
     return next(error);
@@ -39,7 +44,7 @@ export const login = async (
     if (result.session) {
       setAuthCookies(res, result.session as Session);
     }
-
+    console.log(result.message);
     return res.status(200).json(result);
   } catch (error) {
     return next(error);
@@ -58,7 +63,7 @@ export const getSession = async (
       return res.status(401).json({ error: "Not authenticated" });
     }
 
-    const { data, error } = await db.auth.getUser(accessToken);
+    const { data, error } = await getUserFromAccessToken(accessToken);
 
     if (error || !data.user) {
       return res.status(401).json({ error: "Invalid or expired session" });
@@ -89,8 +94,10 @@ export const logout = async (
   next: NextFunction,
 ) => {
   try {
+    const result = await logoutUser();
     clearAuthCookies(res);
-    return res.status(200).json({ success: true, message: "Logged out" });
+    console.log(result.message);
+    return res.status(200).json(result);
   } catch (error) {
     return next(error);
   }

@@ -9,7 +9,6 @@ const validateInputs = (validations: ContextRunner[]) => {
   ) => {
     // sequential processing, stops running validations chain if one fails.
     for (const validation of validations) {
-      console.log(req.body);
       const result = await validation.run(req);
       if (!result.isEmpty()) {
         return res.status(400).json({ errors: result.array() });

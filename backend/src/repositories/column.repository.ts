@@ -1,5 +1,4 @@
 import { db } from "../config/db.js";
-import { getColumns } from "./../modules/columns/column.controller";
 
 export const addColumn = async (
   title: string,
