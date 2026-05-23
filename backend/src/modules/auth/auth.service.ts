@@ -87,3 +87,23 @@ export const loginUser = async (username: string, password: string) => {
     session: data.session,
   };
 };
+
+export const logoutUser = async () => {
+  const { error } = await db.auth.signOut();
+  if (error) {
+    throw new ServiceError("AuthServiceError", error.message, 500);
+  }
+  return {
+    message: "User logged out successfully",
+    success: true,
+    redirect: "/",
+  };
+};
+
+export const getUserFromAccessToken = async (accessToken: string) => {
+  const { data, error } = await db.auth.getUser(accessToken);
+  if (error) {
+    throw new ServiceError("AuthServiceError", error.message, 400);
+  }
+  return { data, error };
+};
