@@ -1,46 +1,119 @@
 import type { Card } from "../../types/kanban";
+import { Button } from "../ui/button";
+import { useCardMutations } from "../../hooks/kanban/useCardMutations";
+import type { JsonValue } from "../../types/json";
+import { CardEditForm } from "./forms/CardEditForm";
+import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
+
+type CardFormValues = {
+  title: string;
+  subtitle: string;
+  metadata: string;
+};
 
 export function CardDetailsModal({
   card,
+  boardId,
   onClose,
 }: {
   card: Card;
+  boardId: number;
   onClose: () => void;
 }) {
+  const { updateCardMutation, deleteCardMutation } = useCardMutations();
+
+  const parseMetadata = (value: string): JsonValue => {
+    if (!value.trim()) {
+      return {};
+    }
+
+    return JSON.parse(value) as JsonValue;
+  };
+
+  const onSave = async ({ title, subtitle, metadata }: CardFormValues) => {
+    await updateCardMutation.mutateAsync({
+      boardId,
+      cardId: card.id,
+      title,
+      subtitle,
+      columnId: card.column_id,
+      position: card.position,
+      metadata: parseMetadata(metadata),
+    });
+    onClose();
+  };
+
+  const onDelete = async () => {
+    await deleteCardMutation.mutateAsync({ boardId, cardId: card.id });
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
       <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-xl">
         <div className="mb-4 flex items-start justify-between">
           <div>
             <h2 className="text-lg font-bold">{card.title}</h2>
-            {card.subtitle && (
-              <p className="mt-1 text-sm text-muted-foreground">
-                {card.subtitle}
-              </p>
-            )}
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md px-3 py-1 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
-          >
+          <Button type="button" onClick={onClose} variant="ghost" size="sm">
             Close
-          </button>
+          </Button>
         </div>
 
-        {card.metadata && (
-          <div className="space-y-2">
-            {Object.entries(card.metadata).map(([field, value]) => (
-              <div key={field} className="rounded-lg bg-muted p-3">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  {field}
-                </p>
-                <p className="mt-1 text-sm text-foreground">{String(value)}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="space-y-4">
+          <CardEditForm
+            cardId={card.id}
+            initialTitle={card.title}
+            initialSubtitle={card.subtitle ?? ""}
+            initialMetadata={
+              card.metadata && typeof card.metadata === "object"
+                ? JSON.stringify(card.metadata, null, 2)
+                : "{}"
+            }
+            isPending={updateCardMutation.isPending}
+            errorMessage={
+              updateCardMutation.isError
+                ? updateCardMutation.error.message
+                : undefined
+            }
+            onSubmit={onSave}
+            onCancel={onClose}
+          />
+
+          {card.metadata && typeof card.metadata === "object" && (
+            <div className="space-y-2 rounded-lg border border-border bg-muted/40 p-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Current metadata
+              </p>
+              {Object.entries(card.metadata).map(([field, value]) => (
+                <div key={field} className="rounded-lg bg-background p-3">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {field}
+                  </p>
+                  <p className="mt-1 text-sm text-foreground">
+                    {String(value)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <DeleteConfirmButton
+            confirmMessage={`Delete card "${card.title}"?`}
+            label="Delete card"
+            pendingLabel="Deleting..."
+            isPending={deleteCardMutation.isPending}
+            onConfirm={onDelete}
+            size="sm"
+          />
+
+          {deleteCardMutation.isError && (
+            <p className="text-sm text-destructive">
+              {deleteCardMutation.error.message}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

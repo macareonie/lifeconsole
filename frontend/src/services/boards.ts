@@ -9,3 +9,18 @@ export const getBoard = async (boardId: number) => {
   const { data } = await backendApi.get(`/boards/${boardId}/`);
   return data.data;
 };
+
+export const createBoard = async (title: string) => {
+  const { data } = await backendApi.post("/boards/", { title });
+  return data;
+};
+
+export const updateBoard = async (boardId: number, title: string) => {
+  const { data } = await backendApi.put(`/boards/${boardId}/`, { title });
+  return data;
+};
+
+export const deleteBoard = async (boardId: number) => {
+  const { data } = await backendApi.delete(`/boards/${boardId}/`);
+  return data;
+};
