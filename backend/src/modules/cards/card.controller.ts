@@ -14,8 +14,14 @@ export const createNewCard = async (
   next: NextFunction,
 ) => {
   try {
-    const { title, columnId, position, content } = req.body;
-    const result = await createCard(title, columnId, position, content);
+    const { title, subtitle, columnId, position, metadata } = req.body;
+    const result = await createCard(
+      title,
+      subtitle,
+      columnId,
+      position,
+      metadata,
+    );
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -55,14 +61,15 @@ export const updateCard = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
-  const { title, columnId, position, content } = req.body;
+  const { title, subtitle, columnId, position, metadata } = req.body;
   try {
     const result = await updateCardById(
       Number(id),
       title,
+      subtitle,
       position,
       columnId,
-      content,
+      metadata,
     );
     res.status(200).json(result);
   } catch (error) {

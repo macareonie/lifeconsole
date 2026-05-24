@@ -18,9 +18,10 @@ const cardNotFoundError = new ServiceError(
 
 export const createCard = async (
   title: string,
+  subtitle: string,
   columnId: number,
   position: number,
-  content: JsonValue,
+  metadata: JsonValue,
 ) => {
   // same thing here, title should probably be optional but position should not
   if (!position || position < 0) {
@@ -30,7 +31,13 @@ export const createCard = async (
       400,
     );
   }
-  const { data, error } = await addCard(title, columnId, position, content);
+  const { data, error } = await addCard(
+    title,
+    subtitle,
+    columnId,
+    position,
+    metadata,
+  );
   if (error) {
     throw new ServiceError("CardServiceError", error.message, 400);
   }
@@ -73,15 +80,17 @@ export const getAllCards = async () => {
 export const updateCardById = async (
   id: number,
   title: string,
+  subtitle: string,
   position: number,
   columnId: number,
-  content: JsonValue,
+  metadata: JsonValue,
 ) => {
   const { data: updatedData, error } = await updateCardByIdRepo(id, {
     title,
+    subtitle,
     columnId,
     position,
-    content,
+    metadata,
   });
   if (error) {
     throw new ServiceError("CardServiceError", error.message, 400);

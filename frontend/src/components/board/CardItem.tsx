@@ -7,7 +7,10 @@ export function CardItem({
   card: Card;
   onClick?: (card: Card) => void;
 }) {
-  const metadataEntries = card.metadata ? Object.entries(card.metadata) : [];
+  const metadataEntries =
+    card.metadata && typeof card.metadata === "object" && !Array.isArray(card.metadata)
+      ? Object.entries(card.metadata)
+      : [];
   const previewEntries = metadataEntries.slice(0, 3);
   const remainingCount = metadataEntries.length - previewEntries.length;
 

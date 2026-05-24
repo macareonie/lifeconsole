@@ -3,15 +3,17 @@ import type { JsonValue } from "../types/json.ts";
 
 export const addCard = async (
   title: string,
+  subtitle: string,
   columnId: number,
   position: number,
-  content: JsonValue,
+  metadata: JsonValue,
 ) => {
   const { data: result, error } = await db.from("cards").insert({
     title: title,
+    subtitle: subtitle,
     column_id: columnId,
     position: position,
-    data: content,
+    metadata: metadata,
   });
   return { data: result, error };
 };
@@ -36,7 +38,8 @@ export const updateCardById = async (
     title: string;
     columnId: number;
     position: number;
-    content: JsonValue;
+    subtitle: string;
+    metadata: JsonValue;
   }>,
 ) => {
   const { data, error } = await db.from("cards").update(updates).eq("id", id);

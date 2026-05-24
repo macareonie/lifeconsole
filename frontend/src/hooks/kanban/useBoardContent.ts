@@ -11,16 +11,12 @@ async function fetchBoardContent(boardId: number): Promise<BoardContent> {
     getCardsFromBoardId(boardId),
   ]);
 
-  console.log(cards);
-
   const columnsWithCards: Column[] = columns.map((column: Column) => ({
     ...column,
     cards: cards
       .filter((card: Card) => card.column_id === column.id)
       .sort((a: Card, b: Card) => a.position - b.position),
   }));
-
-  console.log(columnsWithCards);
 
   return {
     ...board,
