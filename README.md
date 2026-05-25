@@ -8,7 +8,7 @@ Personal full-stack project built with React (Vite) + Typescript frontend and No
 
 - Customizable KanBan style board
   - Drag-and-Droppable card entries
-  - Search & Filter functionality
+  - ~~Search & Filter functionality~~ (does not seem as applicable now)
 - Customizable daily task tracker
   - Visual streaks as an emotional incentive
   - Multiple tracking capabilities
@@ -18,6 +18,7 @@ Personal full-stack project built with React (Vite) + Typescript frontend and No
 
 - Frontend: React 19 + Typescript + Vite + Tailwind CSS
 - Backend: Node.js + Express + tsx
+- Miscellaneous Libraries: TanStackQuery, shadcn/ui, Axios etc.
 
 ## Motivation and Thoughts
 
