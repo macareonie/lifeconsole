@@ -24,9 +24,9 @@ export const useColumnMutations = () => {
 
   const createColumnMutation = useMutation({
     mutationFn: (variables: CreateColumnVariables) => createColumn(variables),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (boardId: number) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", boardId],
       });
     },
   });
@@ -38,9 +38,9 @@ export const useColumnMutations = () => {
         title: variables.title,
         position: variables.position,
       }),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (boardId: number) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", boardId],
       });
     },
   });
@@ -48,9 +48,9 @@ export const useColumnMutations = () => {
   const deleteColumnMutation = useMutation({
     mutationFn: (variables: DeleteColumnVariables) =>
       deleteColumn(variables.columnId),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (boardId: number) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", boardId],
       });
     },
   });

@@ -38,7 +38,7 @@ export const useCardMutations = () => {
         position: variables.position,
         metadata: variables.metadata,
       }),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (variables: CreateCardVariables) => {
       await queryClient.invalidateQueries({
         queryKey: ["boardContent", variables.boardId],
       });
@@ -65,7 +65,7 @@ export const useCardMutations = () => {
   const deleteCardMutation = useMutation({
     mutationFn: (variables: DeleteCardVariables) =>
       deleteCard(variables.cardId),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (variables: DeleteCardVariables) => {
       await queryClient.invalidateQueries({
         queryKey: ["boardContent", variables.boardId],
       });
