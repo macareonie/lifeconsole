@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosError, type AxiosResponse } from "axios";
 import { env } from "../config/env";
 
 export const backendApi = axios.create({
@@ -12,8 +12,8 @@ export const backendApi = axios.create({
 });
 
 backendApi.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  (response: AxiosResponse) => response,
+  (error: AxiosError<{ message?: string; error?: string }>) => {
     const message =
       error?.response?.data?.message ||
       error?.response?.data?.error ||

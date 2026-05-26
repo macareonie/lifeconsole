@@ -14,11 +14,11 @@ export const useBoardMutations = () => {
   const updateBoardMutation = useMutation({
     mutationFn: ({ boardId, title }: { boardId: number; title: string }) =>
       updateBoard(boardId, title),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (boardId: number) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["boards"] }),
         queryClient.invalidateQueries({
-          queryKey: ["boardContent", variables.boardId],
+          queryKey: ["boardContent", boardId],
         }),
       ]);
     },
@@ -26,7 +26,7 @@ export const useBoardMutations = () => {
 
   const deleteBoardMutation = useMutation({
     mutationFn: deleteBoard,
-    onSuccess: async (_, boardId) => {
+    onSuccess: async (boardId: number) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["boards"] }),
         queryClient.invalidateQueries({ queryKey: ["boardContent", boardId] }),
