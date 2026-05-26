@@ -1,7 +1,6 @@
 import {
   addCard,
   getCardById as getCardByIdRepo,
-  getAllCards as getAllCardsRepo,
   updateCardById as updateCardByIdRepo,
   deleteCardById as deleteCardByIdRepo,
   getCardsByBoardId as getCardsByBoardIdRepo,
@@ -58,21 +57,6 @@ export const getCardById = async (id: number) => {
   return {
     data: data,
     message: "Card retrieved successfully",
-    success: true,
-  };
-};
-
-export const getAllCards = async () => {
-  const { data, error } = await getAllCardsRepo();
-  if (error) {
-    throw new ServiceError("CardServiceError", error.message, 500);
-  }
-  if (!data || data.length === 0) {
-    throw cardNotFoundError;
-  }
-  return {
-    data: data,
-    message: "Cards retrieved successfully",
     success: true,
   };
 };

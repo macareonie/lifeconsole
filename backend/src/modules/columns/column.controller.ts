@@ -1,6 +1,5 @@
 import { type NextFunction, type Request, type Response } from "express";
 import {
-  getAllColumns,
   getColumnById,
   createColumn,
   updateColumnById,
@@ -30,19 +29,6 @@ export const getColumn = async (
   const { id } = req.params;
   try {
     const result = await getColumnById(Number(id));
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getColumns = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const result = await getAllColumns();
     res.status(200).json(result);
   } catch (error) {
     next(error);

@@ -27,11 +27,6 @@ export const getCardById = async (id: number) => {
   return { data, error };
 };
 
-export const getAllCards = async () => {
-  const { data, error } = await db.from("cards").select("*");
-  return { data, error };
-};
-
 export const updateCardById = async (
   id: number,
   updates: Partial<{

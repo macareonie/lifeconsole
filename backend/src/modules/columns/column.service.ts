@@ -1,7 +1,6 @@
 import {
   addColumn,
   getColumnById as getColumnByIdRepo,
-  getAllColumns as getAllColumnsRepo,
   updateColumnById as updateColumnByIdRepo,
   deleteColumnById as deleteColumnByIdRepo,
   getColumnsByBoardId as getColumnsByBoardIdRepo,
@@ -49,21 +48,6 @@ export const getColumnById = async (id: number) => {
   return {
     data: data,
     message: "Column retrieved successfully",
-    success: true,
-  };
-};
-
-export const getAllColumns = async () => {
-  const { data, error } = await getAllColumnsRepo();
-  if (error) {
-    throw columnNotFoundError;
-  }
-  if (!data || data.length === 0) {
-    throw columnNotFoundError;
-  }
-  return {
-    data: data,
-    message: "Columns retrieved successfully",
     success: true,
   };
 };
