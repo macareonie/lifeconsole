@@ -49,4 +49,15 @@ describe("auth routes (validation and session)", () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
+
+  it("returns an error response when logout fails", async () => {
+    signOut.mockResolvedValueOnce({
+      error: { message: "logout failed" },
+    });
+
+    const res = await request(app).post("/api/auth/logout");
+
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({ error: "logout failed" });
+  });
 });
