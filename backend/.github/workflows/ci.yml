@@ -51,8 +51,8 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
-      #   - name: Run frontend tests
-      #     run: npm run test
+      - name: Run frontend tests
+        run: echo "No frontend tests to run for now"
 
       - name: Build frontend
         run: npm run build

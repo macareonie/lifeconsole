@@ -24,6 +24,7 @@ app.use("/api/columns", authMiddleware, columnsRouter);
 app.use("/api/cards", authMiddleware, cardsRouter);
 
 app.get("/", (req, res) => {
+  console.log("Received request for landing page");
   res.send("Landing page");
 });
 
