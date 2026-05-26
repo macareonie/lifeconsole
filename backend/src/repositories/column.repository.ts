@@ -22,11 +22,6 @@ export const getColumnById = async (id: number) => {
   return { data, error };
 };
 
-export const getAllColumns = async () => {
-  const { data, error } = await db.from("columns").select("*");
-  return { data, error };
-};
-
 export const updateColumnById = async (
   id: number,
   updates: Partial<{ title: string; position: number }>,

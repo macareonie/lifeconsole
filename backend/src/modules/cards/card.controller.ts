@@ -1,7 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
 import {
   createCard,
-  getAllCards,
   getCardById,
   updateCardById,
   deleteCardById,
@@ -36,19 +35,6 @@ export const getCard = async (
   const { id } = req.params;
   try {
     const result = await getCardById(Number(id));
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getCards = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const result = await getAllCards();
     res.status(200).json(result);
   } catch (error) {
     next(error);

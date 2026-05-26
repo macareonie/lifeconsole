@@ -2,7 +2,6 @@ import { Router } from "express";
 
 import {
   createNewColumn,
-  getColumns,
   getColumn,
   updateColumn,
   deleteColumn,
@@ -12,9 +11,6 @@ import {
 const columnsRouter = Router();
 
 columnsRouter.post("/", createNewColumn);
-// similar to in cards, this endpoint retrieve all columns across all boards.
-// can potentially see a use in the future, the filtered endpoint below is more suitable
-columnsRouter.get("/", getColumns);
 columnsRouter.get("/:id", getColumn);
 columnsRouter.put("/:id", updateColumn);
 columnsRouter.delete("/:id", deleteColumn);
