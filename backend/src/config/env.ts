@@ -14,8 +14,13 @@ export const env = {
   PORT: requireEnv(process.env.PORT, "PORT"),
   SUPABASE_URL: requireEnv(process.env.SUPABASE_URL, "SUPABASE_URL"),
   SUPABASE_KEY: requireEnv(process.env.SUPABASE_KEY, "SUPABASE_KEY"),
+  FRONTEND_MODE: requireEnv(process.env.FRONTEND_MODE, "FRONTEND_MODE"),
   FRONTEND_DEV_URL: requireEnv(
     process.env.FRONTEND_DEV_URL,
     "FRONTEND_DEV_URL",
+  ),
+  FRONTEND_PROD_URL: requireEnv(
+    process.env.FRONTEND_PROD_URL,
+    "FRONTEND_PROD_URL",
   ),
 };
