@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { clearAuthCookies, getAuthCookieTokens, setAuthCookies } from "../../src/utils/auth-cookies.js";
+import {
+  clearAuthCookies,
+  getAuthCookieTokens,
+  setAuthCookies,
+} from "../../src/utils/auth-cookies.js";
 
 describe("auth-cookies", () => {
   it("returns empty tokens when cookie header is missing", () => {
@@ -15,7 +19,8 @@ describe("auth-cookies", () => {
   it("parses encoded cookie values and ignores malformed parts", () => {
     const req = {
       headers: {
-        cookie: "bad; lc-access-token=access%20token; lc-refresh-token=refresh%2Ftoken; lc-expires-at=123",
+        cookie:
+          "bad; lc-access-token=access%20token; lc-refresh-token=refresh%2Ftoken; lc-expires-at=123",
       },
     } as any;
 
@@ -36,6 +41,17 @@ describe("auth-cookies", () => {
     } as any);
 
     expect(cookie).toHaveBeenCalledTimes(3);
+    expect(cookie).toHaveBeenNthCalledWith(
+      1,
+      "lc-access-token",
+      "access",
+      expect.objectContaining({
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        path: "/",
+      }),
+    );
   });
 
   it("clears all auth cookies", () => {
@@ -45,5 +61,14 @@ describe("auth-cookies", () => {
     clearAuthCookies(res);
 
     expect(clearCookie).toHaveBeenCalledTimes(3);
+    expect(clearCookie).toHaveBeenCalledWith(
+      "lc-access-token",
+      expect.objectContaining({
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        path: "/",
+      }),
+    );
   });
 });
