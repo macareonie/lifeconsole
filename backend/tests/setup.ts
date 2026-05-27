@@ -3,7 +3,9 @@ const testEnv = {
   PORT: "3001",
   SUPABASE_URL: "http://127.0.0.1:54321",
   SUPABASE_KEY: "test-supabase-key",
+  FRONTEND_MODE: "dev",
   FRONTEND_DEV_URL: "http://localhost:5173",
+  FRONTEND_PROD_URL: "https://test-frontend-url.com",
 };
 
 for (const [key, value] of Object.entries(testEnv)) {

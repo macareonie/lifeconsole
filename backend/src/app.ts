@@ -14,7 +14,10 @@ app.use(
   cors({
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-    origin: env.FRONTEND_DEV_URL,
+    origin:
+      env.FRONTEND_MODE === "prod"
+        ? env.FRONTEND_PROD_URL
+        : env.FRONTEND_DEV_URL,
   }),
 );
 app.use(express.json());
