@@ -1,4 +1,5 @@
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   const { session } = useAuth();
@@ -12,12 +13,12 @@ const LandingPage = () => {
         <p className="text-lg text-muted-foreground mb-4">
           Your all-in-one life management dashboard
         </p>
-        <a
-          href={session ? "/board" : "/login"}
+        <Link
+          to={session ? "/board" : "/login"}
           className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground transition hover:opacity-90"
         >
           Get Started
-        </a>
+        </Link>
       </div>
     </>
   );
