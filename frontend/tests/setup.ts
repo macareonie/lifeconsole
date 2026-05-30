@@ -3,6 +3,7 @@ import { cleanup } from "@testing-library/react";
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
 });
 
 Object.defineProperty(window, "matchMedia", {
@@ -17,4 +18,9 @@ Object.defineProperty(window, "matchMedia", {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
+});
+
+Object.defineProperty(window, "scrollTo", {
+  writable: true,
+  value: vi.fn(),
 });
