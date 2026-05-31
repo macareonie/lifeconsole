@@ -62,7 +62,7 @@ jobs:
         run: npm install
 
       - name: Run frontend tests
-        run: echo "No frontend tests to run for now"
+        run: npm run test
 
       - name: Build frontend
         run: npm run build
