@@ -18,7 +18,6 @@ vi.mock("../../src/services/columns", () => ({
 
 describe("useColumnMutations", () => {
   it("invalidates boardContent after create/update/delete", async () => {
-    // mock service to return the boardId so onSuccess receives it
     vi.mocked(createColumn).mockResolvedValue(7);
     vi.mocked(updateColumn).mockResolvedValue(7);
     vi.mocked(deleteColumn).mockResolvedValue(7);
