@@ -1,23 +1,36 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
+import type { JsonValue } from "../../../types/json";
+import { MetadataFieldArray } from "./MetadataFieldArray";
+
+import {
+  type MetadataFormValues,
+  metadataEntriesToJson,
+  metadataJsonToEntries,
+} from "../../../utils/kanban/CardMetadataConversion";
 
 type CardFormValues = {
   title: string;
   subtitle: string;
-  metadata: string;
+} & MetadataFormValues;
+
+export type CardSubmissionValues = {
+  title: string;
+  subtitle: string;
+  metadata: JsonValue;
 };
 
 type CardEditFormProps = {
   cardId: number;
   initialTitle: string;
   initialSubtitle: string;
-  initialMetadata: string;
+  initialMetadata: JsonValue;
   isPending: boolean;
   errorMessage?: string;
-  onSubmit: (values: CardFormValues) => Promise<void> | void;
+  onSubmit: (values: CardSubmissionValues) => Promise<void> | void;
   onCancel: () => void;
 };
 
@@ -31,84 +44,73 @@ export function CardEditForm({
   onSubmit,
   onCancel,
 }: CardEditFormProps) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<CardFormValues>({
+  const methods = useForm<CardFormValues>({
     defaultValues: {
       title: initialTitle,
       subtitle: initialSubtitle,
-      metadata: initialMetadata,
+      metadataEntries: metadataJsonToEntries(initialMetadata),
     },
   });
+
+  const {
+    handleSubmit,
+    reset,
+    register,
+    formState: { errors },
+  } = methods;
 
   useEffect(() => {
     reset({
       title: initialTitle,
       subtitle: initialSubtitle,
-      metadata: initialMetadata,
+      metadataEntries: metadataJsonToEntries(initialMetadata),
     });
   }, [initialTitle, initialSubtitle, initialMetadata, reset]);
 
+  const handleSave = async (values: CardFormValues) => {
+    await onSubmit({
+      title: values.title,
+      subtitle: values.subtitle,
+      metadata: metadataEntriesToJson(values.metadataEntries),
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor={`card-title-${cardId}`}>Title</Label>
-        <Input
-          id={`card-title-${cardId}`}
-          {...register("title", {
-            required: "Card title is required",
-          })}
-        />
-        {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message}</p>
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(handleSave)} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor={`card-title-${cardId}`}>Title</Label>
+          <Input
+            id={`card-title-${cardId}`}
+            {...register("title", {
+              required: "Card title is required",
+            })}
+          />
+          {errors.title && (
+            <p className="text-sm text-destructive">{errors.title.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor={`card-subtitle-${cardId}`}>Subtitle</Label>
+          <Input id={`card-subtitle-${cardId}`} {...register("subtitle")} />
+        </div>
+
+        <MetadataFieldArray inputIdPrefix={`card-${cardId}`} />
+
+        <div className="flex flex-wrap gap-2">
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Saving..." : "Save card"}
+          </Button>
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+        </div>
+
+        {errorMessage && (
+          <p className="text-sm text-destructive">{errorMessage}</p>
         )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor={`card-subtitle-${cardId}`}>Subtitle</Label>
-        <Input id={`card-subtitle-${cardId}`} {...register("subtitle")} />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor={`card-metadata-${cardId}`}>Metadata JSON</Label>
-        <textarea
-          id={`card-metadata-${cardId}`}
-          className="min-h-36 w-full rounded-lg border border-input bg-background px-2.5 py-1.5 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          {...register("metadata", {
-            validate: (value) => {
-              if (!value.trim()) {
-                return true;
-              }
-
-              try {
-                JSON.parse(value);
-                return true;
-              } catch {
-                return "Metadata must be valid JSON";
-              }
-            },
-          })}
-        />
-        {errors.metadata && (
-          <p className="text-sm text-destructive">{errors.metadata.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving..." : "Save card"}
-        </Button>
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-      </div>
-
-      {errorMessage && (
-        <p className="text-sm text-destructive">{errorMessage}</p>
-      )}
-    </form>
+      </form>
+    </FormProvider>
   );
 }

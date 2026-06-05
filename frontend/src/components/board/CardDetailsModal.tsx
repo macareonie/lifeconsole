@@ -1,15 +1,9 @@
 import type { Card } from "../../types/kanban";
 import { Button } from "../ui/button";
 import { useCardMutations } from "../../hooks/kanban/useCardMutations";
-import type { JsonValue } from "../../types/json";
 import { CardEditForm } from "./forms/CardEditForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
-
-type CardFormValues = {
-  title: string;
-  subtitle: string;
-  metadata: string;
-};
+import type { CardSubmissionValues } from "./forms/CardEditForm";
 
 export function CardDetailsModal({
   card,
@@ -22,15 +16,11 @@ export function CardDetailsModal({
 }) {
   const { updateCardMutation, deleteCardMutation } = useCardMutations();
 
-  const parseMetadata = (value: string): JsonValue => {
-    if (!value.trim()) {
-      return {};
-    }
-
-    return JSON.parse(value) as JsonValue;
-  };
-
-  const onSave = async ({ title, subtitle, metadata }: CardFormValues) => {
+  const onSave = async ({
+    title,
+    subtitle,
+    metadata,
+  }: CardSubmissionValues) => {
     await updateCardMutation.mutateAsync({
       boardId,
       cardId: card.id,
@@ -38,7 +28,7 @@ export function CardDetailsModal({
       subtitle,
       columnId: card.column_id,
       position: card.position,
-      metadata: parseMetadata(metadata),
+      metadata: metadata,
     });
     onClose();
   };
@@ -66,11 +56,7 @@ export function CardDetailsModal({
             cardId={card.id}
             initialTitle={card.title}
             initialSubtitle={card.subtitle ?? ""}
-            initialMetadata={
-              card.metadata && typeof card.metadata === "object"
-                ? JSON.stringify(card.metadata, null, 2)
-                : "{}"
-            }
+            initialMetadata={card.metadata ?? {}}
             isPending={updateCardMutation.isPending}
             errorMessage={
               updateCardMutation.isError
