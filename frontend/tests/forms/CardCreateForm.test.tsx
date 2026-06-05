@@ -22,7 +22,7 @@ describe("CardCreateForm", () => {
     expect(await screen.findByText(/card title is required/i)).toBeTruthy();
 
     await user.type(screen.getByLabelText(/card title/i), "Ship release");
-    await user.click(screen.getByRole("button", { name: /\+ add field/i }));
+    await user.click(screen.getByRole("button", { name: /\+ Add Row/i }));
     await user.click(screen.getByRole("button", { name: /create card/i }));
 
     expect(await screen.findByText(/field name is required/i)).toBeTruthy();
@@ -44,16 +44,16 @@ describe("CardCreateForm", () => {
 
     await user.type(screen.getByLabelText(/card title/i), "Ship release");
     await user.type(screen.getByLabelText(/subtitle/i), "Before Friday");
-    await user.click(screen.getByRole("button", { name: /\+ add field/i }));
-    await user.type(screen.getByLabelText(/field name/i), "Company");
-    await user.type(screen.getByLabelText(/field value/i), "Google");
+    await user.click(screen.getByRole("button", { name: /\+ Add Row/i }));
+    await user.type(screen.getByLabelText(/Field name/i), "Salary");
+    await user.type(screen.getByLabelText(/Field value/i), "$3000");
 
     await user.click(screen.getByRole("button", { name: /create card/i }));
 
     expect(onSubmit).toHaveBeenCalledWith({
       title: "Ship release",
       subtitle: "Before Friday",
-      metadata: { Company: "Google" },
+      metadata: { Salary: "$3000" },
     });
 
     expect(
@@ -62,7 +62,7 @@ describe("CardCreateForm", () => {
     expect((screen.getByLabelText(/subtitle/i) as HTMLInputElement).value).toBe(
       "",
     );
-    expect(screen.getByText(/no metadata fields yet/i)).toBeTruthy();
+    expect(screen.getByText(/no fields yet/i)).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: /cancel/i }));
     expect(onCancel).toHaveBeenCalledTimes(1);
