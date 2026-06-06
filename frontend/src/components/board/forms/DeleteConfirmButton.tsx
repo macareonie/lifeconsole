@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button } from "../../ui/button";
+import { Button, buttonVariants } from "../../ui/button";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -42,10 +43,16 @@ export function DeleteConfirmButton({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger>
-        <Button variant="destructive" size={size} disabled={isPending}>
-          {isPending ? pendingLabel : label}
-        </Button>
+      <DialogTrigger
+        className={cn(
+          buttonVariants({
+            variant: "destructive",
+            size,
+          }),
+        )}
+        disabled={isPending}
+      >
+        {isPending ? pendingLabel : label}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
