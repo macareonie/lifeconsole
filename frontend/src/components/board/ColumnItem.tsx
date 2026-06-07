@@ -4,15 +4,15 @@ import { CardItem } from "./CardItem";
 import { Button } from "../ui/button";
 import { useCardMutations } from "../../hooks/kanban/useCardMutations";
 import { useColumnMutations } from "../../hooks/kanban/useColumnMutations";
-import type { JsonValue } from "../../types/json";
 import { CardCreateForm } from "./forms/CardCreateForm";
 import { ColumnEditForm } from "./forms/ColumnEditForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
+import type { JsonValue } from "../../types/json";
 
 type CardFormValues = {
   title: string;
   subtitle: string;
-  metadata: string;
+  metadata: JsonValue;
 };
 
 type ColumnTitleFormValues = {
@@ -51,14 +51,6 @@ export function ColumnItem({
     await deleteColumnMutation.mutateAsync({ columnId: column.id, boardId });
   };
 
-  const parseMetadata = (value: string): JsonValue => {
-    if (!value.trim()) {
-      return {};
-    }
-
-    return JSON.parse(value) as JsonValue;
-  };
-
   const onCreateCard = async ({
     title,
     subtitle,
@@ -70,7 +62,7 @@ export function ColumnItem({
       subtitle,
       columnId: column.id,
       position: sortedCards.length + 1,
-      metadata: parseMetadata(metadata),
+      metadata,
     });
     setIsCreatingCard(false);
   };

@@ -47,7 +47,7 @@ export const updateCard = async ({
   const { data } = await backendApi.put(`/cards/${cardId}/`, {
     title,
     subtitle,
-    columnId,
+    column_id: columnId,
     position,
     metadata,
   });

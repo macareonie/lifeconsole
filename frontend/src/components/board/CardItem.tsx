@@ -8,7 +8,9 @@ export function CardItem({
   onClick?: (card: Card) => void;
 }) {
   const metadataEntries =
-    card.metadata && typeof card.metadata === "object" && !Array.isArray(card.metadata)
+    card.metadata &&
+    typeof card.metadata === "object" &&
+    !Array.isArray(card.metadata)
       ? Object.entries(card.metadata)
       : [];
   const previewEntries = metadataEntries.slice(0, 3);
@@ -17,6 +19,7 @@ export function CardItem({
   return (
     <button
       type="button"
+      name={card.title}
       onClick={() => onClick?.(card)}
       className="w-full rounded-xl border border-border bg-card p-4 text-left text-card-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >

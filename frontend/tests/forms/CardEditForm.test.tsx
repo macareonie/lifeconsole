@@ -1,11 +1,11 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CardEditForm } from "../../src/components/board/forms/CardEditForm";
 import { renderWithProviders } from "../test-utils";
 
 describe("CardEditForm", () => {
-  it("validates required title and metadata JSON", async () => {
+  it("validates required title and duplicate metadata fields", async () => {
     const user = userEvent.setup();
 
     renderWithProviders(
@@ -13,7 +13,7 @@ describe("CardEditForm", () => {
         cardId={4}
         initialTitle="Task"
         initialSubtitle="Details"
-        initialMetadata='{"priority":"low"}'
+        initialMetadata={{ priority: "low" }}
         isPending={false}
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
@@ -23,16 +23,20 @@ describe("CardEditForm", () => {
     const titleInput = screen.getByLabelText(/^title$/i) as HTMLInputElement;
     await user.clear(titleInput);
 
-    fireEvent.change(screen.getByLabelText(/metadata json/i), {
-      target: { value: "{invalid json" },
-    });
+    await user.clear(screen.getByLabelText(/Field name/i));
+    await user.clear(screen.getByLabelText(/Field value/i));
+    await user.type(screen.getByLabelText(/Field name/i), "Company");
+    await user.type(screen.getByLabelText(/Field value/i), "Google");
+    await user.click(screen.getByRole("button", { name: /\+ Add Row/i }));
+    const secondFieldName = screen.getAllByLabelText(/Field name/i)[1];
+    await user.type(secondFieldName, "Company");
 
     await user.click(screen.getByRole("button", { name: /save card/i }));
 
     expect(await screen.findByText(/card title is required/i)).toBeTruthy();
     expect(
-      await screen.findByText(/metadata must be valid json/i),
-    ).toBeTruthy();
+      (await screen.findAllByText(/field names must be unique/i)).length,
+    ).toBeGreaterThan(0);
   });
 
   it("submits edited values and handles cancel/pending", async () => {
@@ -45,7 +49,7 @@ describe("CardEditForm", () => {
         cardId={4}
         initialTitle="Task"
         initialSubtitle="Details"
-        initialMetadata='{"priority":"low"}'
+        initialMetadata={{ priority: "low" }}
         isPending
         onSubmit={onSubmit}
         onCancel={onCancel}
@@ -70,7 +74,7 @@ describe("CardEditForm", () => {
         cardId={4}
         initialTitle="Task"
         initialSubtitle="Details"
-        initialMetadata='{"priority":"low"}'
+        initialMetadata={{ priority: "low" }}
         isPending={false}
         onSubmit={onSubmit}
         onCancel={vi.fn()}
@@ -81,9 +85,10 @@ describe("CardEditForm", () => {
     await user.type(screen.getByLabelText(/^title$/i), "Updated task");
     await user.clear(screen.getByLabelText(/^subtitle$/i));
     await user.type(screen.getByLabelText(/^subtitle$/i), "Updated details");
-    fireEvent.change(screen.getByLabelText(/metadata json/i), {
-      target: { value: '{"priority":"high"}' },
-    });
+    await user.clear(screen.getByLabelText(/Field name/i));
+    await user.clear(screen.getByLabelText(/Field value/i));
+    await user.type(screen.getByLabelText(/Field name/i), "Priority");
+    await user.type(screen.getByLabelText(/Field value/i), "high");
 
     await user.click(screen.getByRole("button", { name: /save card/i }));
 
@@ -93,7 +98,7 @@ describe("CardEditForm", () => {
     ).toEqual({
       title: "Updated task",
       subtitle: "Updated details",
-      metadata: '{"priority":"high"}',
+      metadata: { Priority: "high" },
     });
   });
 });
