@@ -1,3 +1,10 @@
+import type {
+  BoardSummary,
+  BoardContent,
+  Column,
+  Card,
+} from "../../types/kanban.js";
+
 import { getUserIdByEmail } from "../../repositories/user.repository.js";
 import {
   addBoard,
@@ -6,6 +13,9 @@ import {
   updateBoardById as updateBoardByIdRepo,
   deleteBoardById as deleteBoardByIdRepo,
 } from "../../repositories/board.repository.js";
+
+import { getColumnsByBoardId } from "../../repositories/column.repository.js";
+import { getCardsByBoardId } from "../../repositories/card.repository.js";
 
 import { ServiceError } from "../../errors/service.error.js";
 
@@ -79,6 +89,57 @@ export const getAllBoards = async () => {
   return {
     data: data,
     message: "Boards retrieved successfully",
+    success: true,
+  };
+};
+
+function buildBoardContent(
+  boardData: BoardSummary,
+  columnsData: Column[],
+  cardsData: Card[],
+) {
+  const columnsWithCards: Column[] = columnsData.map((column: Column) => ({
+    ...column,
+    cards: cardsData
+      .filter((card: Card) => card.column_id === column.id)
+      .sort((a: Card, b: Card) => a.position - b.position),
+  }));
+
+  return {
+    ...boardData,
+    columns: columnsWithCards,
+  } as BoardContent;
+}
+
+export const getBoardContentById = async (id: number) => {
+  const { data: boardData, error: boardError } = await getBoardByIdRepo(id);
+  const { data: columnsData, error: columnsError } =
+    await getColumnsByBoardId(id);
+  const { data: cardsData, error: cardsError } = await getCardsByBoardId(id);
+
+  if (boardError) {
+    throw new ServiceError("BoardServiceError", boardError.message, 400);
+  }
+  if (columnsError) {
+    throw new ServiceError("BoardServiceError", columnsError.message, 400);
+  }
+  if (cardsError) {
+    throw new ServiceError("BoardServiceError", cardsError.message, 400);
+  }
+
+  if (!boardData) {
+    throw boardNotFoundError;
+  }
+
+  const boardContent = buildBoardContent(
+    boardData,
+    columnsData || [],
+    cardsData || [],
+  );
+
+  return {
+    data: boardContent,
+    message: "Board content retrieved successfully",
     success: true,
   };
 };
