@@ -4,6 +4,7 @@ vi.mock("../../src/modules/boards/board.service.js", () => ({
   createBoard: vi.fn(),
   getBoardById: vi.fn(),
   getAllBoards: vi.fn(),
+  getBoardContentById: vi.fn(),
   updateBoardById: vi.fn(),
   deleteBoardById: vi.fn(),
 }));
@@ -46,6 +47,17 @@ describe("board.controller", () => {
     const req = {} as any;
     const res = makeRes();
     await boardController.getBoards(req, res, vi.fn());
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it("getBoardContent calls service and returns 200", async () => {
+    (boardService.getBoardContentById as any).mockResolvedValue({
+      data: { id: 1, columns: [] },
+      success: true,
+    });
+    const req = { params: { id: "1" } } as any;
+    const res = makeRes();
+    await boardController.getBoardContent(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
@@ -98,6 +110,16 @@ describe("board.controller", () => {
 
     await boardController.getBoards(req, res, next);
 
+    expect(next).toHaveBeenCalledWith(error);
+  });
+
+  it("getBoardContent forwards errors to next", async () => {
+    const error = new Error("boom");
+    (boardService.getBoardContentById as any).mockRejectedValue(error);
+    const req = { params: { id: "1" } } as any;
+    const res = makeRes();
+    const next = vi.fn();
+    await boardController.getBoardContent(req, res, next);
     expect(next).toHaveBeenCalledWith(error);
   });
 

@@ -4,8 +4,17 @@ vi.mock("../../src/repositories/board.repository.js", () => ({
   addBoard: vi.fn(),
   getBoardById: vi.fn(),
   getAllBoards: vi.fn(),
+  getBoardContentById: vi.fn(),
   updateBoardById: vi.fn(),
   deleteBoardById: vi.fn(),
+}));
+
+vi.mock("../../src/repositories/column.repository.js", () => ({
+  getColumnsByBoardId: vi.fn(),
+}));
+
+vi.mock("../../src/repositories/card.repository.js", () => ({
+  getCardsByBoardId: vi.fn(),
 }));
 
 vi.mock("../../src/repositories/user.repository.js", () => ({
@@ -16,10 +25,13 @@ import {
   createBoard,
   getBoardById,
   getAllBoards,
+  getBoardContentById,
   updateBoardById,
   deleteBoardById,
 } from "../../src/modules/boards/board.service.js";
 import * as boardRepo from "../../src/repositories/board.repository.js";
+import * as columnRepo from "../../src/repositories/column.repository.js";
+import * as cardRepo from "../../src/repositories/card.repository.js";
 import * as userRepo from "../../src/repositories/user.repository.js";
 import { ServiceError } from "../../src/errors/service.error.js";
 
@@ -159,6 +171,94 @@ describe("board.service", () => {
     });
 
     await expect(getAllBoards()).rejects.toBeInstanceOf(ServiceError);
+  });
+
+  it("getBoardContentById - returns content when repo returns data", async () => {
+    (boardRepo.getBoardById as any).mockResolvedValue({
+      data: { id: 1, title: "My" },
+      error: null,
+    });
+    (columnRepo.getColumnsByBoardId as any).mockResolvedValue({
+      data: [{ id: 10, title: "Col" }],
+      error: null,
+    });
+    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
+      data: [{ id: 100, title: "Card" }],
+      error: null,
+    });
+
+    const result = await getBoardContentById(1);
+
+    expect(result.success).toBe(true);
+    expect(result.data).toBeDefined();
+  });
+
+  it("getBoardContentById - throws when board repo errors", async () => {
+    (boardRepo.getBoardById as any).mockResolvedValue({
+      data: null,
+      error: { message: "query failed" },
+    });
+    (columnRepo.getColumnsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+
+    await expect(getBoardContentById(1)).rejects.toBeInstanceOf(ServiceError);
+  });
+
+  it("getBoardContentById - throws when columns repo errors", async () => {
+    (boardRepo.getBoardById as any).mockResolvedValue({
+      data: { id: 1, title: "My" },
+      error: null,
+    });
+    (columnRepo.getColumnsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: { message: "query failed" },
+    });
+    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+
+    await expect(getBoardContentById(1)).rejects.toBeInstanceOf(ServiceError);
+  });
+
+  it("getBoardContentById - throws when cards repo errors", async () => {
+    (boardRepo.getBoardById as any).mockResolvedValue({
+      data: { id: 1, title: "My" },
+      error: null,
+    });
+    (columnRepo.getColumnsByBoardId as any).mockResolvedValue({
+      data: [{ id: 10, title: "Col" }],
+      error: null,
+    });
+    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: { message: "query failed" },
+    });
+
+    await expect(getBoardContentById(1)).rejects.toBeInstanceOf(ServiceError);
+  });
+
+  it("getBoardContentById - throws when board not found", async () => {
+    (boardRepo.getBoardById as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+    (columnRepo.getColumnsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+
+    await expect(getBoardContentById(999)).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("updateBoardById - success", async () => {
