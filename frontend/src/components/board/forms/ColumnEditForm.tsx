@@ -6,11 +6,13 @@ import { Label } from "../../ui/label";
 
 type ColumnTitleFormValues = {
   title: string;
+  position: number;
 };
 
 type ColumnEditFormProps = {
   columnId: number;
   initialTitle: string;
+  initialPosition?: number;
   isPending: boolean;
   errorMessage?: string;
   onSubmit: (values: ColumnTitleFormValues) => Promise<void> | void;
@@ -20,6 +22,7 @@ type ColumnEditFormProps = {
 export function ColumnEditForm({
   columnId,
   initialTitle,
+  initialPosition,
   isPending,
   errorMessage,
   onSubmit,
@@ -33,12 +36,13 @@ export function ColumnEditForm({
   } = useForm<ColumnTitleFormValues>({
     defaultValues: {
       title: initialTitle,
+      position: initialPosition,
     },
   });
 
   useEffect(() => {
-    reset({ title: initialTitle });
-  }, [initialTitle, reset]);
+    reset({ title: initialTitle, position: initialPosition });
+  }, [initialTitle, initialPosition, reset]);
 
   return (
     <form
