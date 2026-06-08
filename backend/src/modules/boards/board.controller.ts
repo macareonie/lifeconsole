@@ -4,6 +4,7 @@ import {
   createBoard,
   getBoardById,
   getAllBoards,
+  getBoardContentById,
   updateBoardById,
   deleteBoardById,
 } from "./board.service.js";
@@ -44,6 +45,20 @@ export const getBoards = async (
 ) => {
   try {
     const result = await getAllBoards();
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getBoardContent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { id } = req.params;
+  try {
+    const result = await getBoardContentById(Number(id));
     return res.status(200).json(result);
   } catch (error) {
     next(error);

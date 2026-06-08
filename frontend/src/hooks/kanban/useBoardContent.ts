@@ -1,27 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBoard } from "@/services/boards";
-import { getColumnsFromBoardId } from "@/services/columns";
-import { getCardsFromBoardId } from "@/services/cards";
-import type { BoardContent, Column, Card } from "../../types/kanban";
+import { getBoardContent } from "@/services/boards";
+
+import type { BoardContent } from "../../types/kanban";
 
 async function fetchBoardContent(boardId: number): Promise<BoardContent> {
-  const [board, columns, cards] = await Promise.all([
-    getBoard(boardId),
-    getColumnsFromBoardId(boardId),
-    getCardsFromBoardId(boardId),
-  ]);
-
-  const columnsWithCards: Column[] = columns.map((column: Column) => ({
-    ...column,
-    cards: cards
-      .filter((card: Card) => card.column_id === column.id)
-      .sort((a: Card, b: Card) => a.position - b.position),
-  }));
-
-  return {
-    ...board,
-    columns: columnsWithCards,
-  };
+  const boardContent = await getBoardContent(boardId);
+  return boardContent;
 }
 
 export const useBoardContent = (boardId: number) => {

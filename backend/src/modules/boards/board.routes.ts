@@ -5,6 +5,7 @@ import {
   createNewBoard,
   getBoard,
   getBoards,
+  getBoardContent,
   updateBoard,
   deleteBoard,
 } from "./board.controller.js";
@@ -18,6 +19,7 @@ const validateTitleParam = [
 boardsRouter.post("/", validateInputs(validateTitleParam), createNewBoard);
 boardsRouter.get("/", getBoards);
 boardsRouter.get("/:id", getBoard);
+boardsRouter.get("/:id/content", getBoardContent);
 boardsRouter.put("/:id", validateInputs(validateTitleParam), updateBoard);
 boardsRouter.delete("/:id", deleteBoard);
 
