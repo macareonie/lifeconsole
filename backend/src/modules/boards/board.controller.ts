@@ -6,6 +6,7 @@ import {
   getAllBoards,
   getBoardContentById,
   updateBoardById,
+  updateBoardLayoutById,
   deleteBoardById,
 } from "./board.service.js";
 
@@ -59,6 +60,21 @@ export const getBoardContent = async (
   const { id } = req.params;
   try {
     const result = await getBoardContentById(Number(id));
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateBoardLayout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { id } = req.params;
+  const layout = req.body;
+  try {
+    const result = await updateBoardLayoutById(Number(id), layout);
     return res.status(200).json(result);
   } catch (error) {
     next(error);
