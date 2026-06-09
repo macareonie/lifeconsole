@@ -31,7 +31,7 @@ export const updateCardById = async (
   id: number,
   updates: Partial<{
     title: string;
-    columnId: number;
+    column_id: number;
     position: number;
     subtitle: string;
     metadata: JsonValue;

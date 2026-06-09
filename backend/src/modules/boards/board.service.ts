@@ -14,8 +14,14 @@ import {
   deleteBoardById as deleteBoardByIdRepo,
 } from "../../repositories/board.repository.js";
 
-import { getColumnsByBoardId } from "../../repositories/column.repository.js";
-import { getCardsByBoardId } from "../../repositories/card.repository.js";
+import {
+  getColumnsByBoardId,
+  updateColumnById,
+} from "../../repositories/column.repository.js";
+import {
+  getCardsByBoardId,
+  updateCardById,
+} from "../../repositories/card.repository.js";
 
 import { ServiceError } from "../../errors/service.error.js";
 
@@ -141,6 +147,62 @@ export const getBoardContentById = async (id: number) => {
     data: boardContent,
     message: "Board content retrieved successfully",
     success: true,
+  };
+};
+
+type updateLayoutRequestBody = {
+  columns: {
+    id: number;
+    cardIds: number[];
+  }[];
+};
+
+export const updateBoardLayoutById = async (
+  id: number,
+  layout: updateLayoutRequestBody,
+) => {
+  if (!layout || !Array.isArray(layout.columns)) {
+    console.error("Invalid layout structure:", layout);
+    console.error({ layout }, "???hello???" + !Array.isArray(layout.columns));
+    throw new ServiceError(
+      "BoardServiceError",
+      "Invalid layout structure",
+      400,
+    );
+  }
+
+  for (const [columnPosition, column] of layout.columns.entries()) {
+    if (typeof column.id !== "number" || !Array.isArray(column.cardIds)) {
+      throw new ServiceError(
+        "BoardServiceError",
+        "Invalid column structure",
+        400,
+      );
+    }
+
+    const { error: columnError } = await updateColumnById(column.id, {
+      position: columnPosition,
+    });
+
+    if (columnError) {
+      throw new ServiceError("BoardServiceError", columnError.message, 400);
+    }
+
+    for (const [cardPosition, cardId] of column.cardIds.entries()) {
+      const { error: cardError } = await updateCardById(cardId, {
+        column_id: column.id,
+        position: cardPosition,
+      });
+
+      if (cardError) {
+        throw new ServiceError("BoardServiceError", cardError.message, 400);
+      }
+    }
+  }
+
+  return {
+    success: true,
+    message: "Board layout updated successfully",
   };
 };
 

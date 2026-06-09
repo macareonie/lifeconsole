@@ -6,6 +6,7 @@ import {
   getBoard,
   getBoards,
   getBoardContent,
+  updateBoardLayout,
   updateBoard,
   deleteBoard,
 } from "./board.controller.js";
@@ -20,6 +21,7 @@ boardsRouter.post("/", validateInputs(validateTitleParam), createNewBoard);
 boardsRouter.get("/", getBoards);
 boardsRouter.get("/:id", getBoard);
 boardsRouter.get("/:id/content", getBoardContent);
+boardsRouter.put("/:id/layout", updateBoardLayout);
 boardsRouter.put("/:id", validateInputs(validateTitleParam), updateBoard);
 boardsRouter.delete("/:id", deleteBoard);
 
