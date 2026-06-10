@@ -72,7 +72,7 @@ export const updateBoardLayout = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
-  const layout = req.body;
+  const { layout } = req.body;
   try {
     const result = await updateBoardLayoutById(Number(id), layout);
     return res.status(200).json(result);
