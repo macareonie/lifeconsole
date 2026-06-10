@@ -20,7 +20,7 @@ export const createColumn = async (
   position: number,
 ) => {
   //title should probably be optional here? position should not though
-  if (!position || position < 0) {
+  if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
       "Position is required and must be a non-negative integer",
@@ -57,7 +57,7 @@ export const updateColumnById = async (
   title: string,
   position: number,
 ) => {
-  if (position !== undefined && position < 0) {
+  if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
       "Position must be a non-negative integer",
