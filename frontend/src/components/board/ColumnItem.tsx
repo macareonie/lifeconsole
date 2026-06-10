@@ -9,6 +9,10 @@ import { ColumnEditForm } from "./forms/ColumnEditForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
 import type { JsonValue } from "../../types/json";
 
+import { useSortable } from "@dnd-kit/react/sortable";
+import { useDroppable } from "@dnd-kit/react";
+import { CollisionPriority } from "@dnd-kit/abstract";
+
 type CardFormValues = {
   title: string;
   subtitle: string;
@@ -22,10 +26,12 @@ type ColumnTitleFormValues = {
 
 export function ColumnItem({
   column,
+  index,
   board_id,
   onCardClick,
 }: {
   column: Column;
+  index: number;
   board_id: number;
   onCardClick?: (card: Card) => void;
 }) {
@@ -33,6 +39,19 @@ export function ColumnItem({
   const [isCreatingCard, setIsCreatingCard] = useState(false);
   const { updateColumnMutation, deleteColumnMutation } = useColumnMutations();
   const { createCardMutation } = useCardMutations();
+
+  const { ref: columnRef, isDragging: isColumnDragging } = useSortable({
+    id: column.id,
+    index,
+    type: "column",
+  });
+
+  const { ref: dropRef, isDropTarget } = useDroppable({
+    id: `column-drop-${column.id}`,
+    type: "column-drop",
+    accept: "card",
+    collisionPriority: CollisionPriority.Low,
+  });
 
   const onUpdateColumn = async ({ title, position }: ColumnTitleFormValues) => {
     await updateColumnMutation.mutateAsync({
@@ -65,7 +84,10 @@ export function ColumnItem({
   };
 
   return (
-    <div className="w-80 shrink-0 rounded-2xl border border-border bg-muted/60 p-3 shadow-sm">
+    <div
+      ref={columnRef}
+      className={`w-80 shrink-0 rounded-2xl border border-border bg-muted/60 p-3 shadow-sm ${isColumnDragging ? "opacity-50" : ""}`}
+    >
       <div className="mb-3 space-y-3 px-1">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-foreground/80">
@@ -133,11 +155,18 @@ export function ColumnItem({
         )}
       </div>
 
-      <div className="space-y-3">
-        {column.cards.map((card: Card) => (
+      <div
+        ref={dropRef}
+        className={`min-h-128 space-y-3 rounded-xl border-2 border-dashed p-1 transition-colors ${
+          isDropTarget ? "border-primary/40 bg-primary/5" : "border-transparent"
+        }`}
+      >
+        {column.cards.map((card: Card, index: number) => (
           <CardItem
             key={card.id}
             card={card}
+            index={index}
+            column_id={column.id}
             onClick={() => onCardClick?.(card)}
           />
         ))}

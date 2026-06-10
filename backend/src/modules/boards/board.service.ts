@@ -153,7 +153,7 @@ export const getBoardContentById = async (id: number) => {
 type updateLayoutRequestBody = {
   columns: {
     id: number;
-    cardIds: number[];
+    card_ids: number[];
   }[];
 };
 
@@ -162,8 +162,6 @@ export const updateBoardLayoutById = async (
   layout: updateLayoutRequestBody,
 ) => {
   if (!layout || !Array.isArray(layout.columns)) {
-    console.error("Invalid layout structure:", layout);
-    console.error({ layout }, "???hello???" + !Array.isArray(layout.columns));
     throw new ServiceError(
       "BoardServiceError",
       "Invalid layout structure",
@@ -172,7 +170,7 @@ export const updateBoardLayoutById = async (
   }
 
   for (const [columnPosition, column] of layout.columns.entries()) {
-    if (typeof column.id !== "number" || !Array.isArray(column.cardIds)) {
+    if (typeof column.id !== "number" || !Array.isArray(column.card_ids)) {
       throw new ServiceError(
         "BoardServiceError",
         "Invalid column structure",
@@ -188,7 +186,7 @@ export const updateBoardLayoutById = async (
       throw new ServiceError("BoardServiceError", columnError.message, 400);
     }
 
-    for (const [cardPosition, cardId] of column.cardIds.entries()) {
+    for (const [cardPosition, cardId] of column.card_ids.entries()) {
       const { error: cardError } = await updateCardById(cardId, {
         column_id: column.id,
         position: cardPosition,

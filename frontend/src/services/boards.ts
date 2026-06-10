@@ -1,3 +1,4 @@
+import type { updateLayoutBody } from "@/hooks/kanban/useBoardMutations";
 import backendApi from "./http";
 
 export const getBoards = async () => {
@@ -22,6 +23,16 @@ export const createBoard = async (title: string) => {
 
 export const updateBoard = async (board_id: number, title: string) => {
   const { data } = await backendApi.put(`/boards/${board_id}/`, { title });
+  return data;
+};
+
+export const updateBoardLayout = async (
+  board_id: number,
+  layout: updateLayoutBody,
+) => {
+  const { data } = await backendApi.put(`/boards/${board_id}/layout/`, {
+    layout,
+  });
   return data;
 };
 

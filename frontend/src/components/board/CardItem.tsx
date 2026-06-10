@@ -1,12 +1,24 @@
 import type { Card } from "../../types/kanban";
+import { useSortable } from "@dnd-kit/react/sortable";
 
 export function CardItem({
   card,
+  index,
+  column_id,
   onClick,
 }: {
   card: Card;
+  index: number;
+  column_id: number;
   onClick?: (card: Card) => void;
 }) {
+  const { ref, isDragging } = useSortable({
+    id: card.id,
+    index,
+    type: "card",
+    group: String(column_id),
+  });
+
   const metadataEntries =
     card.metadata &&
     typeof card.metadata === "object" &&
@@ -21,7 +33,8 @@ export function CardItem({
       type="button"
       name={card.title}
       onClick={() => onClick?.(card)}
-      className="w-full rounded-xl border border-border bg-card p-4 text-left text-card-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      className={`w-full max-w-72 rounded-xl border border-border bg-card p-4 text-left text-card-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${isDragging ? "opacity-50 shadow-lg" : ""}`}
+      ref={ref}
     >
       <h3 className="text-sm font-semibold">{card.title}</h3>
 
