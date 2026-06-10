@@ -10,7 +10,7 @@ describe("CardEditForm", () => {
 
     renderWithProviders(
       <CardEditForm
-        cardId={4}
+        card_id={4}
         initialTitle="Task"
         initialSubtitle="Details"
         initialMetadata={{ priority: "low" }}
@@ -46,7 +46,7 @@ describe("CardEditForm", () => {
 
     renderWithProviders(
       <CardEditForm
-        cardId={4}
+        card_id={4}
         initialTitle="Task"
         initialSubtitle="Details"
         initialMetadata={{ priority: "low" }}
@@ -71,7 +71,7 @@ describe("CardEditForm", () => {
 
     renderWithProviders(
       <CardEditForm
-        cardId={4}
+        card_id={4}
         initialTitle="Task"
         initialSubtitle="Details"
         initialMetadata={{ priority: "low" }}

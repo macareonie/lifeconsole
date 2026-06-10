@@ -3,20 +3,20 @@ import { createColumn, deleteColumn, updateColumn } from "@/services/columns";
 
 type CreateColumnVariables = {
   title: string;
-  boardId: number;
+  board_id: number;
   position: number;
 };
 
 type UpdateColumnVariables = {
-  columnId: number;
-  boardId: number;
+  column_id: number;
+  board_id: number;
   title: string;
   position: number;
 };
 
 type DeleteColumnVariables = {
-  columnId: number;
-  boardId: number;
+  column_id: number;
+  board_id: number;
 };
 
 export const useColumnMutations = () => {
@@ -26,7 +26,7 @@ export const useColumnMutations = () => {
     mutationFn: (variables: CreateColumnVariables) => createColumn(variables),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", variables.board_id],
       });
     },
   });
@@ -34,23 +34,23 @@ export const useColumnMutations = () => {
   const updateColumnMutation = useMutation({
     mutationFn: (variables: UpdateColumnVariables) =>
       updateColumn({
-        columnId: variables.columnId,
+        column_id: variables.column_id,
         title: variables.title,
         position: variables.position,
       }),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", variables.board_id],
       });
     },
   });
 
   const deleteColumnMutation = useMutation({
     mutationFn: (variables: DeleteColumnVariables) =>
-      deleteColumn(variables.columnId),
+      deleteColumn(variables.column_id),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", variables.board_id],
       });
     },
   });

@@ -14,26 +14,26 @@ export const useBoardMutations = () => {
   });
 
   const updateBoardMutation = useMutation({
-    mutationFn: ({ boardId, title }: { boardId: number; title: string }) =>
-      updateBoard(boardId, title),
+    mutationFn: ({ board_id, title }: { board_id: number; title: string }) =>
+      updateBoard(board_id, title),
     onSuccess: async (_data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["boards"] }),
         queryClient.invalidateQueries({
-          queryKey: ["boardContent", variables.boardId],
+          queryKey: ["boardContent", variables.board_id],
         }),
       ]);
     },
   });
 
   const deleteBoardMutation = useMutation({
-    mutationFn: async (boardId: number) => {
-      return deleteBoard(boardId);
+    mutationFn: async (board_id: number) => {
+      return deleteBoard(board_id);
     },
-    onSuccess: async (_data, boardId) => {
+    onSuccess: async (_data, board_id) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["boards"] }),
-        queryClient.invalidateQueries({ queryKey: ["boardContent", boardId] }),
+        queryClient.invalidateQueries({ queryKey: ["boardContent", board_id] }),
       ]);
     },
   });

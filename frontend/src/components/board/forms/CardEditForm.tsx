@@ -24,7 +24,7 @@ export type CardSubmissionValues = {
 };
 
 type CardEditFormProps = {
-  cardId: number;
+  card_id: number;
   initialTitle: string;
   initialSubtitle: string;
   initialMetadata: JsonValue;
@@ -35,7 +35,7 @@ type CardEditFormProps = {
 };
 
 export function CardEditForm({
-  cardId,
+  card_id,
   initialTitle,
   initialSubtitle,
   initialMetadata,
@@ -79,9 +79,9 @@ export function CardEditForm({
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(handleSave)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor={`card-title-${cardId}`}>Title</Label>
+          <Label htmlFor={`card-title-${card_id}`}>Title</Label>
           <Input
-            id={`card-title-${cardId}`}
+            id={`card-title-${card_id}`}
             {...register("title", {
               required: "Card title is required",
             })}
@@ -92,11 +92,11 @@ export function CardEditForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor={`card-subtitle-${cardId}`}>Subtitle</Label>
-          <Input id={`card-subtitle-${cardId}`} {...register("subtitle")} />
+          <Label htmlFor={`card-subtitle-${card_id}`}>Subtitle</Label>
+          <Input id={`card-subtitle-${card_id}`} {...register("subtitle")} />
         </div>
 
-        <MetadataFieldArray inputIdPrefix={`card-${cardId}`} />
+        <MetadataFieldArray inputIdPrefix={`card-${card_id}`} />
 
         <div className="flex flex-wrap gap-2">
           <Button type="submit" disabled={isPending}>

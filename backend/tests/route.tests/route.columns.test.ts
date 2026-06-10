@@ -107,7 +107,7 @@ describe("columns routes (auth protected)", () => {
     const res = await request(app)
       .post("/api/columns")
       .set("Cookie", "lc-access-token=valid-token")
-      .send({ title: "Todo", boardId: 1, position: 1 });
+      .send({ title: "Todo", board_id: 1, position: 1 });
 
     expect(res.status).toBe(201);
     expect(res.body).toEqual({

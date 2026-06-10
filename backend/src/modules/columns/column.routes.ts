@@ -15,6 +15,6 @@ columnsRouter.get("/:id", getColumn);
 columnsRouter.put("/:id", updateColumn);
 columnsRouter.delete("/:id", deleteColumn);
 // similar to in cards, this endpoint is the main endpoint to retrieve columns for a specific board
-columnsRouter.get("/board/:boardId", getColumnsByBoardId);
+columnsRouter.get("/board/:board_id", getColumnsByBoardId);
 
 export default columnsRouter;

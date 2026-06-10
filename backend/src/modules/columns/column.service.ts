@@ -16,7 +16,7 @@ const columnNotFoundError = new ServiceError(
 
 export const createColumn = async (
   title: string,
-  boardId: number,
+  board_id: number,
   position: number,
 ) => {
   //title should probably be optional here? position should not though
@@ -27,7 +27,7 @@ export const createColumn = async (
       400,
     );
   }
-  const { data, error } = await addColumn(title, boardId, position);
+  const { data, error } = await addColumn(title, board_id, position);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
@@ -86,14 +86,14 @@ export const deleteColumnById = async (id: number) => {
   };
 };
 
-export const getAllColumnsByBoardId = async (boardId: number) => {
-  const { data, error } = await getColumnsByBoardIdRepo(boardId);
+export const getAllColumnsByBoardId = async (board_id: number) => {
+  const { data, error } = await getColumnsByBoardIdRepo(board_id);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
   return {
     data: data,
-    message: `Columns in board ${boardId} retrieved successfully`,
+    message: `Columns in board ${board_id} retrieved successfully`,
     success: true,
   };
 };

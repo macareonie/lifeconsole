@@ -10,7 +10,7 @@ describe("CardCreateForm", () => {
 
     renderWithProviders(
       <CardCreateForm
-        columnId={7}
+        column_id={7}
         isPending={false}
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
@@ -35,7 +35,7 @@ describe("CardCreateForm", () => {
 
     renderWithProviders(
       <CardCreateForm
-        columnId={7}
+        column_id={7}
         isPending={false}
         onSubmit={onSubmit}
         onCancel={onCancel}

@@ -2,13 +2,13 @@ import { db } from "../config/db.js";
 
 export const addColumn = async (
   title: string,
-  boardId: number,
+  board_id: number,
   position: number,
 ) => {
   const { data, error } = await db.from("columns").insert({
-    title: title,
-    board_id: boardId,
-    position: position,
+    title,
+    board_id,
+    position,
   });
   return { data, error };
 };
@@ -35,10 +35,10 @@ export const deleteColumnById = async (id: number) => {
   return { data, error };
 };
 
-export const getColumnsByBoardId = async (boardId: number) => {
+export const getColumnsByBoardId = async (board_id: number) => {
   const { data, error } = await db
     .from("columns")
     .select("*")
-    .eq("board_id", boardId);
+    .eq("board_id", board_id);
   return { data, error };
 };

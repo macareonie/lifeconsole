@@ -14,6 +14,6 @@ cardsRouter.get("/:id", getCard);
 cardsRouter.put("/:id", updateCard);
 cardsRouter.delete("/:id", deleteCard);
 // This is the main endpoint for querying card content on the frontend for a single board
-cardsRouter.get("/board/:boardId", getCardsByBoardId);
+cardsRouter.get("/board/:board_id", getCardsByBoardId);
 
 export default cardsRouter;

@@ -3,27 +3,27 @@ import { type JsonValue } from "@/types/json";
 import { createCard, deleteCard, updateCard } from "@/services/cards";
 
 type CreateCardVariables = {
-  boardId: number;
+  board_id: number;
   title: string;
   subtitle: string;
-  columnId: number;
+  column_id: number;
   position: number;
   metadata: JsonValue;
 };
 
 type UpdateCardVariables = {
-  boardId: number;
-  cardId: number;
+  board_id: number;
+  card_id: number;
   title: string;
   subtitle: string;
-  columnId: number;
+  column_id: number;
   position: number;
   metadata: JsonValue;
 };
 
 type DeleteCardVariables = {
-  boardId: number;
-  cardId: number;
+  board_id: number;
+  card_id: number;
 };
 
 export const useCardMutations = () => {
@@ -34,13 +34,13 @@ export const useCardMutations = () => {
       createCard({
         title: variables.title,
         subtitle: variables.subtitle,
-        columnId: variables.columnId,
+        column_id: variables.column_id,
         position: variables.position,
         metadata: variables.metadata,
       }),
     onSuccess: async (_data, variables: CreateCardVariables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", variables.board_id],
       });
     },
   });
@@ -48,26 +48,26 @@ export const useCardMutations = () => {
   const updateCardMutation = useMutation({
     mutationFn: (variables: UpdateCardVariables) =>
       updateCard({
-        cardId: variables.cardId,
+        card_id: variables.card_id,
         title: variables.title,
         subtitle: variables.subtitle,
-        columnId: variables.columnId,
+        column_id: variables.column_id,
         position: variables.position,
         metadata: variables.metadata,
       }),
     onSuccess: async (_data, variables: UpdateCardVariables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", variables.board_id],
       });
     },
   });
 
   const deleteCardMutation = useMutation({
     mutationFn: (variables: DeleteCardVariables) =>
-      deleteCard(variables.cardId),
+      deleteCard(variables.card_id),
     onSuccess: async (_data, variables: DeleteCardVariables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.boardId],
+        queryKey: ["boardContent", variables.board_id],
       });
     },
   });
