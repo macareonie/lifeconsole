@@ -12,9 +12,9 @@ export const createNewColumn = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, boardId, position } = req.body;
+  const { title, board_id, position } = req.body;
   try {
-    const result = await createColumn(title, boardId, position);
+    const result = await createColumn(title, board_id, position);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -70,9 +70,9 @@ export const getColumnsByBoardId = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { boardId } = req.params;
+  const { board_id } = req.params;
   try {
-    const result = await getAllColumnsByBoardId(Number(boardId));
+    const result = await getAllColumnsByBoardId(Number(board_id));
     res.status(200).json(result);
   } catch (error) {
     next(error);

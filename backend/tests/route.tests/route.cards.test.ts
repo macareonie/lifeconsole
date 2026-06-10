@@ -133,7 +133,7 @@ describe("cards routes (auth protected)", () => {
     const payload = {
       title: "Ship tests",
       subtitle: "Route coverage",
-      columnId: 11,
+      column_id: 11,
       position: 1,
       metadata: { priority: "high" },
     };
@@ -151,7 +151,7 @@ describe("cards routes (auth protected)", () => {
     expect(insert).toHaveBeenCalledWith({
       title: payload.title,
       subtitle: payload.subtitle,
-      column_id: payload.columnId,
+      column_id: payload.column_id,
       position: payload.position,
       metadata: payload.metadata,
     });
@@ -172,7 +172,7 @@ describe("cards routes (auth protected)", () => {
     const payload = {
       title: "Ship tests now",
       subtitle: "More coverage",
-      columnId: 12,
+      column_id: 12,
       position: 2,
       metadata: { priority: "low" },
     };

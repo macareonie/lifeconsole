@@ -1,44 +1,44 @@
 import backendApi from "./http";
 
-export const getColumnsFromBoardId = async (boardId: number) => {
-  const { data } = await backendApi.get(`/columns/board/${boardId}/`);
+export const getColumnsFromBoardId = async (board_id: number) => {
+  const { data } = await backendApi.get(`/columns/board/${board_id}/`);
   return data.data;
 };
 
 export const createColumn = async ({
   title,
-  boardId,
+  board_id,
   position,
 }: {
   title: string;
-  boardId: number;
+  board_id: number;
   position: number;
 }) => {
   const { data } = await backendApi.post("/columns/", {
     title,
-    boardId,
+    board_id,
     position,
   });
   return data;
 };
 
 export const updateColumn = async ({
-  columnId,
+  column_id,
   title,
   position,
 }: {
-  columnId: number;
+  column_id: number;
   title: string;
   position: number;
 }) => {
-  const { data } = await backendApi.put(`/columns/${columnId}/`, {
+  const { data } = await backendApi.put(`/columns/${column_id}/`, {
     title,
     position,
   });
   return data;
 };
 
-export const deleteColumn = async (columnId: number) => {
-  const { data } = await backendApi.delete(`/columns/${columnId}/`);
+export const deleteColumn = async (column_id: number) => {
+  const { data } = await backendApi.delete(`/columns/${column_id}/`);
   return data;
 };

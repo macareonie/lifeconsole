@@ -18,7 +18,7 @@ const cardNotFoundError = new ServiceError(
 export const createCard = async (
   title: string,
   subtitle: string,
-  columnId: number,
+  column_id: number,
   position: number,
   metadata: JsonValue,
 ) => {
@@ -33,7 +33,7 @@ export const createCard = async (
   const { data, error } = await addCard(
     title,
     subtitle,
-    columnId,
+    column_id,
     position,
     metadata,
   );
@@ -66,13 +66,13 @@ export const updateCardById = async (
   title: string,
   subtitle: string,
   position: number,
-  columnId: number,
+  column_id: number,
   metadata: JsonValue,
 ) => {
   const { data: updatedData, error } = await updateCardByIdRepo(id, {
     title,
     subtitle,
-    columnId,
+    column_id,
     position,
     metadata,
   });
@@ -96,8 +96,8 @@ export const deleteCardById = async (id: number) => {
   };
 };
 
-export const getAllCardsByBoardId = async (boardId: number) => {
-  const { data, error } = await getCardsByBoardIdRepo(boardId);
+export const getAllCardsByBoardId = async (board_id: number) => {
+  const { data, error } = await getCardsByBoardIdRepo(board_id);
   if (error) {
     throw new ServiceError("CardServiceError", error.message, 400);
   }
@@ -110,7 +110,7 @@ export const getAllCardsByBoardId = async (boardId: number) => {
 
   return {
     data: truncatedData,
-    message: `Cards in board ${boardId} retrieved successfully`,
+    message: `Cards in board ${board_id} retrieved successfully`,
     success: true,
   };
 };

@@ -4,10 +4,10 @@ import { BoardItem } from "../components/board/BoardItem";
 
 const BoardPage = () => {
   const { id } = useParams();
-  const boardId = Number(id);
-  const { data, isPending, isError, error } = useBoardContent(Number(boardId));
+  const board_id = Number(id);
+  const { data, isPending, isError, error } = useBoardContent(Number(board_id));
 
-  if (!id || !Number.isFinite(boardId)) {
+  if (!id || !Number.isFinite(board_id)) {
     return <div>Invalid Board ID</div>;
   }
 

@@ -4,16 +4,16 @@ import type { JsonValue } from "../types/json.ts";
 export const addCard = async (
   title: string,
   subtitle: string,
-  columnId: number,
+  column_id: number,
   position: number,
   metadata: JsonValue,
 ) => {
   const { data: result, error } = await db.from("cards").insert({
-    title: title,
-    subtitle: subtitle,
-    column_id: columnId,
-    position: position,
-    metadata: metadata,
+    title,
+    subtitle,
+    column_id,
+    position,
+    metadata,
   });
   return { data: result, error };
 };
@@ -31,7 +31,7 @@ export const updateCardById = async (
   id: number,
   updates: Partial<{
     title: string;
-    columnId: number;
+    column_id: number;
     position: number;
     subtitle: string;
     metadata: JsonValue;
@@ -46,10 +46,10 @@ export const deleteCardById = async (id: number) => {
   return { data, error };
 };
 
-export const getCardsByBoardId = async (boardId: number) => {
+export const getCardsByBoardId = async (board_id: number) => {
   const { data, error } = await db
     .from("cards")
     .select("*, columns!inner(*)")
-    .eq("columns.board_id", boardId);
+    .eq("columns.board_id", board_id);
   return { data, error };
 };
