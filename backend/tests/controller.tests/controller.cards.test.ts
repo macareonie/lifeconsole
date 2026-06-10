@@ -25,7 +25,7 @@ describe("card.controller", () => {
       body: {
         title: "t",
         subtitle: "s",
-        columnId: 1,
+        column_id: 1,
         position: 0,
         metadata: {},
       },
@@ -67,7 +67,7 @@ describe("card.controller", () => {
       data: [],
       success: true,
     });
-    const req = { params: { boardId: "1" } } as any;
+    const req = { params: { board_id: "1" } } as any;
     const res = makeRes();
     await cardController.getCardsByBoardId(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(200);
@@ -80,7 +80,7 @@ describe("card.controller", () => {
       body: {
         title: "t",
         subtitle: "s",
-        columnId: 1,
+        column_id: 1,
         position: 0,
         metadata: {},
       },
@@ -132,7 +132,7 @@ describe("card.controller", () => {
   it("getCardsByBoardId forwards errors to next", async () => {
     const error = new Error("boom");
     (cardService.getAllCardsByBoardId as any).mockRejectedValue(error);
-    const req = { params: { boardId: "1" } } as any;
+    const req = { params: { board_id: "1" } } as any;
     const res = makeRes();
     const next = vi.fn();
 

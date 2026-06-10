@@ -22,11 +22,11 @@ type ColumnTitleFormValues = {
 
 export function ColumnItem({
   column,
-  boardId,
+  board_id,
   onCardClick,
 }: {
   column: Column;
-  boardId: number;
+  board_id: number;
   onCardClick?: (card: Card) => void;
 }) {
   const [isEditingColumn, setIsEditingColumn] = useState(false);
@@ -39,8 +39,8 @@ export function ColumnItem({
 
   const onUpdateColumn = async ({ title, position }: ColumnTitleFormValues) => {
     await updateColumnMutation.mutateAsync({
-      columnId: column.id,
-      boardId,
+      column_id: column.id,
+      board_id,
       title,
       position,
     });
@@ -48,7 +48,7 @@ export function ColumnItem({
   };
 
   const onDeleteColumn = async () => {
-    await deleteColumnMutation.mutateAsync({ columnId: column.id, boardId });
+    await deleteColumnMutation.mutateAsync({ column_id: column.id, board_id });
   };
 
   const onCreateCard = async ({
@@ -57,10 +57,10 @@ export function ColumnItem({
     metadata,
   }: CardFormValues) => {
     await createCardMutation.mutateAsync({
-      boardId,
+      board_id,
       title,
       subtitle,
-      columnId: column.id,
+      column_id: column.id,
       position: sortedCards.length + 1,
       metadata,
     });
@@ -107,7 +107,7 @@ export function ColumnItem({
 
         {isEditingColumn && (
           <ColumnEditForm
-            columnId={column.id}
+            column_id={column.id}
             initialTitle={column.title}
             initialPosition={column.position}
             isPending={updateColumnMutation.isPending}
@@ -123,7 +123,7 @@ export function ColumnItem({
 
         {isCreatingCard && (
           <CardCreateForm
-            columnId={column.id}
+            column_id={column.id}
             isPending={createCardMutation.isPending}
             errorMessage={
               createCardMutation.isError

@@ -18,7 +18,7 @@ beforeEach(() => {
 });
 
 vi.mock("../../src/hooks/kanban/useBoardContent", () => ({
-  useBoardContent: (boardId: number) => mockUseBoardContent(boardId),
+  useBoardContent: (board_id: number) => mockUseBoardContent(board_id),
 }));
 
 vi.mock("../../src/components/board/BoardItem", () => ({

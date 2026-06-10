@@ -22,7 +22,7 @@ const makeRes = () => {
 describe("column.controller", () => {
   it("createNewColumn calls service and returns 201", async () => {
     (colService.createColumn as any).mockResolvedValue({ success: true });
-    const req = { body: { title: "t", boardId: 1, position: 0 } } as any;
+    const req = { body: { title: "t", board_id: 1, position: 0 } } as any;
     const res = makeRes();
     await colController.createNewColumn(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(201);
@@ -63,7 +63,7 @@ describe("column.controller", () => {
       data: [],
       success: true,
     });
-    const req = { params: { boardId: "1" } } as any;
+    const req = { params: { board_id: "1" } } as any;
     const res = makeRes();
     await colController.getColumnsByBoardId(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(200);
@@ -72,7 +72,7 @@ describe("column.controller", () => {
   it("createNewColumn forwards errors to next", async () => {
     const error = new Error("boom");
     (colService.createColumn as any).mockRejectedValue(error);
-    const req = { body: { title: "t", boardId: 1, position: 0 } } as any;
+    const req = { body: { title: "t", board_id: 1, position: 0 } } as any;
     const res = makeRes();
     const next = vi.fn();
 
@@ -123,7 +123,7 @@ describe("column.controller", () => {
   it("getColumnsByBoardId forwards errors to next", async () => {
     const error = new Error("boom");
     (colService.getAllColumnsByBoardId as any).mockRejectedValue(error);
-    const req = { params: { boardId: "1" } } as any;
+    const req = { params: { board_id: "1" } } as any;
     const res = makeRes();
     const next = vi.fn();
 

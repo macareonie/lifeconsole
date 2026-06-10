@@ -21,7 +21,7 @@ type CardSubmissionValues = {
 };
 
 type CardCreateFormProps = {
-  columnId: number;
+  column_id: number;
   isPending: boolean;
   errorMessage?: string;
   onSubmit: (values: CardSubmissionValues) => Promise<void> | void;
@@ -29,7 +29,7 @@ type CardCreateFormProps = {
 };
 
 export function CardCreateForm({
-  columnId,
+  column_id,
   isPending,
   errorMessage,
   onSubmit,
@@ -66,9 +66,9 @@ export function CardCreateForm({
         className="space-y-3 rounded-xl border border-border bg-background p-3"
       >
         <div className="space-y-2">
-          <Label htmlFor={`card-title-${columnId}`}>Card title</Label>
+          <Label htmlFor={`card-title-${column_id}`}>Card title</Label>
           <Input
-            id={`card-title-${columnId}`}
+            id={`card-title-${column_id}`}
             placeholder="Add a task title"
             {...register("title", {
               required: "Card title is required",
@@ -80,15 +80,15 @@ export function CardCreateForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor={`card-subtitle-${columnId}`}>Subtitle</Label>
+          <Label htmlFor={`card-subtitle-${column_id}`}>Subtitle</Label>
           <Input
-            id={`card-subtitle-${columnId}`}
+            id={`card-subtitle-${column_id}`}
             placeholder="Short context for the card"
             {...register("subtitle")}
           />
         </div>
 
-        <MetadataFieldArray inputIdPrefix={`card-${columnId}`} />
+        <MetadataFieldArray inputIdPrefix={`card-${column_id}`} />
 
         <div className="flex gap-2">
           <Button type="submit" disabled={isPending}>

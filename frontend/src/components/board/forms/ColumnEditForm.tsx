@@ -10,7 +10,7 @@ type ColumnTitleFormValues = {
 };
 
 type ColumnEditFormProps = {
-  columnId: number;
+  column_id: number;
   initialTitle: string;
   initialPosition?: number;
   isPending: boolean;
@@ -20,7 +20,7 @@ type ColumnEditFormProps = {
 };
 
 export function ColumnEditForm({
-  columnId,
+  column_id,
   initialTitle,
   initialPosition,
   isPending,
@@ -50,9 +50,9 @@ export function ColumnEditForm({
       className="space-y-3 rounded-xl border border-border bg-background p-3"
     >
       <div className="space-y-2">
-        <Label htmlFor={`column-title-${columnId}`}>Column title</Label>
+        <Label htmlFor={`column-title-${column_id}`}>Column title</Label>
         <Input
-          id={`column-title-${columnId}`}
+          id={`column-title-${column_id}`}
           {...register("title", {
             required: "Column title is required",
           })}

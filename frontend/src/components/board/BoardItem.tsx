@@ -27,7 +27,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
   const { createColumnMutation } = useColumnMutations();
 
   const onUpdateBoard = async ({ title }: BoardTitleFormValues) => {
-    await updateBoardMutation.mutateAsync({ boardId: board.id, title });
+    await updateBoardMutation.mutateAsync({ board_id: board.id, title });
     setIsEditingBoard(false);
   };
 
@@ -38,7 +38,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
 
   const onCreateColumn = async ({ title }: ColumnFormValues) => {
     await createColumnMutation.mutateAsync({
-      boardId: board.id,
+      board_id: board.id,
       title,
       position: board.columns.length + 1,
     });
@@ -123,7 +123,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
             <ColumnItem
               key={column.id}
               column={column}
-              boardId={board.id}
+              board_id={board.id}
               onCardClick={setSelectedCard}
             />
           ))}
@@ -132,7 +132,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
       {selectedCard && (
         <CardDetailsModal
           card={selectedCard}
-          boardId={board.id}
+          board_id={board.id}
           onClose={() => setSelectedCard(null)}
         />
       )}

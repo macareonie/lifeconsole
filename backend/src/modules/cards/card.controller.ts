@@ -13,11 +13,11 @@ export const createNewCard = async (
   next: NextFunction,
 ) => {
   try {
-    const { title, subtitle, columnId, position, metadata } = req.body;
+    const { title, subtitle, column_id, position, metadata } = req.body;
     const result = await createCard(
       title,
       subtitle,
-      columnId,
+      column_id,
       position,
       metadata,
     );
@@ -47,14 +47,14 @@ export const updateCard = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
-  const { title, subtitle, columnId, position, metadata } = req.body;
+  const { title, subtitle, column_id, position, metadata } = req.body;
   try {
     const result = await updateCardById(
       Number(id),
       title,
       subtitle,
       position,
-      columnId,
+      column_id,
       metadata,
     );
     res.status(200).json(result);
@@ -82,9 +82,9 @@ export const getCardsByBoardId = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { boardId } = req.params;
+  const { board_id } = req.params;
   try {
-    const result = await getAllCardsByBoardId(Number(boardId));
+    const result = await getAllCardsByBoardId(Number(board_id));
     res.status(200).json(result);
   } catch (error) {
     next(error);
