@@ -33,9 +33,6 @@ export function ColumnItem({
   const [isCreatingCard, setIsCreatingCard] = useState(false);
   const { updateColumnMutation, deleteColumnMutation } = useColumnMutations();
   const { createCardMutation } = useCardMutations();
-  const sortedCards = column.cards.sort(
-    (a: Card, b: Card) => a.position - b.position,
-  );
 
   const onUpdateColumn = async ({ title, position }: ColumnTitleFormValues) => {
     await updateColumnMutation.mutateAsync({
@@ -61,7 +58,7 @@ export function ColumnItem({
       title,
       subtitle,
       column_id: column.id,
-      position: sortedCards.length + 1,
+      position: column.cards.length,
       metadata,
     });
     setIsCreatingCard(false);
@@ -76,7 +73,7 @@ export function ColumnItem({
           </h2>
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-background px-2 py-0.5 text-xs font-medium text-muted-foreground shadow-sm ring-1 ring-border">
-              {sortedCards.length}
+              {column.cards.length}
             </span>
             <Button
               type="button"
@@ -137,7 +134,7 @@ export function ColumnItem({
       </div>
 
       <div className="space-y-3">
-        {sortedCards.map((card: Card) => (
+        {column.cards.map((card: Card) => (
           <CardItem
             key={card.id}
             card={card}

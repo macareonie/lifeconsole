@@ -40,7 +40,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
     await createColumnMutation.mutateAsync({
       board_id: board.id,
       title,
-      position: board.columns.length + 1,
+      position: board.columns.length,
     });
     setIsAddingColumn(false);
   };
@@ -117,16 +117,14 @@ export function BoardItem({ board }: { board: BoardContent }) {
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4">
-        {board.columns
-          .sort((a: Column, b: Column) => a.position - b.position)
-          .map((column: Column) => (
-            <ColumnItem
-              key={column.id}
-              column={column}
-              board_id={board.id}
-              onCardClick={setSelectedCard}
-            />
-          ))}
+        {board.columns.map((column: Column) => (
+          <ColumnItem
+            key={column.id}
+            column={column}
+            board_id={board.id}
+            onCardClick={setSelectedCard}
+          />
+        ))}
       </div>
 
       {selectedCard && (
