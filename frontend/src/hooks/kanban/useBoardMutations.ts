@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createBoard,
   deleteBoard,
   updateBoard,
   updateBoardLayout,
 } from "@/services/boards";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export type updateLayoutBody = {
   columns: {

@@ -1,4 +1,4 @@
-import { FaDiscord, FaTelegram, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaDiscord, FaInstagram, FaLinkedin, FaTelegram } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 const Footer = () => {

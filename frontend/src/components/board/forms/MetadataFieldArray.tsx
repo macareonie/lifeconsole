@@ -1,8 +1,10 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
+
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { type MetadataFormValues } from "../../../utils/kanban/CardMetadataConversion";
+
+import type { MetadataFormValues } from "../../../utils/kanban/CardMetadataConversion";
 
 type MetadataFieldArrayProps = {
   inputIdPrefix: string;

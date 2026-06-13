@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type JsonValue } from "@/types/json";
 import { createCard, deleteCard, updateCard } from "@/services/cards";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import type { JsonValue } from "@/types/json";
 
 type CreateCardVariables = {
   board_id: number;

@@ -1,15 +1,17 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook } from "@testing-library/react";
-import type { ReactNode } from "react";
-import { describe, expect, it, vi } from "vitest";
+
 import { useColumnMutations } from "../../src/hooks/kanban/useColumnMutations";
 import {
   createColumn,
-  updateColumn,
   deleteColumn,
+  updateColumn,
 } from "../../src/services/columns";
 import { createTestQueryClient } from "../test-utils";
 
+import type { ReactNode } from "react";
 vi.mock("../../src/services/columns", () => ({
   createColumn: vi.fn(),
   updateColumn: vi.fn(),

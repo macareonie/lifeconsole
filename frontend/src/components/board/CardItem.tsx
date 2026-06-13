@@ -1,5 +1,6 @@
 import type { Card } from "../../types/kanban";
 import { GripVertical } from "lucide-react";
+
 import { useSortable } from "@dnd-kit/react/sortable";
 
 function CardContent({ card }: { card: Card }) {

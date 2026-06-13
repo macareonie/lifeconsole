@@ -1,5 +1,6 @@
-import type { updateLayoutBody } from "@/hooks/kanban/useBoardMutations";
 import backendApi from "./http";
+
+import type { updateLayoutBody } from "@/hooks/kanban/useBoardMutations";
 
 export const getBoards = async () => {
   const { data } = await backendApi.get("/boards/");

@@ -1,4 +1,4 @@
-import { type JsonValue } from "../../types/json";
+import type { JsonValue } from "../../types/json";
 
 export type MetadataField = {
   key: string;

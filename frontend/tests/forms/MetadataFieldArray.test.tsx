@@ -1,10 +1,13 @@
+import { FormProvider, useForm } from "react-hook-form";
+import { describe, expect, it, vi } from "vitest";
+
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
-import { FormProvider, useForm } from "react-hook-form";
-import type { ReactNode } from "react";
+
 import { MetadataFieldArray } from "../../src/components/board/forms/MetadataFieldArray";
 import { renderWithProviders } from "../test-utils";
+
+import type { ReactNode } from "react";
 import type { MetadataFormValues } from "../../src/utils/kanban/CardMetadataConversion";
 
 function MetadataTestForm({

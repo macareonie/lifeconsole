@@ -1,28 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Card, Column, BoardContent } from "../../types/kanban";
-import { Button } from "../ui/button";
 
-import { ColumnItem } from "./ColumnItem";
-import { CardDetailsModal } from "./CardDetailsModal";
+import { PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
+import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
+import { isSortable } from "@dnd-kit/react/sortable";
+
 import { useBoardMutations } from "../../hooks/kanban/useBoardMutations";
 import { useColumnMutations } from "../../hooks/kanban/useColumnMutations";
+import { Button } from "../ui/button";
+import { CardDetailsModal } from "./CardDetailsModal";
+import { CardOverlayPreview } from "./CardItem";
+import { ColumnItem, ColumnOverlayPreview } from "./ColumnItem";
 import { BoardEditForm } from "./forms/BoardEditForm";
 import { ColumnCreateForm } from "./forms/ColumnCreateForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
 
-import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
-
-import { PointerSensor, PointerActivationConstraints } from "@dnd-kit/dom";
-import { isSortable } from "@dnd-kit/react/sortable";
+import type { Card, Column, BoardContent } from "../../types/kanban";
 import type {
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
 } from "@dnd-kit/react";
-import { CardOverlayPreview } from "./CardItem";
-import { ColumnOverlayPreview } from "./ColumnItem";
-
 type BoardTitleFormValues = {
   title: string;
 };

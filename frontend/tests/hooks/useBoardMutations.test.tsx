@@ -1,7 +1,8 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook } from "@testing-library/react";
-import type { ReactNode } from "react";
-import { describe, expect, it, vi } from "vitest";
+
 import { useBoardMutations } from "../../src/hooks/kanban/useBoardMutations";
 import {
   createBoard,
@@ -10,6 +11,7 @@ import {
 } from "../../src/services/boards";
 import { createTestQueryClient } from "../test-utils";
 
+import type { ReactNode } from "react";
 vi.mock("../../src/services/boards", () => ({
   createBoard: vi.fn(),
   updateBoard: vi.fn(),

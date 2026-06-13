@@ -1,7 +1,8 @@
+import { Moon, Sun } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../hooks/useTheme";
-import { Moon, Sun } from "lucide-react";
 
 const NavBar = () => {
   const { session, logout } = useAuth();

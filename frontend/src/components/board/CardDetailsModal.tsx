@@ -1,8 +1,9 @@
 import type { Card } from "../../types/kanban";
-import { Button } from "../ui/button";
 import { useCardMutations } from "../../hooks/kanban/useCardMutations";
+import { Button } from "../ui/button";
 import { CardEditForm } from "./forms/CardEditForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
+
 import type { CardSubmissionValues } from "./forms/CardEditForm";
 
 export function CardDetailsModal({

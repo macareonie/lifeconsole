@@ -1,13 +1,12 @@
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+
+import { metadataEntriesToJson } from "../../../utils/kanban/CardMetadataConversion";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { MetadataFieldArray } from "./MetadataFieldArray";
 
-import {
-  type MetadataFormValues,
-  metadataEntriesToJson,
-} from "../../../utils/kanban/CardMetadataConversion";
+import type { MetadataFormValues } from "../../../utils/kanban/CardMetadataConversion";
 
 type CardFormValues = {
   title: string;

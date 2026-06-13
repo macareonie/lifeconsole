@@ -1,5 +1,7 @@
-import { screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { screen } from "@testing-library/react";
+
 import BoardPage from "../../src/pages/BoardPage";
 import { renderWithRouter } from "../test-utils";
 
