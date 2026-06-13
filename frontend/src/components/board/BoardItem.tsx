@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Card, Column, BoardContent } from "../../types/kanban";
 import { Button } from "../ui/button";
@@ -12,9 +12,16 @@ import { ColumnCreateForm } from "./forms/ColumnCreateForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
 
 import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
+
+import { PointerSensor, PointerActivationConstraints } from "@dnd-kit/dom";
 import { isSortable } from "@dnd-kit/react/sortable";
-import type { DragEndEvent, DragStartEvent } from "@dnd-kit/react";
-import { CardPreview } from "./CardPreview";
+import type {
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+} from "@dnd-kit/react";
+import { CardOverlayPreview } from "./CardItem";
+import { ColumnOverlayPreview } from "./ColumnItem";
 
 type BoardTitleFormValues = {
   title: string;
@@ -24,48 +31,70 @@ type ColumnFormValues = {
   title: string;
 };
 
-function toItemMap(columns: Column[]) {
+// helper functions to convert current data struc to match shape used in dnd-kit example guide
+function toColumnOrder(columns: Column[]) {
+  return columns.map((column) => column.id);
+}
+
+// cardsByColumn: Record<groupKey, Card[]>, keyed by column id as a string
+// to match the `group` value used in CardItem's useSortable.
+function toCardsByColumn(columns: Column[]) {
   return Object.fromEntries(
     columns.map((column) => [String(column.id), column.cards]),
   );
 }
 
-function toColumnOrder(columns: Column[]) {
-  return columns.map((column) => String(column.id));
-}
-
 export function BoardItem({ board }: { board: BoardContent }) {
+  const navigate = useNavigate();
+
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [isEditingBoard, setIsEditingBoard] = useState(false);
   const [isAddingColumn, setIsAddingColumn] = useState(false);
-  const [activeCard, setActiveCard] = useState<Card | null>(null);
-  const navigate = useNavigate();
+
   const { updateBoardMutation, updateLayoutMutation, deleteBoardMutation } =
     useBoardMutations();
   const { createColumnMutation } = useColumnMutations();
 
-  const [items, setItems] = useState(() => toItemMap(board.columns));
-  const [columnOrder, setColumnOrder] = useState(() =>
+  // local state; single source of truth that updates after each drag action
+  const [columnOrder, setColumnOrder] = useState<number[]>(() =>
     toColumnOrder(board.columns),
   );
+  const [cardsByColumn, setCardsByColumn] = useState<Record<string, Card[]>>(
+    () => toCardsByColumn(board.columns),
+  );
+  // handle dragging state + dragOverlay, tracked by id instead of card or column objet
+  const [activeCardId, setActiveCardId] = useState<number | null>(null);
+  const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
+
+  const activeCard = activeCardId
+    ? (Object.values(cardsByColumn)
+        .flat()
+        .find((card) => card.id === activeCardId) ?? null)
+    : null;
+
+  const activeColumn = activeColumnId
+    ? (board.columns.find((col) => col.id === activeColumnId) ?? null)
+    : null;
 
   const isDragging = useRef(false);
-  const snapshot = useRef({ items, columnOrder });
 
-  const boardStateRef = useRef({
-    items: toItemMap(board.columns),
-    columnOrder: toColumnOrder(board.columns),
-  });
+  // holds latest updated board layout state at any given time that does not change upon rerenders; used as fallback on dragevent errors
+  const columnOrderRef = useRef(columnOrder);
+  const cardsByColumnRef = useRef(cardsByColumn);
+
   useEffect(() => {
-    boardStateRef.current = {
-      items: toItemMap(board.columns),
-      columnOrder: toColumnOrder(board.columns),
-    };
     if (!isDragging.current) {
-      setItems(boardStateRef.current.items);
-      setColumnOrder(boardStateRef.current.columnOrder);
+      const nextOrder = toColumnOrder(board.columns);
+      const nextCards = toCardsByColumn(board.columns);
+      columnOrderRef.current = nextOrder;
+      cardsByColumnRef.current = nextCards;
+      // eslint-disable-next-line
+      setColumnOrder(nextOrder);
+      setCardsByColumn(nextCards);
     }
-  }, [board]);
+    // whenever the api put request goes through board layout is updated on the backend
+    // and data is refetched, update local state if not currently in dragEvent
+  }, [board.columns]);
 
   const onUpdateBoard = async ({ title }: BoardTitleFormValues) => {
     await updateBoardMutation.mutateAsync({ board_id: board.id, title });
@@ -86,135 +115,159 @@ export function BoardItem({ board }: { board: BoardContent }) {
     setIsAddingColumn(false);
   };
 
+  const persistLayout = (
+    nextColumnOrder: number[],
+    nextCardsByColumn: Record<string, Card[]>,
+  ) => {
+    const layout = {
+      columns: nextColumnOrder.map((col_id) => ({
+        id: col_id,
+        card_ids: (nextCardsByColumn[String(col_id)] ?? []).map((c) => c.id),
+      })),
+    };
+
+    updateLayoutMutation.mutate(
+      { board_id: board.id, layout },
+      {
+        onError: () => {
+          // Roll back to last known-good state on error
+          const fallbackOrder = toColumnOrder(board.columns);
+          const fallbackCards = toCardsByColumn(board.columns);
+          columnOrderRef.current = fallbackOrder;
+          cardsByColumnRef.current = fallbackCards;
+          setColumnOrder(fallbackOrder);
+          setCardsByColumn(fallbackCards);
+        },
+      },
+    );
+  };
+
+  // start tracking card/column in motion
   const handleDragStart = (event: DragStartEvent) => {
     isDragging.current = true;
-    snapshot.current = { items, columnOrder };
-
     const { source } = event.operation;
     if (source?.type === "card") {
-      // Find the card data across all columns so we can render it in the overlay
-      const allCards = Object.values(items).flat();
-      const card = allCards.find((c) => c.id === source.id) ?? null;
-      setActiveCard(card);
+      setActiveCardId(source.id as number);
+    }
+    if (source?.type === "column") {
+      setActiveColumnId(source.id as number);
     }
   };
 
-  const handleDragEnd = async (event: DragEndEvent) => {
-    isDragging.current = false;
-    setActiveCard(null);
+  const handleDragOver = (event: DragOverEvent) => {
+    const { source, target } = event.operation;
+    if (!source || !target) return;
+    if (source.type !== "card") return;
+    if (!isSortable(source)) return;
 
-    if (event.canceled) {
-      setItems(snapshot.current.items);
-      setColumnOrder(snapshot.current.columnOrder);
+    const sourceGroup = String(source.group);
+    if (!sourceGroup) return;
+
+    // Determine target group and index
+    let targetGroup: string;
+    let targetIndex: number;
+
+    if (target.type === "card" && isSortable(target)) {
+      if (!target.group) return;
+      targetGroup = String(target.group);
+      targetIndex = target.index;
+    } else if (target.type === "column") {
+      const rawId = String(target.id).replace("zone-", "");
+      targetGroup = rawId;
+      targetIndex = (cardsByColumnRef.current[targetGroup] ?? []).length;
+    } else {
       return;
     }
 
-    const { source, target } = event.operation;
+    const knownIds = new Set(columnOrderRef.current.map(String));
+    if (!knownIds.has(sourceGroup) || !knownIds.has(targetGroup)) return;
+
+    // No-op if nothing changed
+    if (sourceGroup === targetGroup && source.index === targetIndex) return;
+
+    setCardsByColumn((prev) => {
+      const sourceCards = [...(prev[sourceGroup] ?? [])];
+      const cardIdx = sourceCards.findIndex((c) => c.id === source.id);
+      if (cardIdx === -1) return prev;
+
+      const [moved] = sourceCards.splice(cardIdx, 1);
+
+      if (sourceGroup === targetGroup) {
+        // Same column reorder
+        const insertAt = Math.min(targetIndex, sourceCards.length);
+        sourceCards.splice(insertAt, 0, moved);
+        const next = { ...prev, [sourceGroup]: sourceCards };
+        cardsByColumnRef.current = next;
+        return next;
+      } else {
+        // Cross-column transfer
+        const targetCards = [...(prev[targetGroup] ?? [])];
+        const insertAt = Math.min(targetIndex, targetCards.length);
+        targetCards.splice(insertAt, 0, {
+          ...moved,
+          column_id: Number(targetGroup),
+        });
+        const next = {
+          ...prev,
+          [sourceGroup]: sourceCards,
+          [targetGroup]: targetCards,
+        };
+        cardsByColumnRef.current = next;
+        return next;
+      }
+    });
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    isDragging.current = false;
+    setActiveCardId(null);
+    setActiveColumnId(null);
+
+    // Canceled — roll back to server state
+    if (event.canceled) {
+      const fallbackOrder = toColumnOrder(board.columns);
+      const fallbackCards = toCardsByColumn(board.columns);
+      columnOrderRef.current = fallbackOrder;
+      cardsByColumnRef.current = fallbackCards;
+      setColumnOrder(fallbackOrder);
+      setCardsByColumn(fallbackCards);
+      return;
+    }
+
+    const { source } = event.operation;
     if (!source) return;
 
+    // Column reorder — only columns are handled in onDragEnd
     if (source.type === "column") {
       if (!isSortable(source)) return;
       const { initialIndex, index } = source;
+      if (initialIndex === index) return;
 
-      setColumnOrder((currentOrder) => {
-        const newOrder = [...currentOrder];
-        const [moved] = newOrder.splice(initialIndex, 1);
-        newOrder.splice(index, 0, moved);
+      const newOrder = [...columnOrderRef.current];
+      const [moved] = newOrder.splice(initialIndex, 1);
+      newOrder.splice(index, 0, moved);
 
-        // newOrder is fresh here — no stale closure
-        const layout = {
-          columns: newOrder.map((col_id) => ({
-            id: Number(col_id),
-            card_ids: (items[col_id] ?? []).map((c) => c.id),
-          })),
-        };
-        updateLayoutMutation.mutate(
-          { board_id: board.id, layout },
-          { onError: () => setColumnOrder(snapshot.current.columnOrder) },
-        );
-        return newOrder;
-      });
+      columnOrderRef.current = newOrder;
+      setColumnOrder(newOrder);
+      persistLayout(newOrder, cardsByColumnRef.current);
       return;
     }
 
-    // Card move (same column or cross-column)
-    if (source.type === "card" && isSortable(source)) {
-      const { initialGroup, initialIndex, index } = source;
-
-      let group = source.group;
-
-      if (
-        target &&
-        target.type === "column-drop" &&
-        typeof target.id === "string"
-      ) {
-        // target.id is "column-drop-{column_id}" — extract the column id
-        const targetColId = String(target.id).replace("column-drop-", "");
-        if (targetColId) {
-          group = targetColId;
-        }
-      }
-      if (!initialGroup) {
-        setItems(snapshot.current.items);
-        return;
-      }
-
-      const knownColumnIds = new Set(columnOrder);
-      if (!group || !knownColumnIds.has(group.toString())) {
-        setItems(snapshot.current.items);
-        return;
-      }
-
-      setItems((currentItems) => {
-        let nextItems: typeof currentItems;
-
-        if (initialGroup === group) {
-          // Same column reorder
-          const groupCards = [...(currentItems[initialGroup] ?? [])];
-          const [moved] = groupCards.splice(initialIndex, 1);
-          groupCards.splice(index, 0, moved);
-          nextItems = { ...currentItems, [group]: groupCards };
-        } else {
-          // Cross-column transfer
-          const sourceCards = [...(currentItems[initialGroup] ?? [])];
-          const [moved] = sourceCards.splice(initialIndex, 1);
-          const targetCards = [...(currentItems[group] ?? [])];
-
-          const isEmpty = (currentItems[group]?.length ?? 0) === 0;
-          const insertAt = isEmpty ? 0 : Math.min(index, targetCards.length);
-          targetCards.splice(insertAt, 0, {
-            ...moved,
-            column_id: Number(group),
-          });
-          nextItems = {
-            ...currentItems,
-            [initialGroup]: sourceCards,
-            [group]: targetCards,
-          };
-        }
-
-        const layout = {
-          columns: columnOrder.map((col_id) => ({
-            id: Number(col_id),
-            card_ids: (nextItems[col_id] ?? []).map((c) => c.id),
-          })),
-        };
-
-        updateLayoutMutation.mutate(
-          { board_id: board.id, layout },
-          { onError: () => setItems(snapshot.current.items) },
-        );
-
-        return nextItems;
-      });
+    // Card drop — state already correct from onDragOver, just persist
+    if (source.type === "card") {
+      persistLayout(columnOrderRef.current, cardsByColumnRef.current);
     }
   };
 
-  // Merge server column shape with optimistic card order from items
+  // Merge server column shape (title, position, etc.) with the live
+  // ordering/cards from local state.
   const columns = columnOrder
-    .map((col_id) => board.columns.find((c) => String(c.id) === col_id))
+    .map((col_id) => board.columns.find((c) => c.id === col_id))
     .filter((col): col is Column => col !== undefined)
-    .map((col) => ({ ...col, cards: items[String(col.id)] ?? [] }));
+    .map((col) => ({
+      ...col,
+      cards: cardsByColumn[String(col.id)] ?? [],
+    }));
 
   return (
     <div className="min-h-screen bg-background p-6 text-foreground">
@@ -289,8 +342,22 @@ export function BoardItem({ board }: { board: BoardContent }) {
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         <DragDropProvider
+          sensors={(defaults) => [
+            ...defaults.filter((sensor) => sensor !== PointerSensor),
+            PointerSensor.configure({
+              activationConstraints: [
+                // Drag starts after the pointer moves 8px
+                new PointerActivationConstraints.Distance({ value: 8 }),
+                // ...or after holding for 200ms with up to 10px tolerance
+                new PointerActivationConstraints.Delay({
+                  value: 200,
+                  tolerance: 10,
+                }),
+              ],
+            }),
+          ]}
           onDragStart={handleDragStart}
-          // onDragOver={handleDragOver}
+          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
           {columns.map((column: Column, index: number) => (
@@ -303,10 +370,9 @@ export function BoardItem({ board }: { board: BoardContent }) {
             />
           ))}
           <DragOverlay>
-            {activeCard ? (
-              <div>
-                <CardPreview card={activeCard} />
-              </div>
+            {activeCard ? <CardOverlayPreview card={activeCard} /> : null}
+            {activeColumn ? (
+              <ColumnOverlayPreview column={activeColumn} />
             ) : null}
           </DragOverlay>
         </DragDropProvider>
