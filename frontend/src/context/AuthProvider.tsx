@@ -1,7 +1,12 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { type Session } from "@supabase/supabase-js";
-import { AuthContext, type LoginInput, type SignupInput } from "./AuthContext";
+import { useEffect, useState } from "react";
+
 import backendApi from "../services/http";
+import { AuthContext } from "./AuthContext";
+
+import type { Session } from "@supabase/supabase-js";
+
+import type { LoginInput, SignupInput } from "./AuthContext";
+import type { ReactNode } from "react";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);

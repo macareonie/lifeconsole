@@ -1,12 +1,19 @@
+import { GripVertical } from "lucide-react";
 import { useState } from "react";
-import type { Card, Column } from "../../types/kanban";
-import { CardItem } from "./CardItem";
-import { Button } from "../ui/button";
+
+import { CollisionPriority } from "@dnd-kit/abstract";
+import { useDroppable } from "@dnd-kit/react";
+import { useSortable } from "@dnd-kit/react/sortable";
+
 import { useCardMutations } from "../../hooks/kanban/useCardMutations";
 import { useColumnMutations } from "../../hooks/kanban/useColumnMutations";
+import { Button } from "../ui/button";
+import { CardItem, CardOverlayPreview } from "./CardItem";
 import { CardCreateForm } from "./forms/CardCreateForm";
 import { ColumnEditForm } from "./forms/ColumnEditForm";
 import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
+
+import type { Card, Column } from "../../types/kanban";
 import type { JsonValue } from "../../types/json";
 
 type CardFormValues = {
@@ -22,10 +29,12 @@ type ColumnTitleFormValues = {
 
 export function ColumnItem({
   column,
+  index,
   board_id,
   onCardClick,
 }: {
   column: Column;
+  index: number;
   board_id: number;
   onCardClick?: (card: Card) => void;
 }) {
@@ -33,9 +42,31 @@ export function ColumnItem({
   const [isCreatingCard, setIsCreatingCard] = useState(false);
   const { updateColumnMutation, deleteColumnMutation } = useColumnMutations();
   const { createCardMutation } = useCardMutations();
-  const sortedCards = column.cards.sort(
-    (a: Card, b: Card) => a.position - b.position,
-  );
+
+  // Register under diff IDs for sortbale columns and for droppable column zones for CARDS only.
+  // Collision priority higher for card zones when empty to prevent weird behaviours where cards can be dropped into column area.
+  const {
+    ref: columnRef,
+    isDragging: isColumnDragging,
+    isDropTarget: isColumnDropTarget,
+    handleRef,
+  } = useSortable({
+    id: column.id,
+    index,
+    type: "column",
+    accept: ["column"],
+    collisionPriority: CollisionPriority.Low,
+  });
+
+  const { ref: cardZoneRef, isDropTarget: isCardZoneTarget } = useDroppable({
+    id: `zone-${column.id}`,
+    type: "column",
+    accept: "card",
+    collisionPriority:
+      column.cards.length === 0
+        ? CollisionPriority.Normal
+        : CollisionPriority.Low,
+  });
 
   const onUpdateColumn = async ({ title, position }: ColumnTitleFormValues) => {
     await updateColumnMutation.mutateAsync({
@@ -61,22 +92,43 @@ export function ColumnItem({
       title,
       subtitle,
       column_id: column.id,
-      position: sortedCards.length + 1,
+      position: column.cards.length,
       metadata,
     });
     setIsCreatingCard(false);
   };
 
   return (
-    <div className="w-80 shrink-0 rounded-2xl border border-border bg-muted/60 p-3 shadow-sm">
+    <div
+      ref={columnRef}
+      data-dragging={isColumnDragging}
+      className={`Column w-80 shrink-0 rounded-2xl border bg-muted/60 p-3 shadow-sm transition-all duration-150
+        ${isColumnDragging ? "opacity-0" : "opacity-100"}
+        ${isColumnDropTarget ? "border-primary/60 shadow-md" : "border-border"}
+      `}
+      role="region"
+      aria-label={`Column: ${column.title}`}
+    >
       <div className="mb-3 space-y-3 px-1">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-foreground/80">
-            {column.title}
-          </h2>
+          {/* Drag handle — only this triggers column drag */}
+          <div className="flex items-center gap-2 min-w-0">
+            <div
+              ref={handleRef}
+              role="button"
+              tabIndex={0}
+              aria-label={`Drag column: ${column.title}`}
+              className="self-stretch cursor-grab touch-none rounded p-0.5 text-muted-foreground/50 hover:text-muted-foreground active:cursor-grabbing"
+            >
+              <GripVertical />
+            </div>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-foreground/80">
+              {column.title}
+            </h2>
+          </div>
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-background px-2 py-0.5 text-xs font-medium text-muted-foreground shadow-sm ring-1 ring-border">
-              {sortedCards.length}
+              {column.cards.length}
             </span>
             <Button
               type="button"
@@ -123,6 +175,7 @@ export function ColumnItem({
 
         {isCreatingCard && (
           <CardCreateForm
+            aria-label={`Create card in column ${column.title}`}
             column_id={column.id}
             isPending={createCardMutation.isPending}
             errorMessage={
@@ -136,13 +189,56 @@ export function ColumnItem({
         )}
       </div>
 
-      <div className="space-y-3">
-        {sortedCards.map((card: Card) => (
+      {/* Card drop zone */}
+      <div
+        ref={cardZoneRef}
+        className={`min-h-128 space-y-3 rounded-xl border-2 border-dashed p-1 transition-colors duration-150
+          ${
+            isCardZoneTarget
+              ? "border-primary/40 bg-primary/5"
+              : "border-transparent"
+          }
+        `}
+      >
+        {column.cards.map((card: Card, index: number) => (
           <CardItem
             key={card.id}
             card={card}
+            index={index}
+            column_id={column.id}
             onClick={() => onCardClick?.(card)}
           />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Same as cardoverlay preview. static rendering simply for the dragoverlay.
+export function ColumnOverlayPreview({ column }: { column: Column }) {
+  return (
+    <div className="w-80 rotate-1 rounded-2xl border border-primary/40 bg-muted/60 p-3 shadow-2xl ring-2 ring-primary/20 opacity-95">
+      <div className="mb-3 space-y-3 px-1">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <div className="cursor-grab self-stretch p-0.5 text-muted-foreground/50">
+              <GripVertical />
+            </div>
+            <h2 className="truncate text-sm font-semibold uppercase tracking-wide text-foreground/80">
+              {column.title}
+            </h2>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="rounded-full bg-background px-2 py-0.5 text-xs font-medium text-muted-foreground shadow-sm ring-1 ring-border">
+              {column.cards.length}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="min-h-128 space-y-3 rounded-xl border-2 border-dashed border-transparent p-1">
+        {column.cards.map((card) => (
+          <CardOverlayPreview card={card} />
         ))}
       </div>
     </div>

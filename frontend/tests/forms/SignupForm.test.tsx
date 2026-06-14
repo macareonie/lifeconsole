@@ -1,6 +1,8 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+
 import SignupForm from "../../src/components/auth/SignupForm";
 import { renderWithProviders } from "../test-utils";
 

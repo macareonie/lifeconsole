@@ -1,5 +1,17 @@
+import {
+  createBoard,
+  deleteBoard,
+  updateBoard,
+  updateBoardLayout,
+} from "@/services/boards";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createBoard, deleteBoard, updateBoard } from "@/services/boards";
+
+export type updateLayoutBody = {
+  columns: {
+    id: number;
+    card_ids: number[];
+  }[];
+};
 
 export const useBoardMutations = () => {
   const queryClient = useQueryClient();
@@ -26,6 +38,21 @@ export const useBoardMutations = () => {
     },
   });
 
+  const updateLayoutMutation = useMutation({
+    mutationFn: ({
+      board_id,
+      layout,
+    }: {
+      board_id: number;
+      layout: updateLayoutBody;
+    }) => updateBoardLayout(board_id, layout),
+    onError(_error, variables) {
+      queryClient.invalidateQueries({
+        queryKey: ["boardContent", variables.board_id],
+      });
+    },
+  });
+
   const deleteBoardMutation = useMutation({
     mutationFn: async (board_id: number) => {
       return deleteBoard(board_id);
@@ -41,6 +68,7 @@ export const useBoardMutations = () => {
   return {
     createBoardMutation,
     updateBoardMutation,
+    updateLayoutMutation,
     deleteBoardMutation,
   };
 };

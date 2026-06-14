@@ -23,7 +23,7 @@ export const createCard = async (
   metadata: JsonValue,
 ) => {
   // same thing here, title should probably be optional but position should not
-  if (!position || position < 0) {
+  if (position === undefined || position < 0) {
     throw new ServiceError(
       "CardServiceError",
       "Position is required and must be a non-negative integer",

@@ -1,5 +1,8 @@
-import axios, { type AxiosError, type AxiosResponse } from "axios";
+import axios from "axios";
+
 import { env } from "../config/env";
+
+import type { AxiosError, AxiosResponse } from "axios";
 
 export const backendApi = axios.create({
   baseURL:

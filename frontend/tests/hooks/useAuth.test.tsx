@@ -1,10 +1,13 @@
-import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
+import { renderHook } from "@testing-library/react";
+
+import { AuthContext } from "../../src/context/AuthContext";
 import { useAuth } from "../../src/hooks/useAuth";
-import {
-  AuthContext,
-  type AuthContextType,
-} from "../../src/context/AuthContext";
+
+import type { AuthContextType } from "../../src/context/AuthContext";
+
+import type { ReactNode } from "react";
 
 describe("useAuth", () => {
   it("throws when used outside AuthProvider", () => {
@@ -22,7 +25,7 @@ describe("useAuth", () => {
       logout: vi.fn().mockResolvedValue(undefined),
     };
 
-    const wrapper = ({ children }: { children: any }) => (
+    const wrapper = ({ children }: { children: ReactNode }) => (
       <AuthContext.Provider value={fakeContext}>
         {children}
       </AuthContext.Provider>

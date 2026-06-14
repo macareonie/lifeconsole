@@ -1,5 +1,7 @@
-import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
+import { screen } from "@testing-library/react";
+
 import ErrorPage from "../../src/pages/ErrorPage";
 import { renderWithProviders } from "../test-utils";
 

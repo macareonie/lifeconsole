@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { getBoardContent } from "@/services/boards";
+import { useQuery } from "@tanstack/react-query";
 
 import type { BoardContent } from "../../types/kanban";
 

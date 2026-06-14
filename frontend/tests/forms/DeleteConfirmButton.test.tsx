@@ -1,6 +1,8 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+
 import { DeleteConfirmButton } from "../../src/components/board/forms/DeleteConfirmButton";
 import { renderWithProviders } from "../test-utils";
 

@@ -1,7 +1,11 @@
-import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { useTheme } from "../../src/hooks/useTheme";
+
+import { act, renderHook } from "@testing-library/react";
+
 import { ThemeProvider } from "../../src/context/ThemeProvider";
+import { useTheme } from "../../src/hooks/useTheme";
+
+import type { ReactNode } from "react";
 
 describe("useTheme", () => {
   it("throws when used outside ThemeProvider", () => {
@@ -13,7 +17,7 @@ describe("useTheme", () => {
   it("reads and toggles theme via ThemeProvider and localStorage", () => {
     localStorage.setItem("theme", "light");
 
-    const wrapper = ({ children }: { children: any }) => (
+    const wrapper = ({ children }: { children: ReactNode }) => (
       <ThemeProvider>{children}</ThemeProvider>
     );
 

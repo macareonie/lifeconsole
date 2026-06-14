@@ -1,5 +1,7 @@
-import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
+import { screen } from "@testing-library/react";
+
 import LandingPage from "../../src/pages/LandingPage";
 import { renderWithProviders } from "../test-utils";
 
