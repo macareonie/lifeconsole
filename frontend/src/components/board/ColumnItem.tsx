@@ -105,6 +105,8 @@ export function ColumnItem({
         ${isColumnDragging ? "opacity-0" : "opacity-100"}
         ${isColumnDropTarget ? "border-primary/60 shadow-md" : "border-border"}
       `}
+      role="region"
+      aria-label={`Column: ${column.title}`}
     >
       <div className="mb-3 space-y-3 px-1">
         <div className="flex items-center justify-between gap-3">
@@ -112,6 +114,9 @@ export function ColumnItem({
           <div className="flex items-center gap-2 min-w-0">
             <div
               ref={handleRef}
+              role="button"
+              tabIndex={0}
+              aria-label={`Drag column: ${column.title}`}
               className="self-stretch cursor-grab touch-none rounded p-0.5 text-muted-foreground/50 hover:text-muted-foreground active:cursor-grabbing"
             >
               <GripVertical />
@@ -169,6 +174,7 @@ export function ColumnItem({
 
         {isCreatingCard && (
           <CardCreateForm
+            aria-label={`Create card in column ${column.title}`}
             column_id={column.id}
             isPending={createCardMutation.isPending}
             errorMessage={

@@ -66,7 +66,12 @@ export function CardItem({
   });
 
   return (
-    <div ref={ref} className="relative">
+    <div
+      ref={ref}
+      className="relative"
+      role="article"
+      aria-label={`Card: ${card.title}`}
+    >
       {/* Drop indicator line above the card */}
       <div
         className={`absolute -top-1.5 left-2 right-2 h-0.5 rounded-full bg-primary transition-opacity duration-100 ${
@@ -82,6 +87,9 @@ export function CardItem({
         {/* Grip handle — only this initiates drag */}
         <div
           ref={handleRef}
+          role="button"
+          tabIndex={0}
+          aria-label={`Drag card: ${card.title}`}
           className="cursor-grab touch-none rounded p-0.5 text-muted-foreground/50 hover:text-muted-foreground active:cursor-grabbing self-center"
         >
           <GripVertical />

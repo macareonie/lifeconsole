@@ -20,6 +20,7 @@ type CardSubmissionValues = {
 };
 
 type CardCreateFormProps = {
+  "aria-label": string;
   column_id: number;
   isPending: boolean;
   errorMessage?: string;
@@ -28,6 +29,7 @@ type CardCreateFormProps = {
 };
 
 export function CardCreateForm({
+  "aria-label": ariaLabel,
   column_id,
   isPending,
   errorMessage,
@@ -61,6 +63,7 @@ export function CardCreateForm({
   return (
     <FormProvider {...methods}>
       <form
+        aria-label={ariaLabel}
         onSubmit={handleSubmit(handleCreate)}
         className="space-y-3 rounded-xl border border-border bg-background p-3"
       >
