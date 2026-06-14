@@ -101,6 +101,7 @@ export function ColumnItem({
   return (
     <div
       ref={columnRef}
+      data-dragging={isColumnDragging}
       className={`Column w-80 shrink-0 rounded-2xl border bg-muted/60 p-3 shadow-sm transition-all duration-150
         ${isColumnDragging ? "opacity-0" : "opacity-100"}
         ${isColumnDropTarget ? "border-primary/60 shadow-md" : "border-border"}

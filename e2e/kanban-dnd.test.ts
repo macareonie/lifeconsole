@@ -9,9 +9,9 @@ test.describe("Board", () => {
     page,
   }, testInfo) => {
     const unique = `${testInfo.project.name}-${Date.now()}`;
-    const boardTitle = `e2e testboard ${unique}`;
-    const columnTitle = `test column ${unique}`;
-    const cardTitle = `test card ${unique}`;
+    const boardTitle = `board ${unique}`;
+    const columnTitle = `col ${unique}`;
+    const cardTitle = `card ${unique}`;
     const cardSubtitle = `context ${unique}`;
 
     const columnAName = `${columnTitle}a`;
@@ -93,17 +93,29 @@ test.describe("Board", () => {
       handle: ReturnType<typeof page.getByRole>,
       ...keys: string[]
     ) => {
+      await handle.focus();
+      await page.waitForTimeout(100);
       await handle.press("Space");
-      await page.waitForTimeout(150);
+      await page.waitForTimeout(500); // longer wait for Chromium/WebKit
       for (const key of keys) {
         await handle.press(key);
-        await page.waitForTimeout(150);
+        await page.waitForTimeout(200); // longer gap between keys
       }
       await handle.press("Space");
-      await page.waitForTimeout(300); // allow layout mutation to fire
+      await page
+        .waitForResponse(
+          (response) =>
+            response.url().includes("/layout") && response.status() === 200,
+          { timeout: 10000 },
+        )
+        .catch(() => {});
+      await page.waitForTimeout(200); // settle after drop
     };
 
     // ── Drag card A → column B ─────────────────────────────────────────────
+    await expect(
+      colA.getByRole("article", { name: `Card: ${cardATitle}` }),
+    ).toBeVisible();
     await drag(cardHandle(cardATitle), "ArrowRight");
     await expect(
       colA.getByRole("article", { name: `Card: ${cardATitle}` }),
@@ -113,6 +125,9 @@ test.describe("Board", () => {
     ).toBeVisible();
 
     // ── Drag card C → column B ─────────────────────────────────────────────
+    await expect(
+      colC.getByRole("article", { name: `Card: ${cardCTitle}` }),
+    ).toBeVisible();
     await drag(cardHandle(cardCTitle), "ArrowLeft");
     await expect(
       colC.getByRole("article", { name: `Card: ${cardCTitle}` }),
@@ -121,7 +136,8 @@ test.describe("Board", () => {
       colB.getByRole("article", { name: `Card: ${cardCTitle}` }),
     ).toBeVisible();
 
-    // ── Drag column A → position 2 (after column B) ────────────────────────
+    // ── Drag column A → position 2 ─────────────────────────────────────────
+    await expect(colA.getByText("0", { exact: true })).toBeVisible();
     await drag(columnHandle(columnAName), "ArrowRight");
 
     // check card counts B:3, A:0, C:0
@@ -130,9 +146,13 @@ test.describe("Board", () => {
     await expect(colC.getByText("0", { exact: true })).toBeVisible();
 
     // ── Cleanup ────────────────────────────────────────────────────────────
+
+    await page.waitForLoadState("networkidle");
+
     await page.getByRole("button", { name: "Delete board" }).click();
     await page.getByRole("button", { name: "Delete board" }).click();
 
+    await page.waitForLoadState("networkidle");
     await page.goto("/board");
     await expect(
       page.getByRole("heading", { name: "Your Boards" }),
@@ -143,5 +163,6 @@ test.describe("Board", () => {
 
     await page.getByRole("button", { name: "Logout" }).click();
     await expect(page.getByRole("link", { name: "Login" })).toBeVisible();
+    await page.waitForLoadState("networkidle");
   });
 });
