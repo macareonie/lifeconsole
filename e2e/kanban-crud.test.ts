@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Login", () => {
   test.beforeEach(async ({ page }) => {
@@ -60,7 +60,7 @@ test.describe("Login", () => {
     await page.getByRole("button", { name: "Delete board" }).click();
     await page.getByRole("button", { name: "Delete board" }).click();
 
-    await page.goto("http://localhost:5173/board");
+    await page.goto("/board");
     await expect(
       page.getByRole("heading", { name: "Your Boards" }),
     ).toBeVisible();

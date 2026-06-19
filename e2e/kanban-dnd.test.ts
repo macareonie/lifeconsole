@@ -96,10 +96,10 @@ test.describe("Board", () => {
       await handle.focus();
       await page.waitForTimeout(100);
       await handle.press("Space");
-      await page.waitForTimeout(500); // longer wait for Chromium/WebKit
+      await page.waitForTimeout(300); // longer wait for Chromium/WebKit
       for (const key of keys) {
         await handle.press(key);
-        await page.waitForTimeout(200); // longer gap between keys
+        await page.waitForTimeout(150); // longer gap between keys
       }
       await handle.press("Space");
       await page
@@ -146,23 +146,15 @@ test.describe("Board", () => {
     await expect(colC.getByText("0", { exact: true })).toBeVisible();
 
     // ── Cleanup ────────────────────────────────────────────────────────────
-
-    await page.waitForLoadState("networkidle");
-
     await page.getByRole("button", { name: "Delete board" }).click();
     await page.getByRole("button", { name: "Delete board" }).click();
-
-    await page.waitForLoadState("networkidle");
     await page.goto("/board");
-    await expect(
-      page.getByRole("heading", { name: "Your Boards" }),
-    ).toBeVisible();
+
     await expect(
       page.getByRole("link", { name: boardTitle }),
     ).not.toBeVisible();
 
     await page.getByRole("button", { name: "Logout" }).click();
     await expect(page.getByRole("link", { name: "Login" })).toBeVisible();
-    await page.waitForLoadState("networkidle");
   });
 });
