@@ -1,10 +1,11 @@
 import { Router } from "express";
+
 import {
   createNewCard,
-  getCard,
-  updateCard,
   deleteCard,
+  getCard,
   getCardsByBoardId,
+  updateCard,
 } from "./card.controller.js";
 
 const cardsRouter = Router();

@@ -1,8 +1,11 @@
-import { ServiceError } from '../../errors/service.error.js';
+import { ServiceError } from "../../errors/service.error.js";
 import {
-    addHabit, deleteHabitById, getAllUserHabits, updateHabitById
-} from '../../repositories/habit.repository.js';
-import { getUserIdByEmail } from '../../repositories/user.repository.js';
+  addHabit,
+  deleteHabitById,
+  getAllUserHabits,
+  updateHabitById,
+} from "../../repositories/habit.repository.js";
+import { getUserIdByEmail } from "../../repositories/user.repository.js";
 
 import type { Habit } from "../../types/habittracker.js";
 

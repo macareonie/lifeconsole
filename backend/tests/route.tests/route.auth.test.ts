@@ -1,6 +1,7 @@
 import request from "supertest";
-import app from "../../src/app.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import app from "../../src/app.js";
 
 const signOut = vi.fn();
 

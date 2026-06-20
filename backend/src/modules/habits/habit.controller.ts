@@ -1,6 +1,9 @@
 import {
-    addHabitService, deleteHabitByIdService, getAllUserHabitsService, updateHabitByIdService
-} from './habit.service.js';
+  addHabitService,
+  deleteHabitByIdService,
+  getAllUserHabitsService,
+  updateHabitByIdService,
+} from "./habit.service.js";
 
 import type { Request, Response, NextFunction } from "express";
 import type { User } from "@supabase/supabase-js";

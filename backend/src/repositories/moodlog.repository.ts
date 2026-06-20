@@ -1,17 +1,17 @@
-import { db } from '../config/db.js';
+import { db } from "../config/db.js";
 
 import type { MoodLog } from "../types/habittracker.js";
 
 export const addMoodLog = async (moodLog: MoodLog, user_id: number) => {
   const { data, error } = await db
-    .from("mood_logs")
+    .from("moodlogs")
     .insert({ ...moodLog, user_id });
   return { data, error };
 };
 
 export const getMoodLogById = async (moodLog_id: number) => {
   const { data, error } = await db
-    .from("mood_logs")
+    .from("moodlogs")
     .select("*")
     .eq("id", moodLog_id);
   return { data, error };
@@ -19,7 +19,7 @@ export const getMoodLogById = async (moodLog_id: number) => {
 
 export const getMoodLogByDate = async (user_id: number, date: string) => {
   const { data, error } = await db
-    .from("mood_logs")
+    .from("moodlogs")
     .select("*")
     .eq("user_id", user_id)
     .eq("date", date);
@@ -32,7 +32,7 @@ export const getMoodLogByDateRange = async (
   endDate: string,
 ) => {
   const { data, error } = await db
-    .from("mood_logs")
+    .from("moodlogs")
     .select("*")
     .eq("user_id", user_id)
     .gte("date", startDate)
@@ -45,7 +45,7 @@ export const updateMoodLogById = async (
   updates: Partial<MoodLog>,
 ) => {
   const { data, error } = await db
-    .from("mood_logs")
+    .from("moodlogs")
     .update(updates)
     .eq("id", moodLog_id);
   return { data, error };
@@ -53,7 +53,7 @@ export const updateMoodLogById = async (
 
 export const deleteHabitLogById = async (habitLog_id: number) => {
   const { data, error } = await db
-    .from("habit_logs")
+    .from("moodlogs")
     .delete()
     .eq("id", habitLog_id);
   return { data, error };

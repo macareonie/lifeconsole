@@ -1,7 +1,11 @@
-import { ServiceError } from '../../errors/service.error.js';
+import { ServiceError } from "../../errors/service.error.js";
 import {
-    addHabitLog, deleteHabitLogById, getAllLogsByHabitId, getHabitLogById, updateHabitLogById
-} from '../../repositories/habitlog.repository.js';
+  addHabitLog,
+  deleteHabitLogById,
+  getAllLogsByHabitId,
+  getHabitLogById,
+  updateHabitLogById,
+} from "../../repositories/habitlog.repository.js";
 
 import type { HabitLog } from "../../types/habittracker.js";
 

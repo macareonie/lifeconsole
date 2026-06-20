@@ -1,4 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import * as cardController from "../../src/modules/cards/card.controller.js";
+import * as cardService from "../../src/modules/cards/card.service.js";
 
 vi.mock("../../src/modules/cards/card.service.js", () => ({
   createCard: vi.fn(),
@@ -7,9 +10,6 @@ vi.mock("../../src/modules/cards/card.service.js", () => ({
   deleteCardById: vi.fn(),
   getAllCardsByBoardId: vi.fn(),
 }));
-
-import * as cardController from "../../src/modules/cards/card.controller.js";
-import * as cardService from "../../src/modules/cards/card.service.js";
 
 beforeEach(() => vi.clearAllMocks());
 

@@ -1,18 +1,27 @@
+import { ServiceError } from "../../errors/service.error.js";
+import {
+  addBoard,
+  deleteBoardById as deleteBoardByIdRepo,
+  getAllBoards as getAllBoardsRepo,
+  getBoardById as getBoardByIdRepo,
+  updateBoardById as updateBoardByIdRepo,
+} from "../../repositories/board.repository.js";
+import {
+  getCardsByBoardId,
+  updateCardById,
+} from "../../repositories/card.repository.js";
+import {
+  getColumnsByBoardId,
+  updateColumnById,
+} from "../../repositories/column.repository.js";
+import { getUserIdByEmail } from "../../repositories/user.repository.js";
+
 import type {
   BoardSummary,
   BoardContent,
   Column,
   Card,
 } from "../../types/kanban.js";
-
-import { ServiceError } from '../../errors/service.error.js';
-import {
-    addBoard, deleteBoardById as deleteBoardByIdRepo, getAllBoards as getAllBoardsRepo,
-    getBoardById as getBoardByIdRepo, updateBoardById as updateBoardByIdRepo
-} from '../../repositories/board.repository.js';
-import { getCardsByBoardId, updateCardById } from '../../repositories/card.repository.js';
-import { getColumnsByBoardId, updateColumnById } from '../../repositories/column.repository.js';
-import { getUserIdByEmail } from '../../repositories/user.repository.js';
 
 const boardNotFoundError = new ServiceError(
   "BoardServiceError",

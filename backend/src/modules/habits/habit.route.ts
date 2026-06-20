@@ -1,8 +1,11 @@
-import { Router } from 'express';
+import { Router } from "express";
 
 import {
-    addHabit, deleteHabitById, getAllUserHabits, updateHabitById
-} from './habit.controller.js';
+  addHabit,
+  deleteHabitById,
+  getAllUserHabits,
+  updateHabitById,
+} from "./habit.controller.js";
 
 const habitsRouter = Router();
 

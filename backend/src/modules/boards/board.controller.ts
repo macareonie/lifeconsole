@@ -1,14 +1,15 @@
-import { type NextFunction, type Request, type Response } from "express";
-import { type User } from "@supabase/supabase-js";
 import {
   createBoard,
-  getBoardById,
+  deleteBoardById,
   getAllBoards,
+  getBoardById,
   getBoardContentById,
   updateBoardById,
   updateBoardLayoutById,
-  deleteBoardById,
 } from "./board.service.js";
+
+import type { NextFunction, Request, Response } from "express";
+import type { User } from "@supabase/supabase-js";
 
 export const createNewBoard = async (
   req: Request,

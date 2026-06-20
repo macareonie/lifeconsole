@@ -1,11 +1,10 @@
 import { createFreshClient } from "../../config/db.js";
+import { ServiceError } from "../../errors/service.error.js";
 import {
   addUser,
   checkUserExists,
   getUserEmailByUsername,
 } from "../../repositories/user.repository.js";
-
-import { ServiceError } from "../../errors/service.error.js";
 
 export const registerUser = async (
   username: string,

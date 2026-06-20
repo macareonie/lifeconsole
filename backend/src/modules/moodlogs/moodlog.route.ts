@@ -1,8 +1,12 @@
-import { Router } from 'express';
+import { Router } from "express";
 
 import {
-    addMoodLog, deleteMoodLog, getMoodLog, getMoodLogByDate, updateMoodLog
-} from './moodlog.controller.js';
+  addMoodLog,
+  deleteMoodLog,
+  getMoodLog,
+  getMoodLogByDate,
+  updateMoodLog,
+} from "./moodlog.controller.js";
 
 const moodLogsRouter = Router();
 

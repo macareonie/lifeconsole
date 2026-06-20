@@ -1,8 +1,12 @@
-import { Router } from 'express';
+import { Router } from "express";
 
 import {
-    addHabitLog, deleteHabitLog, getAllLogsByHabitId, getHabitLog, updateHabitLog
-} from './habitlog.controller.js';
+  addHabitLog,
+  deleteHabitLog,
+  getAllLogsByHabitId,
+  getHabitLog,
+  updateHabitLog,
+} from "./habitlog.controller.js";
 
 const habitLogRouter = Router();
 

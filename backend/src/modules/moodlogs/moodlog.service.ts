@@ -1,8 +1,12 @@
-import { ServiceError } from '../../errors/service.error.js';
+import { ServiceError } from "../../errors/service.error.js";
 import {
-    addMoodLog, deleteHabitLogById, getMoodLogByDate, getMoodLogById, updateMoodLogById
-} from '../../repositories/moodlog.repository.js';
-import { getUserIdByEmail } from '../../repositories/user.repository.js';
+  addMoodLog,
+  deleteHabitLogById,
+  getMoodLogByDate,
+  getMoodLogById,
+  updateMoodLogById,
+} from "../../repositories/moodlog.repository.js";
+import { getUserIdByEmail } from "../../repositories/user.repository.js";
 
 import type { MoodLog } from "../../types/habittracker.js";
 

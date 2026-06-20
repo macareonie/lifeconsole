@@ -1,4 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { createFreshClient } from "../../src/config/db.js";
+import { ServiceError } from "../../src/errors/service.error.js";
+import {
+  getUserFromAccessToken,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from "../../src/modules/auth/auth.service.js";
+import {
+  addUser,
+  checkUserExists,
+  getUserEmailByUsername,
+} from "../../src/repositories/user.repository.js";
 
 vi.mock("../../src/config/db.js", () => ({
   createFreshClient: vi.fn(),
@@ -9,20 +23,6 @@ vi.mock("../../src/repositories/user.repository.js", () => ({
   checkUserExists: vi.fn(),
   getUserEmailByUsername: vi.fn(),
 }));
-
-import {
-  registerUser,
-  loginUser,
-  logoutUser,
-  getUserFromAccessToken,
-} from "../../src/modules/auth/auth.service.js";
-import { createFreshClient } from "../../src/config/db.js";
-import {
-  addUser,
-  checkUserExists,
-  getUserEmailByUsername,
-} from "../../src/repositories/user.repository.js";
-import { ServiceError } from "../../src/errors/service.error.js";
 
 beforeEach(() => {
   vi.clearAllMocks();

@@ -1,15 +1,15 @@
-import { db } from '../config/db.js';
+import { db } from "../config/db.js";
 
 import type { HabitLog } from "../types/habittracker.js";
 
 export const addHabitLog = async (habitLog: HabitLog) => {
-  const { data, error } = await db.from("habit_logs").insert(habitLog);
+  const { data, error } = await db.from("habitlogs").insert(habitLog);
   return { data, error };
 };
 
 export const getHabitLogById = async (habitLog_id: number) => {
   const { data, error } = await db
-    .from("habit_logs")
+    .from("habitlogs")
     .select("*")
     .eq("id", habitLog_id);
   return { data, error };
@@ -17,7 +17,7 @@ export const getHabitLogById = async (habitLog_id: number) => {
 
 export const getAllLogsByHabitId = async (habit_id: number) => {
   const { data, error } = await db
-    .from("habit_logs")
+    .from("habitlogs")
     .select("*")
     .eq("habit_id", habit_id);
   return { data, error };
@@ -28,7 +28,7 @@ export const updateHabitLogById = async (
   updates: Partial<HabitLog>,
 ) => {
   const { data, error } = await db
-    .from("habit_logs")
+    .from("habitlogs")
     .update(updates)
     .eq("id", habitLog_id);
   return { data, error };
@@ -36,7 +36,7 @@ export const updateHabitLogById = async (
 
 export const deleteHabitLogById = async (habitLog_id: number) => {
   const { data, error } = await db
-    .from("habit_logs")
+    .from("habitlogs")
     .delete()
     .eq("id", habitLog_id);
   return { data, error };

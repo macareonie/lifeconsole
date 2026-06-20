@@ -1,16 +1,16 @@
-import cors from 'cors';
-import express from 'express';
+import cors from "cors";
+import express from "express";
 
-import { env } from './config/env.js';
-import { authMiddleware } from './middleware/auth.middleware.js';
-import { errorMiddleware } from './middleware/error.middleware.js';
-import authRouter from './modules/auth/auth.routes.js';
-import boardsRouter from './modules/boards/board.routes.js';
-import cardsRouter from './modules/cards/card.routes.js';
-import columnsRouter from './modules/columns/column.routes.js';
-import habitLogsRouter from './modules/habitlogs/habitlog.route.js';
-import habitsRouter from './modules/habits/habit.route.js';
-import moodLogsRouter from './modules/moodlogs/moodlog.route.js';
+import { env } from "./config/env.js";
+import { authMiddleware } from "./middleware/auth.middleware.js";
+import { errorMiddleware } from "./middleware/error.middleware.js";
+import authRouter from "./modules/auth/auth.routes.js";
+import boardsRouter from "./modules/boards/board.routes.js";
+import cardsRouter from "./modules/cards/card.routes.js";
+import columnsRouter from "./modules/columns/column.routes.js";
+import habitLogsRouter from "./modules/habitlogs/habitlog.route.js";
+import habitsRouter from "./modules/habits/habit.route.js";
+import moodLogsRouter from "./modules/moodlogs/moodlog.route.js";
 
 const app = express();
 

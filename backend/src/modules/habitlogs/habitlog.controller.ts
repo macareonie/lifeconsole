@@ -1,7 +1,10 @@
 import {
-    addHabitLogService, deleteHabitLogByIdService, getAllLogsByHabitIdService,
-    getHabitLogByIdService, updateHabitLogByIdService
-} from './habitlog.service.js';
+  addHabitLogService,
+  deleteHabitLogByIdService,
+  getAllLogsByHabitIdService,
+  getHabitLogByIdService,
+  updateHabitLogByIdService,
+} from "./habitlog.service.js";
 
 import type { Request, Response, NextFunction } from "express";
 import type { HabitLog } from "../../types/habittracker.js";

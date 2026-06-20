@@ -1,4 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { ServiceError } from "../../src/errors/service.error.js";
+import {
+  createBoard,
+  deleteBoardById,
+  getAllBoards,
+  getBoardById,
+  getBoardContentById,
+  updateBoardById,
+} from "../../src/modules/boards/board.service.js";
+import * as boardRepo from "../../src/repositories/board.repository.js";
+import * as cardRepo from "../../src/repositories/card.repository.js";
+import * as columnRepo from "../../src/repositories/column.repository.js";
+import * as userRepo from "../../src/repositories/user.repository.js";
 
 vi.mock("../../src/repositories/board.repository.js", () => ({
   addBoard: vi.fn(),
@@ -20,20 +34,6 @@ vi.mock("../../src/repositories/card.repository.js", () => ({
 vi.mock("../../src/repositories/user.repository.js", () => ({
   getUserIdByEmail: vi.fn(),
 }));
-
-import {
-  createBoard,
-  getBoardById,
-  getAllBoards,
-  getBoardContentById,
-  updateBoardById,
-  deleteBoardById,
-} from "../../src/modules/boards/board.service.js";
-import * as boardRepo from "../../src/repositories/board.repository.js";
-import * as columnRepo from "../../src/repositories/column.repository.js";
-import * as cardRepo from "../../src/repositories/card.repository.js";
-import * as userRepo from "../../src/repositories/user.repository.js";
-import { ServiceError } from "../../src/errors/service.error.js";
 
 beforeEach(() => {
   vi.clearAllMocks();
