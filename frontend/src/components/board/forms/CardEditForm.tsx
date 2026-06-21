@@ -5,10 +5,10 @@ import {
   metadataEntriesToJson,
   metadataJsonToEntries,
 } from "../../../utils/kanban/CardMetadataConversion";
+import { MetadataFieldArray } from "../../MetadataFieldArray";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { MetadataFieldArray } from "./MetadataFieldArray";
 
 import type { MetadataFormValues } from "../../../utils/kanban/CardMetadataConversion";
 import type { JsonValue } from "../../../types/json";

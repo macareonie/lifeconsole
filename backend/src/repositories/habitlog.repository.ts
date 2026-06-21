@@ -23,6 +23,33 @@ export const getAllLogsByHabitId = async (habit_id: number) => {
   return { data, error };
 };
 
+export const getLogsByDateRange = async (
+  user_id: number,
+  start_date: string,
+  end_date: string,
+) => {
+  const { data, error } = await db
+    .from("habitlogs")
+    .select("*, habits!inner(user_id)")
+    .eq("habits.user_id", user_id)
+    .gte("date", start_date)
+    .lte("date", end_date);
+  return { data, error };
+};
+
+export const getHabitLogByHabitAndDate = async (
+  habit_id: number,
+  date: string,
+) => {
+  const { data, error } = await db
+    .from("habitlogs")
+    .select("*")
+    .eq("habit_id", habit_id)
+    .eq("date", date)
+    .maybeSingle();
+  return { data, error };
+};
+
 export const updateHabitLogById = async (
   habitLog_id: number,
   updates: Partial<HabitLog>,

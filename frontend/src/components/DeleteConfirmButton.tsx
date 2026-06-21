@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { Button, buttonVariants } from "../../ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../ui/dialog";
+} from "./ui/dialog";
 
 type DeleteConfirmButtonProps = {
   confirmMessage: string;
