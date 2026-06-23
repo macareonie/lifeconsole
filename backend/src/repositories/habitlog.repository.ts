@@ -2,8 +2,30 @@ import { db } from "../config/db.js";
 
 import type { HabitLog } from "../types/habittracker.js";
 
-export const addHabitLog = async (habitLog: HabitLog) => {
-  const { data, error } = await db.from("habitlogs").insert(habitLog);
+// export const addHabitLog = async (habitLog: HabitLog) => {
+//   const { data, error } = await db.from("habitlogs").insert(habitLog);
+//   return { data, error };
+// };
+
+// export const updateHabitLogById = async (
+//   habitLog_id: number,
+//   updates: Partial<HabitLog>,
+// ) => {
+//   const { data, error } = await db
+//     .from("habitlogs")
+//     .update(updates)
+//     .eq("id", habitLog_id);
+//   return { data, error };
+// };
+
+// combined into upsert for simplicity since supabase already has upsert functionality
+
+export const upsertHabitLog = async (habitLog: HabitLog) => {
+  const { data, error } = await db
+    .from("habitlogs")
+    .upsert(habitLog, { onConflict: "habit_id, date" })
+    .select()
+    .maybeSingle();
   return { data, error };
 };
 
@@ -47,17 +69,6 @@ export const getHabitLogByHabitAndDate = async (
     .eq("habit_id", habit_id)
     .eq("date", date)
     .maybeSingle();
-  return { data, error };
-};
-
-export const updateHabitLogById = async (
-  habitLog_id: number,
-  updates: Partial<HabitLog>,
-) => {
-  const { data, error } = await db
-    .from("habitlogs")
-    .update(updates)
-    .eq("id", habitLog_id);
   return { data, error };
 };
 

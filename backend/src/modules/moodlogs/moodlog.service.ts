@@ -1,37 +1,39 @@
 import { ServiceError } from "../../errors/service.error.js";
 import {
-  addMoodLog,
-  deleteHabitLogById,
+  deleteMoodLogById,
   getMoodLogByDate,
+  getMoodLogByDateRange,
   getMoodLogById,
-  updateMoodLogById,
+  upsertMoodLog,
 } from "../../repositories/moodlog.repository.js";
-import { getUserIdByEmail } from "../../repositories/user.repository.js";
+import { MOOD_MAX, MOOD_MIN } from "../../types/habittracker.js";
+import { resolveUserId } from "../../utils/email2userid.js";
 
 import type { MoodLog } from "../../types/habittracker.js";
-
-export const addMoodLogService = async (moodLog: MoodLog, email: string) => {
-  if (!email) {
+function validateMood(mood: number) {
+  if (typeof mood !== "number" || mood < MOOD_MIN || mood > MOOD_MAX) {
     throw new ServiceError(
       "MoodLogServiceError",
-      "User must be authenticated to create a mood log",
+      `Mood must be a number between ${MOOD_MIN} and ${MOOD_MAX}`,
       400,
     );
   }
-  const { userId, hasError: userIdError } = await getUserIdByEmail(email);
-  if (userIdError) {
-    throw new ServiceError(
-      "MoodLogServiceError",
-      "Internal server error: Getting user ID",
-      500,
-    );
+}
+
+export const setMoodLogService = async (email: string, moodLog: MoodLog) => {
+  validateMood(moodLog.mood);
+  const userId = await resolveUserId(email);
+  if (!userId) {
+    throw new ServiceError("MoodLogServiceError", "User not found", 404);
   }
-  const { data, error } = await addMoodLog(moodLog, userId);
+
+  const { data, error } = await upsertMoodLog(moodLog, userId);
   if (error) {
     throw new ServiceError("MoodLogServiceError", error.message, 400);
   }
   return {
-    message: "Mood log created successfully",
+    data,
+    message: "Mood log set successfully",
     success: true,
   };
 };
@@ -49,21 +51,7 @@ export const getMoodLogByIdService = async (id: number) => {
 };
 
 export const getMoodLogByDateService = async (date: string, email: string) => {
-  if (!email) {
-    throw new ServiceError(
-      "MoodLogServiceError",
-      "User must be authenticated to create a mood log",
-      400,
-    );
-  }
-  const { userId, hasError: userIdError } = await getUserIdByEmail(email);
-  if (userIdError) {
-    throw new ServiceError(
-      "MoodLogServiceError",
-      "Internal server error: Getting user ID",
-      500,
-    );
-  }
+  const userId = await resolveUserId(email);
   const { data, error } = await getMoodLogByDate(userId, date);
   if (error) {
     throw new ServiceError("MoodLogServiceError", error.message, 400);
@@ -75,22 +63,37 @@ export const getMoodLogByDateService = async (date: string, email: string) => {
   };
 };
 
-export const updateMoodLogByIdService = async (
-  moodLog_id: number,
-  updates: Partial<MoodLog>,
+export const getMoodLogByDateRangeService = async (
+  email: string,
+  startDate: string,
+  endDate: string,
 ) => {
-  const { data, error } = await updateMoodLogById(moodLog_id, updates);
+  const userId = await resolveUserId(email);
+  if (!startDate || !endDate) {
+    throw new ServiceError(
+      "MoodLogServiceError",
+      "Start date and end date are required",
+      400,
+    );
+  }
+
+  const { data, error } = await getMoodLogByDateRange(
+    userId,
+    startDate,
+    endDate,
+  );
   if (error) {
     throw new ServiceError("MoodLogServiceError", error.message, 400);
   }
   return {
-    message: "Mood log updated successfully",
+    data: data ?? [],
+    message: "Mood logs retrieved successfully",
     success: true,
   };
 };
 
 export const deleteMoodLogByIdService = async (moodLog_id: number) => {
-  const { data, error } = await deleteHabitLogById(moodLog_id);
+  const { data, error } = await deleteMoodLogById(moodLog_id);
   if (error) {
     throw new ServiceError("MoodLogServiceError", error.message, 400);
   }

@@ -1,27 +1,13 @@
 import { ServiceError } from "../../errors/service.error.js";
 import {
-  addHabitLog,
   deleteHabitLogById,
   getAllLogsByHabitId,
   getHabitLogByHabitAndDate,
   getHabitLogById,
   getLogsByDateRange,
-  updateHabitLogById,
+  upsertHabitLog,
 } from "../../repositories/habitlog.repository.js";
-import { getUserIdByEmail } from "../../repositories/user.repository.js";
-
-import type { HabitLog } from "../../types/habittracker.js";
-
-export const addHabitLogService = async (habitLog: HabitLog) => {
-  const { data, error } = await addHabitLog(habitLog);
-  if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
-  }
-  return {
-    message: "Habit log created successfully",
-    success: true,
-  };
-};
+import { resolveUserId } from "../../utils/email2userid.js";
 
 export const getHabitLogByIdService = async (habitLog_id: number) => {
   const { data, error } = await getHabitLogById(habitLog_id);
@@ -40,23 +26,7 @@ export const getLogsByDateRangeService = async (
   start_date: string,
   end_date: string,
 ) => {
-  if (!email) {
-    throw new ServiceError(
-      "HabitLogServiceError",
-      "User must be authenticated to create a board",
-      400,
-    );
-  }
-
-  const { userId, hasError: userIdError } = await getUserIdByEmail(email);
-  if (userIdError) {
-    throw new ServiceError(
-      "HabitLogServiceError",
-      "Internal server error: Getting user ID",
-      500,
-    );
-  }
-
+  const userId = await resolveUserId(email);
   if (!userId) {
     throw new ServiceError("HabitLogServiceError", "User not found", 404);
   }
@@ -91,24 +61,18 @@ export const toggleHabitLogService = async (habit_id: number, date: string) => {
     throw new ServiceError("HabitLogServiceError", lookupError.message, 400);
   }
 
-  if (existing) {
-    const { error } = await updateHabitLogById(existing.id, {
-      completed: !existing.completed,
-    });
-    if (error) {
-      throw new ServiceError("HabitLogServiceError", error.message, 400);
-    }
-    return {
-      message: "Habit log toggled successfully",
-      success: true,
-    };
-  }
-  const { error } = await addHabitLog({ habit_id, date, completed: true });
+  const completed = existing ? !existing.completed : true;
+  const { error } = await upsertHabitLog({
+    id: existing?.id,
+    habit_id,
+    date,
+    completed,
+  });
   if (error) {
     throw new ServiceError("HabitLogServiceError", error.message, 400);
   }
   return {
-    message: "Habit log created successfully",
+    message: "Habit log toggled successfully",
     success: true,
   };
 };
@@ -121,20 +85,6 @@ export const getAllLogsByHabitIdService = async (habit_id: number) => {
   return {
     data: data,
     message: "Habit logs retrieved successfully",
-    success: true,
-  };
-};
-
-export const updateHabitLogByIdService = async (
-  habitLog_id: number,
-  updates: Partial<HabitLog>,
-) => {
-  const { data, error } = await updateHabitLogById(habitLog_id, updates);
-  if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
-  }
-  return {
-    message: "Habit log updated successfully",
     success: true,
   };
 };

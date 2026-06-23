@@ -21,3 +21,6 @@ export type MoodLog = {
   date: string;
   mood: number;
 };
+
+export const MOOD_MIN = 1;
+export const MOOD_MAX = 5;

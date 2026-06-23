@@ -2,10 +2,12 @@ import { db } from "../config/db.js";
 
 import type { MoodLog } from "../types/habittracker.js";
 
-export const addMoodLog = async (moodLog: MoodLog, user_id: number) => {
+export const upsertMoodLog = async (moodLog: MoodLog, user_id: number) => {
   const { data, error } = await db
     .from("moodlogs")
-    .insert({ ...moodLog, user_id });
+    .upsert({ ...moodLog, user_id }, { onConflict: "user_id, date" })
+    .select()
+    .maybeSingle();
   return { data, error };
 };
 
@@ -40,21 +42,10 @@ export const getMoodLogByDateRange = async (
   return { data, error };
 };
 
-export const updateMoodLogById = async (
-  moodLog_id: number,
-  updates: Partial<MoodLog>,
-) => {
-  const { data, error } = await db
-    .from("moodlogs")
-    .update(updates)
-    .eq("id", moodLog_id);
-  return { data, error };
-};
-
-export const deleteHabitLogById = async (habitLog_id: number) => {
+export const deleteMoodLogById = async (moodLog_id: number) => {
   const { data, error } = await db
     .from("moodlogs")
     .delete()
-    .eq("id", habitLog_id);
+    .eq("id", moodLog_id);
   return { data, error };
 };
