@@ -50,7 +50,7 @@ export const getMoodLogByIdService = async (id: number) => {
   };
 };
 
-export const getMoodLogByDateService = async (date: string, email: string) => {
+export const getMoodLogByDateService = async (email: string, date: string) => {
   const userId = await resolveUserId(email);
   const { data, error } = await getMoodLogByDate(userId, date);
   if (error) {

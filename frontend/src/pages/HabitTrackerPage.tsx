@@ -9,11 +9,12 @@ import { useHabits } from "../hooks/habittracker/useHabits";
 
 const HabitTrackerPage = () => {
   const { data: habits, isPending, isError, error } = useHabits();
-  const { logsByHabit, isPending: logsPending } = useHabitLogs(habits);
   const { createHabitMutation } = useHabitMutations();
 
   const [isAddingHabit, setIsAddingHabit] = useState(false);
   const [weekAnchor, setWeekAnchor] = useState(() => new Date());
+
+  const { logsByHabit, isPending: logsPending } = useHabitLogs(weekAnchor);
 
   const onCreateHabit = async ({
     title,

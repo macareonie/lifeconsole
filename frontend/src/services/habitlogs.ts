@@ -1,22 +1,9 @@
 import backendApi from "./http";
 
-export const addHabitLog = async (
-  habit_id: number,
-  date: string,
-  completed: boolean,
-) => {
-  const { data } = await backendApi.post("/habitlogs/", {
-    habit_id,
-    date,
-    completed,
-  });
-  return data;
-};
-
-export const getHabitLog = async (habitlog_id: number) => {
-  const { data } = await backendApi.get(`/habitlogs/${habitlog_id}/`);
-  return data;
-};
+// export const getHabitLog = async (habitlog_id: number) => {
+//   const { data } = await backendApi.get(`/habitlogs/${habitlog_id}/`);
+//   return data;
+// };
 
 export const getHabitLogsByDateRange = async (
   start_date: string,
@@ -41,18 +28,6 @@ export const toggleHabitLog = async (habit_id: number, date: string) => {
 
 export const getAllLogsByHabitId = async (habit_id: number) => {
   const { data } = await backendApi.get(`/habitlogs/habit/${habit_id}/`);
-  return data;
-};
-
-export const updateHabitLog = async (
-  habitlog_id: number,
-  date: string,
-  completed: boolean,
-) => {
-  const { data } = await backendApi.put(`/habitlogs/${habitlog_id}/`, {
-    date,
-    completed,
-  });
   return data;
 };
 

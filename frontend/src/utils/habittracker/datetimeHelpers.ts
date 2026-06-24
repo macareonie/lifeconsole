@@ -18,6 +18,13 @@ export function startOfWeek(date: Date): Date {
   return d;
 }
 
+export function endOfWeek(date: Date): Date {
+  const start = startOfWeek(date);
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  return end;
+}
+
 // Returns an array of 7 Date objects, Monday through Sunday, for the week
 // containing `date`.
 export function getWeekDays(date: Date): Date[] {

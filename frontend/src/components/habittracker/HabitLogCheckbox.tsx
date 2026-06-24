@@ -1,26 +1,29 @@
 import { Check } from "lucide-react";
-import { useState } from "react";
 
 import { useHabitLogMutations } from "../../hooks/habittracker/useHabitLogMutations";
 
-import type { Habit } from "../../types/habittracker";
+import type { Habit, HabitLog } from "../../types/habittracker";
 export function HabitLogCheckbox({
   habit,
   date,
+  existingLog,
 }: {
   habit: Habit;
   date: string;
+  existingLog?: HabitLog;
 }) {
   const { toggleHabitLogMutation } = useHabitLogMutations();
 
-  const [isCompleted, setIsCompleted] = useState<boolean | undefined>(false);
+  const serverCompleted = existingLog?.completed ?? false;
+  const isCompleted = toggleHabitLogMutation.isPending
+    ? !serverCompleted
+    : serverCompleted;
 
   const onToggle = () => {
     toggleHabitLogMutation.mutate({
       habit_id: habit.id,
       date,
     });
-    setIsCompleted((prev) => !prev);
   };
 
   return (

@@ -1,7 +1,6 @@
 import {
   deleteHabitLogByIdService,
   getAllLogsByHabitIdService,
-  getHabitLogByIdService,
   getLogsByDateRangeService,
   toggleHabitLogService,
 } from "./habitlog.service.js";
@@ -10,19 +9,19 @@ import type { User } from "@supabase/supabase-js";
 import type { Request, Response, NextFunction } from "express";
 import type { HabitLog } from "../../types/habittracker.js";
 
-export const getHabitLog = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { id } = req.params;
-  try {
-    const result = await getHabitLogByIdService(Number(id));
-    return res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
+// export const getHabitLog = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   const { id } = req.params;
+//   try {
+//     const result = await getHabitLogByIdService(Number(id));
+//     return res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 export const getHabitLogsByDateRange = async (
   req: Request,
@@ -48,7 +47,7 @@ export const toggleHabitLog = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { habit_id, date } = req.query;
+  const { habit_id, date } = req.body;
   try {
     const result = await toggleHabitLogService(
       Number(habit_id),

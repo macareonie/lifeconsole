@@ -3,7 +3,6 @@ import { Router } from "express";
 import {
   deleteHabitLog,
   getAllLogsByHabitId,
-  getHabitLog,
   getHabitLogsByDateRange,
   toggleHabitLog,
 } from "./habitlog.controller.js";
@@ -11,7 +10,7 @@ import {
 const habitLogRouter = Router();
 
 habitLogRouter.post("/toggle/", toggleHabitLog);
-habitLogRouter.get("/:id", getHabitLog);
+// habitLogRouter.get("/:id", getHabitLog);
 habitLogRouter.get("/habit/:habit_id", getAllLogsByHabitId);
 habitLogRouter.get("/range/", getHabitLogsByDateRange);
 habitLogRouter.delete("/:id", deleteHabitLog);

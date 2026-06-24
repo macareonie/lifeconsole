@@ -30,8 +30,8 @@ app.use("/api/boards", authMiddleware, boardsRouter);
 app.use("/api/columns", authMiddleware, columnsRouter);
 app.use("/api/cards", authMiddleware, cardsRouter);
 app.use("/api/habits", authMiddleware, habitsRouter);
-app.use("/api/habit-logs", authMiddleware, habitLogsRouter);
-app.use("/api/mood-logs", authMiddleware, moodLogsRouter);
+app.use("/api/habitlogs", authMiddleware, habitLogsRouter);
+app.use("/api/moodlogs", authMiddleware, moodLogsRouter);
 
 app.get("/", (req, res) => {
   console.log("Received request for landing page");

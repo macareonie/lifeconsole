@@ -1,34 +1,28 @@
-import { getAllLogsByHabitId } from "@/services/habitlogs";
-import { useQueries } from "@tanstack/react-query";
+import { useMemo } from "react";
 
-import type { Habit, HabitLog } from "../../types/habittracker";
+import { useHabitLogsByWeek } from "./useHabitLogsByWeek";
 
-// Fetches logs for every habit in parallel and flattens into one array.
-// keyed by habit_id so the calendar grid can do O(1) lookups.
-export const useHabitLogs = (habits: Habit[] | undefined) => {
-  const results = useQueries({
-    queries: (habits ?? []).map((habit) => ({
-      queryKey: ["habitLogs", habit.id],
-      queryFn: () => getAllLogsByHabitId(habit.id),
-      enabled: !!habits,
-    })),
-  });
+import type { HabitLog } from "../../types/habittracker";
 
-  const isPending = results.some((r) => r.isPending);
-  const isError = results.some((r) => r.isError);
+// Wraps the single range-query fetch and reshapes the flat array into
+// Map<habit_id, Map<isoDate, HabitLog>> for O(1) lookups in the grid.
+export const useHabitLogs = (weekAnchor: Date) => {
+  const { data, isPending, isError } = useHabitLogsByWeek(weekAnchor);
 
-  // Map of habit_id -> Map of ISO date -> HabitLog, for fast lookup when
-  // rendering the grid.
-  const logsByHabit = new Map<number, Map<string, HabitLog>>();
+  const logsByHabit = useMemo(() => {
+    const map = new Map<number, Map<string, HabitLog>>();
+    const logs = data?.data ?? [];
 
-  results.forEach((result, index) => {
-    const habit = habits?.[index];
-    if (!habit || !result.data) return;
-    const logMap = new Map<string, HabitLog>();
-    const logs: HabitLog[] = result.data.data ?? result.data;
-    logs.forEach((log) => logMap.set(log.date, log));
-    logsByHabit.set(habit.id, logMap);
-  });
+    for (const log of logs) {
+      const isoDate = log.date.slice(0, 10);
+      if (!map.has(log.habit_id)) {
+        map.set(log.habit_id, new Map());
+      }
+      map.get(log.habit_id)!.set(isoDate, log);
+    }
+
+    return map;
+  }, [data]);
 
   return { logsByHabit, isPending, isError };
 };

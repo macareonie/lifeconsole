@@ -17,9 +17,9 @@ export const useHabitLogMutations = () => {
     }) => {
       return toggleHabitLog(habit_id, date);
     },
-    onSuccess: async (_data, variables) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["habitLogs", variables.habit_id],
+        queryKey: ["habitLogs"],
       });
     },
   });

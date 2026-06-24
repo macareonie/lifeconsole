@@ -25,3 +25,7 @@ export type MoodLog = {
   date: string;
   mood: number;
 };
+
+export type ToggleHabitLogResult = {
+  completed: boolean;
+};
