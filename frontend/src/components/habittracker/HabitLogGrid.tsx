@@ -31,7 +31,7 @@ export function HabitLogGrid({
   const today = new Date();
 
   return (
-    <div className="rounded-2xl border border-border bg-card shadow-sm">
+    <div className="w-full rounded-2xl border border-border bg-card shadow-sm">
       {/* Week navigation header */}
       <div className="flex items-center justify-between border-b border-border p-4">
         <Button
@@ -56,7 +56,7 @@ export function HabitLogGrid({
       </div>
 
       {/* Day-of-week header row */}
-      <div className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-2 border-b border-border px-4 py-2 sm:grid-cols-[12rem_repeat(7,2.5rem)]">
+      <div className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-4 border-b border-border px-4 py-2 sm:grid-cols-[12rem_repeat(7,2.5rem)]">
         <div />
         {weekDays.map((day) => {
           const { weekday, day: dayNum } = formatDayLabel(day);
@@ -88,7 +88,7 @@ export function HabitLogGrid({
           return (
             <div
               key={habit.id}
-              className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-2 px-4 py-3 sm:grid-cols-[12rem_repeat(7,2.5rem)]"
+              className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-4 px-4 py-3 sm:grid-cols-[12rem_repeat(7,2.5rem)]"
             >
               <div className="flex items-center justify-between gap-2 pr-2">
                 <div className="min-w-0">

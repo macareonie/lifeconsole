@@ -70,7 +70,7 @@ const HabitTrackerPage = () => {
       )}
 
       {habits && (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem]">
+        <div className="grid w-full grid-cols-1 gap-3 xl:grid-cols-[50fr_20fr_30fr]">
           <div className="space-y-2">
             <HabitLogGrid
               habits={habits}
@@ -83,8 +83,12 @@ const HabitTrackerPage = () => {
             )}
           </div>
 
-          <div className="space-y-4">
+          <div className="grid gap-4">
             <MoodWidget />
+          </div>
+
+          <div>
+            <p>stats sdashboard</p>
           </div>
         </div>
       )}
