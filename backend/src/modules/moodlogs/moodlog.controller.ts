@@ -1,26 +1,25 @@
 import {
   deleteMoodLogByIdService,
   getMoodLogByDateService,
-  getMoodLogByIdService,
   setMoodLogService,
 } from "./moodlog.service.js";
 
 import type { Request, Response, NextFunction } from "express";
 import type { User } from "@supabase/supabase-js";
 
-export const getMoodLog = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const { id } = req.params;
-    const result = await getMoodLogByIdService(Number(id));
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
+// export const getMoodLog = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   try {
+//     const { id } = req.params;
+//     const result = await getMoodLogByIdService(Number(id));
+//     res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 export const getMoodLogByDate = async (
   req: Request,
@@ -29,7 +28,7 @@ export const getMoodLogByDate = async (
 ) => {
   try {
     const user = req.user as User;
-    const { date } = req.query;
+    const { date } = req.params;
     const result = await getMoodLogByDateService(user.email!, date as string);
     res.status(200).json(result);
   } catch (error) {

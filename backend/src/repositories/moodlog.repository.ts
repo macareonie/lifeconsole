@@ -24,7 +24,8 @@ export const getMoodLogByDate = async (user_id: number, date: string) => {
     .from("moodlogs")
     .select("*")
     .eq("user_id", user_id)
-    .eq("date", date);
+    .eq("date", date)
+    .maybeSingle();
   return { data, error };
 };
 

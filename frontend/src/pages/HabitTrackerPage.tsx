@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { HabitCreateForm } from "../components/habittracker/forms/HabitCreateForm";
 import { HabitLogGrid } from "../components/habittracker/HabitLogGrid";
+import { MoodWidget } from "../components/habittracker/Moodwidget";
 import { Button } from "../components/ui/button";
 import { useHabitLogs } from "../hooks/habittracker/useHabitLogs";
 import { useHabitMutations } from "../hooks/habittracker/useHabitMutations";
@@ -69,16 +70,23 @@ const HabitTrackerPage = () => {
       )}
 
       {habits && (
-        <HabitLogGrid
-          habits={habits}
-          logsByHabit={logsByHabit}
-          weekAnchor={weekAnchor}
-          onWeekChange={setWeekAnchor}
-        />
-      )}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem]">
+          <div className="space-y-2">
+            <HabitLogGrid
+              habits={habits}
+              logsByHabit={logsByHabit}
+              weekAnchor={weekAnchor}
+              onWeekChange={setWeekAnchor}
+            />
+            {logsPending && (
+              <p className="text-xs text-muted-foreground">Loading logs...</p>
+            )}
+          </div>
 
-      {logsPending && (
-        <p className="mt-2 text-xs text-muted-foreground">Loading logs...</p>
+          <div className="space-y-4">
+            <MoodWidget />
+          </div>
+        </div>
       )}
     </div>
   );

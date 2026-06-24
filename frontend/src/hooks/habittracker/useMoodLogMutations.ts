@@ -5,7 +5,7 @@ export const useMoodLogMutations = () => {
   const queryClient = useQueryClient();
 
   const setMoodLogMutation = useMutation({
-    mutationFn: async ({ date, mood }: { date: string; mood: string }) => {
+    mutationFn: async ({ date, mood }: { date: string; mood: number }) => {
       return setMoodLog(date, mood);
     },
     onSuccess: async (_data, variables) => {

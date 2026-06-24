@@ -3,7 +3,6 @@ import {
   deleteMoodLogById,
   getMoodLogByDate,
   getMoodLogByDateRange,
-  getMoodLogById,
   upsertMoodLog,
 } from "../../repositories/moodlog.repository.js";
 import { MOOD_MAX, MOOD_MIN } from "../../types/habittracker.js";
@@ -38,17 +37,17 @@ export const setMoodLogService = async (email: string, moodLog: MoodLog) => {
   };
 };
 
-export const getMoodLogByIdService = async (id: number) => {
-  const { data, error } = await getMoodLogById(id);
-  if (error) {
-    throw new ServiceError("MoodLogServiceError", error.message, 400);
-  }
-  return {
-    data,
-    message: "Mood log retrieved successfully",
-    success: true,
-  };
-};
+// export const getMoodLogByIdService = async (id: number) => {
+//   const { data, error } = await getMoodLogById(id);
+//   if (error) {
+//     throw new ServiceError("MoodLogServiceError", error.message, 400);
+//   }
+//   return {
+//     data,
+//     message: "Mood log retrieved successfully",
+//     success: true,
+//   };
+// };
 
 export const getMoodLogByDateService = async (email: string, date: string) => {
   const userId = await resolveUserId(email);
