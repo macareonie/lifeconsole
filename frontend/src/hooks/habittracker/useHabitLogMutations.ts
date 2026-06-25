@@ -21,6 +21,9 @@ export const useHabitLogMutations = () => {
       await queryClient.invalidateQueries({
         queryKey: ["habitLogs"],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["habits"],
+      });
     },
   });
 

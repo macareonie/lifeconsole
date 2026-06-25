@@ -12,6 +12,7 @@ import {
 } from "../../utils/habittracker/datetimeHelpers";
 import { DeleteConfirmButton } from "../DeleteConfirmButton";
 import { HabitLogCheckbox } from "./HabitLogCheckbox";
+import { StreakBadge } from "./StreakBadge";
 
 import type { Habit, HabitLog } from "../../types/habittracker";
 
@@ -95,10 +96,8 @@ export function HabitLogGrid({
                   <p className="truncate text-sm font-medium text-foreground">
                     {habit.title}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {habit.frequency}
-                  </p>
                 </div>
+                <StreakBadge habit={habit} />
                 <DeleteConfirmButton
                   confirmMessage={`Delete habit "${habit.title}" and all of its logs?`}
                   label="Delete"

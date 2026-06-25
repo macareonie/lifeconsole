@@ -1,25 +1,18 @@
 import { ServiceError } from "../../errors/service.error.js";
 import {
+  getCompletedDatesForHabit,
+  updateHabitStreak,
+} from "../../repositories/habit.repository.js";
+import {
   deleteHabitLogById,
   getAllLogsByHabitId,
   getHabitLogByHabitAndDate,
-  getHabitLogById,
   getLogsByDateRange,
   upsertHabitLog,
 } from "../../repositories/habitlog.repository.js";
+import { toIsoDate } from "../../utils/datetime-helpers.js";
 import { resolveUserId } from "../../utils/email2userid.js";
-
-// export const getHabitLogByIdService = async (habitLog_id: number) => {
-//   const { data, error } = await getHabitLogById(habitLog_id);
-//   if (error) {
-//     throw new ServiceError("HabitLogServiceError", error.message, 400);
-//   }
-//   return {
-//     data: data,
-//     message: "Habit log retrieved successfully",
-//     success: true,
-//   };
-// };
+import { calculateStreaks } from "../../utils/streaks-calc.js";
 
 export const getLogsByDateRangeService = async (
   email: string,
@@ -70,6 +63,11 @@ export const toggleHabitLogService = async (habit_id: number, date: string) => {
   if (error) {
     throw new ServiceError("HabitLogServiceError", error.message, 400);
   }
+
+  console.log("start streak recompute");
+  await recomputeHabitStreaksService(habit_id);
+  console.log("end streak recompute");
+
   return {
     message: "Habit log toggled successfully",
     success: true,
@@ -97,4 +95,31 @@ export const deleteHabitLogByIdService = async (habitLog_id: number) => {
     message: "Habit log deleted successfully",
     success: true,
   };
+};
+
+export const recomputeHabitStreaksService = async (habit_id: number) => {
+  const { data: completedDates, error: completedDatesError } =
+    await getCompletedDatesForHabit(habit_id);
+  if (completedDatesError) {
+    throw new ServiceError(
+      "HabitServiceError",
+      completedDatesError.message,
+      400,
+    );
+  }
+  const today = new Date();
+  const { currentStreak, longestStreak } = calculateStreaks(
+    completedDates ?? [],
+    today,
+  );
+
+  const { error: updateStreakError } = await updateHabitStreak(
+    habit_id,
+    currentStreak,
+    longestStreak,
+    toIsoDate(today),
+  );
+  if (updateStreakError) {
+    throw new ServiceError("HabitServiceError", updateStreakError.message, 400);
+  }
 };

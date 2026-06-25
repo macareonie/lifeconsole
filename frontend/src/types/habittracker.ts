@@ -11,6 +11,9 @@ export type Habit = {
   title: string;
   frequency: HabitFrequency;
   user_id?: number;
+  current_streak: number;
+  longest_streak: number;
+  streak_updated_at: string | null;
 };
 
 export type HabitLog = {

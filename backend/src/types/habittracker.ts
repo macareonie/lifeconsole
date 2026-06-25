@@ -7,6 +7,9 @@ export type Habit = {
   id?: number;
   title: string;
   frequency: HabitFrequency;
+  current_streak: number;
+  longest_streak: number;
+  streak_updated_at: string | null;
 };
 
 export type HabitLog = {
