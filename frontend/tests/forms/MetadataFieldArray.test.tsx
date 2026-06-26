@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { MetadataFieldArray } from "../../src/components/board/forms/MetadataFieldArray";
+import { MetadataFieldArray } from "../../src/components/MetadataFieldArray";
 import { renderWithProviders } from "../test-utils";
 
 import type { ReactNode } from "react";

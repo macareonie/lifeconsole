@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as colController from "../../src/modules/kanban/columns/column.controller.js";
 import * as colService from "../../src/modules/kanban/columns/column.service.js";
 
-vi.mock("../../src/modules/columns/column.service.js", () => ({
+vi.mock("../../src/modules/kanban/columns/column.service.js", () => ({
   createColumn: vi.fn(),
   getColumnById: vi.fn(),
   getAllColumns: vi.fn(),
