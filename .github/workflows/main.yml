@@ -1,68 +1,68 @@
-# name: CI Pipeline
+name: CI Pipeline
 
-# on:
-#   push:
-#     branches: ["main"]
-#   pull_request:
-#     branches: ["main"]
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
-# jobs:
-#   backend:
-#     runs-on: ubuntu-latest
+jobs:
+  backend:
+    runs-on: ubuntu-latest
 
-#     defaults:
-#       run:
-#         working-directory: backend
+    defaults:
+      run:
+        working-directory: backend
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-#       - name: Remove node_modules and dist folders
-#         run: |
-#           rm -rf node_modules
-#           rm -rf dist
+      - name: Remove node_modules and dist folders
+        run: |
+          rm -rf node_modules
+          rm -rf dist
 
-#       - name: Install backend dependencies
-#         run: npm install
+      - name: Install backend dependencies
+        run: npm install
 
-#       - name: Run backend tests
-#         run: npm run test
+      - name: Run backend tests
+        run: npm run test
 
-#       - name: Build backend
-#         run: npm run build
+      - name: Build backend
+        run: npm run build
 
-#   frontend:
-#     runs-on: ubuntu-latest
+  frontend:
+    runs-on: ubuntu-latest
 
-#     defaults:
-#       run:
-#         working-directory: frontend
+    defaults:
+      run:
+        working-directory: frontend
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-#       - name: Remove node_modules and dist folders
-#         run: |
-#           rm -rf node_modules
-#           rm -rf dist
+      - name: Remove node_modules and dist folders
+        run: |
+          rm -rf node_modules
+          rm -rf dist
 
-#       - name: Install frontend dependencies
-#         run: npm install
+      - name: Install frontend dependencies
+        run: npm install
 
-#       - name: Run frontend tests
-#         run: npm run test
+      - name: Run frontend tests
+        run: npm run test
 
-#       - name: Build frontend
-#         run: npm run build
+      - name: Build frontend
+        run: npm run build
