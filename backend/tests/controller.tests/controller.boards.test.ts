@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as boardController from "../../src/modules/boards/board.controller.js";
-import * as boardService from "../../src/modules/boards/board.service.js";
+import * as boardController from "../../src/modules/kanban/boards/board.controller.js";
+import * as boardService from "../../src/modules/kanban/boards/board.service.js";
 
 vi.mock("../../src/modules/boards/board.service.js", () => ({
   createBoard: vi.fn(),

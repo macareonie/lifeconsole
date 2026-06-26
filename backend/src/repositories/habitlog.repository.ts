@@ -79,3 +79,18 @@ export const deleteHabitLogById = async (habitLog_id: number) => {
     .eq("id", habitLog_id);
   return { data, error };
 };
+
+type AlltimeCompletionRow = {
+  habit_id: number;
+  habits: { title: string };
+};
+
+export const getAllTimeCompletions = async (user_id: number) => {
+  const { data, error } = await db
+    .from("habitlogs")
+    .select("habit_id, habits!inner(title)")
+    .eq("habits.user_id", user_id)
+    .eq("completed", true);
+
+  return { data: data as AlltimeCompletionRow[] | null, error };
+};

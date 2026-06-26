@@ -1,7 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getMoodLogByDate } from "../../services/moodlogs";
-import { toIsoDate } from "../../utils/habittracker/datetimeHelpers";
+import {
+  getMoodLogByDate,
+  getMoodLogByDateRange,
+} from "../../services/moodlogs";
+import {
+  endOfWeek,
+  startOfWeek,
+  toIsoDate,
+} from "../../utils/habittracker/datetimeHelpers";
 
 import type { MoodLog } from "../../types/habittracker";
 
@@ -11,5 +18,15 @@ export const useMoodLogByDate = (date: Date) => {
   return useQuery<MoodLog | null>({
     queryKey: ["moodLog", isoDate],
     queryFn: () => getMoodLogByDate(isoDate),
+  });
+};
+
+export const useMoodLogsByWeek = (weekAnchor: Date) => {
+  const startDate = toIsoDate(startOfWeek(weekAnchor));
+  const endDate = toIsoDate(endOfWeek(weekAnchor));
+
+  return useQuery<MoodLog[]>({
+    queryKey: ["moodLogs", startDate, endDate],
+    queryFn: () => getMoodLogByDateRange(startDate, endDate),
   });
 };

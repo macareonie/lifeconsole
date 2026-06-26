@@ -3,6 +3,7 @@ import { useState } from "react";
 import { HabitCreateForm } from "../components/habittracker/forms/HabitCreateForm";
 import { HabitLogGrid } from "../components/habittracker/HabitLogGrid";
 import { MoodWidget } from "../components/habittracker/Moodwidget";
+import { StatsDashboard } from "../components/habittracker/StatsDashBoard";
 import { Button } from "../components/ui/button";
 import { useHabitLogs } from "../hooks/habittracker/useHabitLogs";
 import { useHabitMutations } from "../hooks/habittracker/useHabitMutations";
@@ -84,11 +85,11 @@ const HabitTrackerPage = () => {
           </div>
 
           <div className="grid gap-4">
-            <MoodWidget />
+            <MoodWidget weekAnchor={weekAnchor} />
           </div>
 
           <div>
-            <p>stats sdashboard</p>
+            <StatsDashboard habits={habits} />
           </div>
         </div>
       )}

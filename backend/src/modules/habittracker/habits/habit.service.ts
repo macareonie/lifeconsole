@@ -1,13 +1,13 @@
-import { ServiceError } from "../../errors/service.error.js";
+import { ServiceError } from "../../../errors/service.error.js";
 import {
   addHabit,
   deleteHabitById,
   getAllUserHabits,
   updateHabitById,
-} from "../../repositories/habit.repository.js";
-import { getUserIdByEmail } from "../../repositories/user.repository.js";
+} from "../../../repositories/habit.repository.js";
+import { getUserIdByEmail } from "../../../repositories/user.repository.js";
 
-import type { Habit } from "../../types/habittracker.js";
+import type { Habit } from "../../../types/habittracker.js";
 
 const habitNotFoundError = new ServiceError(
   "HabitServiceError",

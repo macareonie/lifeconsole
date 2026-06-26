@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 
+import { toIsoDate } from "@/utils/habittracker/datetimeHelpers";
+
 import { useHabitLogsByWeek } from "./useHabitLogsByWeek";
 
 import type { HabitLog } from "../../types/habittracker";
-
 // Wraps the single range-query fetch and reshapes the flat array into
 // Map<habit_id, Map<isoDate, HabitLog>> for O(1) lookups in the grid.
 export const useHabitLogs = (weekAnchor: Date) => {
@@ -14,7 +15,7 @@ export const useHabitLogs = (weekAnchor: Date) => {
     const logs = data?.data ?? [];
 
     for (const log of logs) {
-      const isoDate = log.date.slice(0, 10);
+      const isoDate = toIsoDate(new Date(log.date));
       if (!map.has(log.habit_id)) {
         map.set(log.habit_id, new Map());
       }

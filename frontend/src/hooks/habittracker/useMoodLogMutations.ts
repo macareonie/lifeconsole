@@ -12,6 +12,9 @@ export const useMoodLogMutations = () => {
       await queryClient.invalidateQueries({
         queryKey: ["moodLog", variables.date],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["moodLogs"],
+      });
     },
   });
 

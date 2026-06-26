@@ -1,5 +1,6 @@
 import {
   deleteMoodLogByIdService,
+  getMoodLogByDateRangeService,
   getMoodLogByDateService,
   setMoodLogService,
 } from "./moodlog.service.js";
@@ -30,6 +31,25 @@ export const getMoodLogByDate = async (
     const user = req.user as User;
     const { date } = req.params;
     const result = await getMoodLogByDateService(user.email!, date as string);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getMoodLogByDateRange = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = req.user as User;
+    const { startDate, endDate } = req.query;
+    const result = await getMoodLogByDateRangeService(
+      user.email!,
+      startDate as string,
+      endDate as string,
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);

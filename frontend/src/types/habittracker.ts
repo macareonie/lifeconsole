@@ -46,3 +46,15 @@ export const MOOD_SCALE: MoodOption[] = [
 export type ToggleHabitLogResult = {
   completed: boolean;
 };
+
+export type HabitCompletionCount = {
+  habit_id: number;
+  title: string;
+  completion_count: number;
+};
+
+export type AllTimeStats = {
+  totalCompletions: number;
+  topHabit: HabitCompletionCount;
+  completionCounts: HabitCompletionCount[];
+};

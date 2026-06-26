@@ -8,7 +8,7 @@ import {
   getBoardById,
   getBoardContentById,
   updateBoardById,
-} from "../../src/modules/boards/board.service.js";
+} from "../../src/modules/kanban/boards/board.service.js";
 import * as boardRepo from "../../src/repositories/board.repository.js";
 import * as cardRepo from "../../src/repositories/card.repository.js";
 import * as columnRepo from "../../src/repositories/column.repository.js";

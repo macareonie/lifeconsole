@@ -7,7 +7,7 @@ import {
 
 import type { User } from "@supabase/supabase-js";
 import type { Request, Response, NextFunction } from "express";
-import type { HabitLog } from "../../types/habittracker.js";
+import type { HabitLog } from "../../../types/habittracker.js";
 
 // export const getHabitLog = async (
 //   req: Request,

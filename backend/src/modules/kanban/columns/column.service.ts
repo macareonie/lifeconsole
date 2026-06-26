@@ -1,11 +1,11 @@
-import { ServiceError } from "../../errors/service.error.js";
+import { ServiceError } from "../../../errors/service.error.js";
 import {
   addColumn,
   deleteColumnById as deleteColumnByIdRepo,
   getColumnById as getColumnByIdRepo,
   getColumnsByBoardId as getColumnsByBoardIdRepo,
   updateColumnById as updateColumnByIdRepo,
-} from "../../repositories/column.repository.js";
+} from "../../../repositories/column.repository.js";
 
 const columnNotFoundError = new ServiceError(
   "ColumnServiceError",

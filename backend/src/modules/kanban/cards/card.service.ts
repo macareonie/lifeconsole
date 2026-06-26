@@ -1,13 +1,13 @@
-import { ServiceError } from "../../errors/service.error.js";
+import { ServiceError } from "../../../errors/service.error.js";
 import {
   addCard,
   deleteCardById as deleteCardByIdRepo,
   getCardById as getCardByIdRepo,
   getCardsByBoardId as getCardsByBoardIdRepo,
   updateCardById as updateCardByIdRepo,
-} from "../../repositories/card.repository.js";
+} from "../../../repositories/card.repository.js";
 
-import type { JsonValue } from "../../types/json.js";
+import type { JsonValue } from "../../../types/json.js";
 const cardNotFoundError = new ServiceError(
   "CardServiceError",
   "Card not found! Time to create one!",
