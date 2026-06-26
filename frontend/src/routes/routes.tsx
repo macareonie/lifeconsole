@@ -1,9 +1,9 @@
-// src/routes/routes.tsx
 import type { RouteObject } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import BoardListPage from "../pages/BoardListPage";
 import BoardPage from "../pages/BoardPage";
 import ErrorPage from "../pages/ErrorPage";
+import HabitTrackerPage from "../pages/HabitTrackerPage";
 import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import RequireAuth from "./RequireAuth";
@@ -37,6 +37,10 @@ const routes: RouteObject[] = [
                 element: <BoardPage />,
               },
             ],
+          },
+          {
+            path: "habit-tracker",
+            element: <HabitTrackerPage />,
           },
         ],
       },

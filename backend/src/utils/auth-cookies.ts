@@ -1,5 +1,5 @@
-import { type Request, type Response } from "express";
-import { type Session } from "@supabase/supabase-js";
+import type { Request, Response } from "express";
+import type { Session } from "@supabase/supabase-js";
 import { env } from "../config/env.js";
 
 export const AUTH_ACCESS_COOKIE = "lc-access-token";

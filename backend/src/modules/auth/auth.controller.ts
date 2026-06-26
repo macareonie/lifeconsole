@@ -1,16 +1,16 @@
-import { type NextFunction, type Request, type Response } from "express";
-import { type Session } from "@supabase/supabase-js";
-import { db } from "../../config/db.js";
+import type { Session } from "@supabase/supabase-js";
+import type { NextFunction, Request, Response } from "express";
+
 import {
   clearAuthCookies,
   getAuthCookieTokens,
   setAuthCookies,
 } from "../../utils/auth-cookies.js";
 import {
-  loginUser,
-  registerUser,
-  logoutUser,
   getUserFromAccessToken,
+  loginUser,
+  logoutUser,
+  registerUser,
 } from "./auth.service.js";
 
 export const register = async (

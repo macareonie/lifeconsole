@@ -2,10 +2,10 @@ import { Router } from "express";
 
 import {
   createNewColumn,
-  getColumn,
-  updateColumn,
   deleteColumn,
+  getColumn,
   getColumnsByBoardId,
+  updateColumn,
 } from "./column.controller.js";
 
 const columnsRouter = Router();

@@ -1,4 +1,4 @@
-import { type JsonValue } from "./json.js";
+import type { JsonValue } from "./json.js";
 
 export type Card = {
   id: number;

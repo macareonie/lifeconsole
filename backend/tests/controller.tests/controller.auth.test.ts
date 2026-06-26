@@ -1,4 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import {
+  getSession,
+  login,
+  logout,
+  register,
+} from "../../src/modules/auth/auth.controller.js";
+import * as authService from "../../src/modules/auth/auth.service.js";
+import * as authCookies from "../../src/utils/auth-cookies.js";
 
 vi.mock("../../src/modules/auth/auth.service.js", () => ({
   registerUser: vi.fn(),
@@ -12,15 +21,6 @@ vi.mock("../../src/utils/auth-cookies.js", () => ({
   getAuthCookieTokens: vi.fn(),
   clearAuthCookies: vi.fn(),
 }));
-
-import * as authService from "../../src/modules/auth/auth.service.js";
-import * as authCookies from "../../src/utils/auth-cookies.js";
-import {
-  register,
-  login,
-  getSession,
-  logout,
-} from "../../src/modules/auth/auth.controller.js";
 
 beforeEach(() => {
   vi.clearAllMocks();

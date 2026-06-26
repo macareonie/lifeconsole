@@ -1,4 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { ServiceError } from "../../src/errors/service.error.js";
+import * as cardService from "../../src/modules/kanban/cards/card.service.js";
+import * as cardRepo from "../../src/repositories/card.repository.js";
 
 vi.mock("../../src/repositories/card.repository.js", () => ({
   addCard: vi.fn(),
@@ -7,10 +11,6 @@ vi.mock("../../src/repositories/card.repository.js", () => ({
   deleteCardById: vi.fn(),
   getCardsByBoardId: vi.fn(),
 }));
-
-import * as cardService from "../../src/modules/cards/card.service.js";
-import * as cardRepo from "../../src/repositories/card.repository.js";
-import { ServiceError } from "../../src/errors/service.error.js";
 
 beforeEach(() => vi.clearAllMocks());
 

@@ -1,11 +1,12 @@
-import { type NextFunction, type Request, type Response } from "express";
 import {
-  getColumnById,
   createColumn,
-  updateColumnById,
   deleteColumnById,
   getAllColumnsByBoardId,
+  getColumnById,
+  updateColumnById,
 } from "./column.service.js";
+
+import type { NextFunction, Request, Response } from "express";
 
 export const createNewColumn = async (
   req: Request,

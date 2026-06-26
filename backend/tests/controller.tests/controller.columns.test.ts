@@ -1,6 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/modules/columns/column.service.js", () => ({
+import * as colController from "../../src/modules/kanban/columns/column.controller.js";
+import * as colService from "../../src/modules/kanban/columns/column.service.js";
+
+vi.mock("../../src/modules/kanban/columns/column.service.js", () => ({
   createColumn: vi.fn(),
   getColumnById: vi.fn(),
   getAllColumns: vi.fn(),
@@ -8,9 +11,6 @@ vi.mock("../../src/modules/columns/column.service.js", () => ({
   deleteColumnById: vi.fn(),
   getAllColumnsByBoardId: vi.fn(),
 }));
-
-import * as colController from "../../src/modules/columns/column.controller.js";
-import * as colService from "../../src/modules/columns/column.service.js";
 
 beforeEach(() => vi.clearAllMocks());
 

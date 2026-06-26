@@ -1,30 +1,27 @@
+import { ServiceError } from "../../../errors/service.error.js";
+import {
+  addBoard,
+  deleteBoardById as deleteBoardByIdRepo,
+  getAllBoards as getAllBoardsRepo,
+  getBoardById as getBoardByIdRepo,
+  updateBoardById as updateBoardByIdRepo,
+} from "../../../repositories/board.repository.js";
+import {
+  getCardsByBoardId,
+  updateCardById,
+} from "../../../repositories/card.repository.js";
+import {
+  getColumnsByBoardId,
+  updateColumnById,
+} from "../../../repositories/column.repository.js";
+import { resolveUserId } from "../../../utils/email2userid.js";
+
 import type {
   BoardSummary,
   BoardContent,
   Column,
   Card,
-} from "../../types/kanban.js";
-
-import { getUserIdByEmail } from "../../repositories/user.repository.js";
-import {
-  addBoard,
-  getBoardById as getBoardByIdRepo,
-  getAllBoards as getAllBoardsRepo,
-  updateBoardById as updateBoardByIdRepo,
-  deleteBoardById as deleteBoardByIdRepo,
-} from "../../repositories/board.repository.js";
-
-import {
-  getColumnsByBoardId,
-  updateColumnById,
-} from "../../repositories/column.repository.js";
-import {
-  getCardsByBoardId,
-  updateCardById,
-} from "../../repositories/card.repository.js";
-
-import { ServiceError } from "../../errors/service.error.js";
-
+} from "../../../types/kanban.js";
 const boardNotFoundError = new ServiceError(
   "BoardServiceError",
   "Board not found! Time to create one!",
@@ -32,23 +29,7 @@ const boardNotFoundError = new ServiceError(
 );
 
 export const createBoard = async (title: string, email: string) => {
-  if (!email) {
-    throw new ServiceError(
-      "BoardServiceError",
-      "User must be authenticated to create a board",
-      400,
-    );
-  }
-
-  const { userId, hasError: userIdError } = await getUserIdByEmail(email);
-  if (userIdError) {
-    throw new ServiceError(
-      "BoardServiceError",
-      "Internal server error: Getting user ID",
-      500,
-    );
-  }
-
+  const userId = await resolveUserId(email);
   if (!userId) {
     throw new ServiceError("BoardServiceError", "User not found", 404);
   }

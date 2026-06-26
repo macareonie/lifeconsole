@@ -7,13 +7,13 @@ import { isSortable } from "@dnd-kit/react/sortable";
 
 import { useBoardMutations } from "../../hooks/kanban/useBoardMutations";
 import { useColumnMutations } from "../../hooks/kanban/useColumnMutations";
+import { DeleteConfirmButton } from "../DeleteConfirmButton";
 import { Button } from "../ui/button";
 import { CardDetailsModal } from "./CardDetailsModal";
 import { CardOverlayPreview } from "./CardItem";
 import { ColumnItem, ColumnOverlayPreview } from "./ColumnItem";
 import { BoardEditForm } from "./forms/BoardEditForm";
 import { ColumnCreateForm } from "./forms/ColumnCreateForm";
-import { DeleteConfirmButton } from "./forms/DeleteConfirmButton";
 
 import type { Card, Column, BoardContent } from "../../types/kanban";
 import type {

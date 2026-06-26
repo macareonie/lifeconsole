@@ -1,4 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { ServiceError } from "../../src/errors/service.error.js";
+import * as colService from "../../src/modules/kanban/columns/column.service.js";
+import * as colRepo from "../../src/repositories/column.repository.js";
 
 vi.mock("../../src/repositories/column.repository.js", () => ({
   addColumn: vi.fn(),
@@ -8,10 +12,6 @@ vi.mock("../../src/repositories/column.repository.js", () => ({
   deleteColumnById: vi.fn(),
   getColumnsByBoardId: vi.fn(),
 }));
-
-import * as colService from "../../src/modules/columns/column.service.js";
-import * as colRepo from "../../src/repositories/column.repository.js";
-import { ServiceError } from "../../src/errors/service.error.js";
 
 beforeEach(() => vi.clearAllMocks());
 

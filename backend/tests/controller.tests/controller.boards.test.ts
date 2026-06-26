@@ -1,6 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/modules/boards/board.service.js", () => ({
+import * as boardController from "../../src/modules/kanban/boards/board.controller.js";
+import * as boardService from "../../src/modules/kanban/boards/board.service.js";
+
+vi.mock("../../src/modules/kanban/boards/board.service.js", () => ({
   createBoard: vi.fn(),
   getBoardById: vi.fn(),
   getAllBoards: vi.fn(),
@@ -8,9 +11,6 @@ vi.mock("../../src/modules/boards/board.service.js", () => ({
   updateBoardById: vi.fn(),
   deleteBoardById: vi.fn(),
 }));
-
-import * as boardController from "../../src/modules/boards/board.controller.js";
-import * as boardService from "../../src/modules/boards/board.service.js";
 
 beforeEach(() => vi.clearAllMocks());
 

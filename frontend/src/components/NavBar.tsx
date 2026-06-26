@@ -34,6 +34,12 @@ const NavBar = () => {
             >
               Board
             </NavLink>
+            <NavLink
+              to="/habit-tracker"
+              className="text-muted-foreground transition hover:text-primary"
+            >
+              Habit Tracker
+            </NavLink>
           </div>
         </div>
         <div className="flex items-center gap-3">

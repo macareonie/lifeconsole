@@ -1,11 +1,12 @@
-import { type NextFunction, type Request, type Response } from "express";
 import {
   createCard,
-  getCardById,
-  updateCardById,
   deleteCardById,
   getAllCardsByBoardId,
+  getCardById,
+  updateCardById,
 } from "./card.service.js";
+
+import type { NextFunction, Request, Response } from "express";
 
 export const createNewCard = async (
   req: Request,

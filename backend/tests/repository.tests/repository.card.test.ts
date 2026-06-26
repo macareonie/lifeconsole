@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/config/db.js", () => ({ db: { from: vi.fn() } }));
 import { db } from "../../src/config/db.js";
 import * as cardRepo from "../../src/repositories/card.repository.js";
 
+vi.mock("../../src/config/db.js", () => ({ db: { from: vi.fn() } }));
 beforeEach(() => vi.clearAllMocks());
 
 describe("card.repository", () => {

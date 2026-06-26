@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
+
 import validateInputs from "../../utils/input-validation.js";
 import { getSession, login, logout, register } from "./auth.controller.js";
 
