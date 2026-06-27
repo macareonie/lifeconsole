@@ -9,13 +9,13 @@ export const useHabitLogMutations = () => {
   // via POST with completed: true (first click always marks done).
   const toggleHabitLogMutation = useMutation({
     mutationFn: async ({
-      habit_id,
+      habitId,
       date,
     }: {
-      habit_id: number;
+      habitId: number;
       date: string;
     }) => {
-      return toggleHabitLog(habit_id, date);
+      return toggleHabitLog(habitId, date);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({

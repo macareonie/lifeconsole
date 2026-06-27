@@ -22,7 +22,7 @@ const useHabitLogsByWeek = (weekAnchor: Date) => {
 };
 
 // Wraps the single range-query fetch and reshapes the flat array into
-// Map<habit_id, Map<isoDate, HabitLog>> for O(1) lookups in the grid.
+// Map<habitId, Map<isoDate, HabitLog>> for O(1) lookups in the grid.
 export const useHabitLogs = (weekAnchor: Date) => {
   const { data, isPending, isError } = useHabitLogsByWeek(weekAnchor);
 
@@ -32,10 +32,10 @@ export const useHabitLogs = (weekAnchor: Date) => {
 
     for (const log of logs) {
       const isoDate = toIsoDate(new Date(log.date));
-      if (!map.has(log.habit_id)) {
-        map.set(log.habit_id, new Map());
+      if (!map.has(log.habitId)) {
+        map.set(log.habitId, new Map());
       }
-      map.get(log.habit_id)!.set(isoDate, log);
+      map.get(log.habitId)!.set(isoDate, log);
     }
 
     return map;

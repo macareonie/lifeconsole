@@ -35,7 +35,7 @@ describe("useColumnMutations", () => {
     await act(async () => {
       await result.current.createColumnMutation.mutateAsync({
         title: "New col",
-        board_id: 7,
+        boardId: 7,
         position: 1,
       });
     });
@@ -46,8 +46,8 @@ describe("useColumnMutations", () => {
 
     await act(async () => {
       await result.current.updateColumnMutation.mutateAsync({
-        column_id: 5,
-        board_id: 7,
+        columnId: 5,
+        boardId: 7,
         title: "Renamed",
         position: 2,
       });
@@ -59,8 +59,8 @@ describe("useColumnMutations", () => {
 
     await act(async () => {
       await result.current.deleteColumnMutation.mutateAsync({
-        column_id: 5,
-        board_id: 7,
+        columnId: 5,
+        boardId: 7,
       });
     });
 

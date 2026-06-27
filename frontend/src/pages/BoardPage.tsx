@@ -5,10 +5,10 @@ import { useBoardContent } from "../hooks/kanban/useBoardContent";
 
 const BoardPage = () => {
   const { id } = useParams();
-  const board_id = Number(id);
-  const { data, isPending, isError, error } = useBoardContent(Number(board_id));
+  const boardId = Number(id);
+  const { data, isPending, isError, error } = useBoardContent(boardId);
 
-  if (!id || !Number.isFinite(board_id)) {
+  if (!id || !Number.isFinite(boardId)) {
     return <div>Invalid Board ID</div>;
   }
 

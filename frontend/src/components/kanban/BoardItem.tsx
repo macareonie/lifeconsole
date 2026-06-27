@@ -95,7 +95,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
   }, [board.columns]);
 
   const onUpdateBoard = async ({ title }: BoardTitleFormValues) => {
-    await updateBoardMutation.mutateAsync({ board_id: board.id, title });
+    await updateBoardMutation.mutateAsync({ boardId: board.id, title });
     setIsEditingBoard(false);
   };
 
@@ -106,7 +106,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
 
   const onCreateColumn = async ({ title }: ColumnFormValues) => {
     await createColumnMutation.mutateAsync({
-      board_id: board.id,
+      boardId: board.id,
       title,
       position: board.columns.length,
     });
@@ -118,14 +118,14 @@ export function BoardItem({ board }: { board: BoardContent }) {
     nextCardsByColumn: Record<string, Card[]>,
   ) => {
     const layout = {
-      columns: nextColumnOrder.map((col_id) => ({
-        id: col_id,
-        card_ids: (nextCardsByColumn[String(col_id)] ?? []).map((c) => c.id),
+      columns: nextColumnOrder.map((colId) => ({
+        id: colId,
+        cardIds: (nextCardsByColumn[String(colId)] ?? []).map((c) => c.id),
       })),
     };
 
     updateLayoutMutation.mutate(
-      { board_id: board.id, layout },
+      { boardId: board.id, layout },
       {
         onError: () => {
           // Roll back to last known-good state on error
@@ -203,7 +203,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
         const insertAt = Math.min(targetIndex, targetCards.length);
         targetCards.splice(insertAt, 0, {
           ...moved,
-          column_id: Number(targetGroup),
+          columnId: Number(targetGroup),
         });
         const next = {
           ...prev,
@@ -260,7 +260,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
   // Merge server column shape (title, position, etc.) with the live
   // ordering/cards from local state.
   const columns = columnOrder
-    .map((col_id) => board.columns.find((c) => c.id === col_id))
+    .map((colId) => board.columns.find((c) => c.id === colId))
     .filter((col): col is Column => col !== undefined)
     .map((col) => ({
       ...col,
@@ -363,7 +363,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
               key={column.id}
               index={index}
               column={column}
-              board_id={board.id}
+              boardId={board.id}
               onCardClick={setSelectedCard}
             />
           ))}
@@ -379,7 +379,7 @@ export function BoardItem({ board }: { board: BoardContent }) {
       {selectedCard && (
         <CardDetailsModal
           card={selectedCard}
-          board_id={board.id}
+          boardId={board.id}
           onClose={() => setSelectedCard(null)}
         />
       )}
