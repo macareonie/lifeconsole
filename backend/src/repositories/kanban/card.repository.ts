@@ -5,14 +5,14 @@ import type { JsonValue } from "../../types/json.js";
 export const addCard = async (
   title: string,
   subtitle: string,
-  column_id: number,
+  columnId: number,
   position: number,
   metadata: JsonValue,
 ) => {
   const { data: result, error } = await db.from("cards").insert({
     title,
     subtitle,
-    column_id,
+    column_id: columnId,
     position,
     metadata,
   });
@@ -47,10 +47,10 @@ export const deleteCardById = async (id: number) => {
   return { data, error };
 };
 
-export const getCardsByBoardId = async (board_id: number) => {
+export const getCardsByBoardId = async (boardId: number) => {
   const { data, error } = await db
     .from("cards")
     .select("*, columns!inner(*)")
-    .eq("columns.board_id", board_id);
+    .eq("columns.board_id", boardId);
   return { data, error };
 };

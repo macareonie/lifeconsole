@@ -2,7 +2,7 @@ import type { JsonValue } from "./json.js";
 
 export type Card = {
   id: number;
-  column_id: number;
+  columnId: number;
   title: string;
   subtitle?: string;
   metadata?: JsonValue;

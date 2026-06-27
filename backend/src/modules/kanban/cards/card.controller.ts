@@ -1,9 +1,7 @@
 import {
-  createCard,
-  deleteCardById,
-  getAllCardsByBoardId,
-  getCardById,
-  updateCardById,
+  createCardService,
+  deleteCardByIdService,
+  updateCardByIdService,
 } from "./card.service.js";
 
 import type { NextFunction, Request, Response } from "express";
@@ -15,7 +13,7 @@ export const createNewCard = async (
 ) => {
   try {
     const { title, subtitle, column_id, position, metadata } = req.body;
-    const result = await createCard(
+    const result = await createCardService(
       title,
       subtitle,
       column_id,
@@ -23,20 +21,6 @@ export const createNewCard = async (
       metadata,
     );
     res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getCard = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { id } = req.params;
-  try {
-    const result = await getCardById(Number(id));
-    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -50,7 +34,7 @@ export const updateCard = async (
   const { id } = req.params;
   const { title, subtitle, column_id, position, metadata } = req.body;
   try {
-    const result = await updateCardById(
+    const result = await updateCardByIdService(
       Number(id),
       title,
       subtitle,
@@ -71,21 +55,7 @@ export const deleteCard = async (
 ) => {
   const { id } = req.params;
   try {
-    const result = await deleteCardById(Number(id));
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getCardsByBoardId = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { board_id } = req.params;
-  try {
-    const result = await getAllCardsByBoardId(Number(board_id));
+    const result = await deleteCardByIdService(Number(id));
     res.status(200).json(result);
   } catch (error) {
     next(error);

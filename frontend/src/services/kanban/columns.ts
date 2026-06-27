@@ -1,10 +1,5 @@
 import backendApi from "../http";
 
-export const getColumnsFromBoardId = async (board_id: number) => {
-  const { data } = await backendApi.get(`/columns/board/${board_id}/`);
-  return data.data;
-};
-
 export const createColumn = async ({
   title,
   board_id,

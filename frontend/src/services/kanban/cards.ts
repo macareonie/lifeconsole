@@ -2,11 +2,6 @@ import backendApi from "../http.ts";
 
 import type { JsonValue } from "../../types/json.ts";
 
-export const getCardsFromBoardId = async (board_id: number) => {
-  const { data } = await backendApi.get(`/cards/board/${board_id}/`);
-  return data.data;
-};
-
 export const createCard = async ({
   title,
   subtitle,

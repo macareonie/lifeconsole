@@ -2,40 +2,42 @@ import { db } from "../../config/db.js";
 
 import type { Habit } from "../../types/habittracker.js";
 
-export const addHabit = async (habit: Habit, user_id: number) => {
-  const { data, error } = await db.from("habits").insert({ ...habit, user_id });
+export const addHabit = async (habit: Habit, userId: number) => {
+  const { data, error } = await db
+    .from("habits")
+    .insert({ ...habit, user_id: userId });
   return { data, error };
 };
 
-export const getAllUserHabits = async (user_id: number) => {
+export const getAllUserHabits = async (userId: number) => {
   const { data, error } = await db
     .from("habits")
     .select("*")
-    .eq("user_id", user_id);
+    .eq("user_id", userId);
   return { data, error };
 };
 
 export const updateHabitById = async (
-  habit_id: number,
+  habitId: number,
   updates: Partial<Habit>,
 ) => {
   const { data, error } = await db
     .from("habits")
     .update(updates)
-    .eq("id", habit_id);
+    .eq("id", habitId);
   return { data, error };
 };
 
-export const deleteHabitById = async (habit_id: number) => {
-  const { data, error } = await db.from("habits").delete().eq("id", habit_id);
+export const deleteHabitById = async (habitId: number) => {
+  const { data, error } = await db.from("habits").delete().eq("id", habitId);
   return { data, error };
 };
 
-export const getCompletedDatesForHabit = async (habit_id: number) => {
+export const getCompletedDatesForHabit = async (habitId: number) => {
   const { data, error } = await db
     .from("habitlogs")
     .select("date")
-    .eq("habit_id", habit_id)
+    .eq("habit_id", habitId)
     .eq("completed", true);
   return {
     data: data?.map((log) => log.date as string) ?? null,
@@ -44,18 +46,18 @@ export const getCompletedDatesForHabit = async (habit_id: number) => {
 };
 
 export const updateHabitStreak = async (
-  habit_id: number,
-  current_streak: number,
-  longest_streak: number,
+  habitId: number,
+  currentStreak: number,
+  longestStreak: number,
   asOfDate: string,
 ) => {
   const { data, error } = await db
     .from("habits")
     .update({
-      current_streak,
-      longest_streak,
+      current_streak: currentStreak,
+      longest_streak: longestStreak,
       streak_updated_at: asOfDate,
     })
-    .eq("id", habit_id);
+    .eq("id", habitId);
   return { data, error };
 };

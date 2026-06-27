@@ -1,10 +1,10 @@
 import { ServiceError } from "../../../errors/service.error.js";
 import {
   addBoard,
-  deleteBoardById as deleteBoardByIdRepo,
-  getAllBoards as getAllBoardsRepo,
-  getBoardById as getBoardByIdRepo,
-  updateBoardById as updateBoardByIdRepo,
+  deleteBoardById,
+  getAllBoards,
+  getBoardById,
+  updateBoardById,
 } from "../../../repositories/kanban/board.repository.js";
 import {
   getCardsByBoardId,
@@ -14,7 +14,7 @@ import {
   getColumnsByBoardId,
   updateColumnById,
 } from "../../../repositories/kanban/column.repository.js";
-import { resolveUserId } from "../../../utils/email2userid.js";
+import { resolveUserId } from "../../../utils/email-to-userId.js";
 
 import type {
   BoardSummary,
@@ -28,7 +28,7 @@ const boardNotFoundError = new ServiceError(
   404,
 );
 
-export const createBoard = async (title: string, email: string) => {
+export const createBoardService = async (title: string, email: string) => {
   const userId = await resolveUserId(email);
   if (!userId) {
     throw new ServiceError("BoardServiceError", "User not found", 404);
@@ -49,23 +49,8 @@ export const createBoard = async (title: string, email: string) => {
   };
 };
 
-export const getBoardById = async (id: number) => {
-  const { data, error } = await getBoardByIdRepo(id);
-  if (error) {
-    throw new ServiceError("BoardServiceError", error.message, 400);
-  }
-  if (!data) {
-    throw boardNotFoundError;
-  }
-  return {
-    data: data,
-    message: "Board retrieved successfully",
-    success: true,
-  };
-};
-
-export const getAllBoards = async () => {
-  let { data, error } = await getAllBoardsRepo();
+export const getAllBoardsService = async () => {
+  let { data, error } = await getAllBoards();
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }
@@ -88,7 +73,7 @@ function buildBoardContent(
   const columnsWithCards: Column[] = columnsData.map((column: Column) => ({
     ...column,
     cards: cardsData
-      .filter((card: Card) => card.column_id === column.id)
+      .filter((card: Card) => card.columnId === column.id)
       .sort((a: Card, b: Card) => a.position - b.position),
   }));
 
@@ -98,8 +83,8 @@ function buildBoardContent(
   } as BoardContent;
 }
 
-export const getBoardContentById = async (id: number) => {
-  const { data: boardData, error: boardError } = await getBoardByIdRepo(id);
+export const getBoardContentByIdService = async (id: number) => {
+  const { data: boardData, error: boardError } = await getBoardById(id);
   const { data: columnsData, error: columnsError } =
     await getColumnsByBoardId(id);
   const { data: cardsData, error: cardsError } = await getCardsByBoardId(id);
@@ -138,7 +123,7 @@ type updateLayoutRequestBody = {
   }[];
 };
 
-export const updateBoardLayoutById = async (
+export const updateBoardLayoutByIdService = async (
   id: number,
   layout: updateLayoutRequestBody,
 ) => {
@@ -185,11 +170,11 @@ export const updateBoardLayoutById = async (
   };
 };
 
-export const updateBoardById = async (
+export const updateBoardByIdService = async (
   id: number,
   updates: Partial<{ title: string }>,
 ) => {
-  const { data, error } = await updateBoardByIdRepo(id, updates);
+  const { data, error } = await updateBoardById(id, updates);
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }
@@ -199,8 +184,8 @@ export const updateBoardById = async (
   };
 };
 
-export const deleteBoardById = async (id: number) => {
-  const { data, error } = await deleteBoardByIdRepo(id);
+export const deleteBoardByIdService = async (id: number) => {
+  const { data, error } = await deleteBoardById(id);
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }

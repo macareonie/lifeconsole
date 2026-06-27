@@ -2,12 +2,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ServiceError } from "../../src/errors/service.error.js";
 import {
-  createBoard,
-  deleteBoardById,
-  getAllBoards,
-  getBoardById,
-  getBoardContentById,
-  updateBoardById,
+  createBoardService,
+  deleteBoardByIdService,
+  getAllBoardsService,
+  getBoardContentByIdService,
+  updateBoardByIdService,
 } from "../../src/modules/kanban/boards/board.service.js";
 import * as boardRepo from "../../src/repositories/kanban/board.repository.js";
 import * as cardRepo from "../../src/repositories/kanban/card.repository.js";
@@ -47,7 +46,7 @@ describe("board.service", () => {
     });
     (boardRepo.addBoard as any).mockResolvedValue({ data: {}, error: null });
 
-    const result = await createBoard("Roadmap", "user@example.com");
+    const result = await createBoardService("Roadmap", "user@example.com");
 
     expect(result).toEqual({
       message: "Board created successfully",
@@ -58,7 +57,7 @@ describe("board.service", () => {
   });
 
   it("createBoard - throws when email is missing", async () => {
-    await expect(createBoard("Roadmap", "")).rejects.toBeInstanceOf(
+    await expect(createBoardService("Roadmap", "")).rejects.toBeInstanceOf(
       ServiceError,
     );
   });
@@ -70,7 +69,7 @@ describe("board.service", () => {
     });
 
     await expect(
-      createBoard("Roadmap", "user@example.com"),
+      createBoardService("Roadmap", "user@example.com"),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -81,7 +80,7 @@ describe("board.service", () => {
     });
 
     await expect(
-      createBoard("Roadmap", "user@example.com"),
+      createBoardService("Roadmap", "user@example.com"),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -91,9 +90,9 @@ describe("board.service", () => {
       hasError: false,
     });
 
-    await expect(createBoard("", "user@example.com")).rejects.toBeInstanceOf(
-      ServiceError,
-    );
+    await expect(
+      createBoardService("", "user@example.com"),
+    ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createBoard - throws on repository insert error", async () => {
@@ -107,37 +106,8 @@ describe("board.service", () => {
     });
 
     await expect(
-      createBoard("Roadmap", "user@example.com"),
+      createBoardService("Roadmap", "user@example.com"),
     ).rejects.toBeInstanceOf(ServiceError);
-  });
-
-  it("getBoardById - returns data when repo returns row", async () => {
-    (boardRepo.getBoardById as any).mockResolvedValue({
-      data: { id: 1, title: "My" },
-      error: null,
-    });
-
-    const res = await getBoardById(1);
-    expect(res.success).toBe(true);
-    expect(res.data).toBeDefined();
-  });
-
-  it("getBoardById - throws ServiceError when not found", async () => {
-    (boardRepo.getBoardById as any).mockResolvedValue({
-      data: null,
-      error: null,
-    });
-
-    await expect(getBoardById(999)).rejects.toBeInstanceOf(ServiceError);
-  });
-
-  it("getBoardById - throws ServiceError when repository errors", async () => {
-    (boardRepo.getBoardById as any).mockResolvedValue({
-      data: null,
-      error: { message: "query failed" },
-    });
-
-    await expect(getBoardById(1)).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("getAllBoards - returns empty array when none", async () => {
@@ -146,7 +116,7 @@ describe("board.service", () => {
       error: null,
     });
 
-    const { data, success } = await getAllBoards();
+    const { data, success } = await getAllBoardsService();
 
     expect(success).toBe(true);
     expect(Array.isArray(data)).toBe(true);
@@ -158,7 +128,7 @@ describe("board.service", () => {
       error: null,
     });
 
-    const result = await getAllBoards();
+    const result = await getAllBoardsService();
 
     expect(result.success).toBe(true);
     expect(result.data).toEqual([{ id: 1, title: "A" }]);
@@ -170,7 +140,7 @@ describe("board.service", () => {
       error: { message: "query failed" },
     });
 
-    await expect(getAllBoards()).rejects.toBeInstanceOf(ServiceError);
+    await expect(getAllBoardsService()).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("getBoardContentById - returns content when repo returns data", async () => {
@@ -187,7 +157,7 @@ describe("board.service", () => {
       error: null,
     });
 
-    const result = await getBoardContentById(1);
+    const result = await getBoardContentByIdService(1);
 
     expect(result.success).toBe(true);
     expect(result.data).toBeDefined();
@@ -207,7 +177,9 @@ describe("board.service", () => {
       error: null,
     });
 
-    await expect(getBoardContentById(1)).rejects.toBeInstanceOf(ServiceError);
+    await expect(getBoardContentByIdService(1)).rejects.toBeInstanceOf(
+      ServiceError,
+    );
   });
 
   it("getBoardContentById - throws when columns repo errors", async () => {
@@ -224,7 +196,9 @@ describe("board.service", () => {
       error: null,
     });
 
-    await expect(getBoardContentById(1)).rejects.toBeInstanceOf(ServiceError);
+    await expect(getBoardContentByIdService(1)).rejects.toBeInstanceOf(
+      ServiceError,
+    );
   });
 
   it("getBoardContentById - throws when cards repo errors", async () => {
@@ -241,7 +215,9 @@ describe("board.service", () => {
       error: { message: "query failed" },
     });
 
-    await expect(getBoardContentById(1)).rejects.toBeInstanceOf(ServiceError);
+    await expect(getBoardContentByIdService(1)).rejects.toBeInstanceOf(
+      ServiceError,
+    );
   });
 
   it("getBoardContentById - throws when board not found", async () => {
@@ -258,7 +234,9 @@ describe("board.service", () => {
       error: null,
     });
 
-    await expect(getBoardContentById(999)).rejects.toBeInstanceOf(ServiceError);
+    await expect(getBoardContentByIdService(999)).rejects.toBeInstanceOf(
+      ServiceError,
+    );
   });
 
   it("updateBoardById - success", async () => {
@@ -267,7 +245,7 @@ describe("board.service", () => {
       error: null,
     });
 
-    const result = await updateBoardById(1, { title: "Updated" });
+    const result = await updateBoardByIdService(1, { title: "Updated" });
 
     expect(result).toEqual({
       message: "Board updated successfully",
@@ -281,9 +259,9 @@ describe("board.service", () => {
       error: { message: "err" },
     });
 
-    await expect(updateBoardById(1, { title: "x" })).rejects.toBeInstanceOf(
-      ServiceError,
-    );
+    await expect(
+      updateBoardByIdService(1, { title: "x" }),
+    ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("deleteBoardById - success", async () => {
@@ -292,7 +270,7 @@ describe("board.service", () => {
       error: null,
     });
 
-    const result = await deleteBoardById(1);
+    const result = await deleteBoardByIdService(1);
 
     expect(result).toEqual({
       message: "Board deleted successfully",
@@ -306,6 +284,8 @@ describe("board.service", () => {
       error: { message: "err" },
     });
 
-    await expect(deleteBoardById(1)).rejects.toBeInstanceOf(ServiceError);
+    await expect(deleteBoardByIdService(1)).rejects.toBeInstanceOf(
+      ServiceError,
+    );
   });
 });
