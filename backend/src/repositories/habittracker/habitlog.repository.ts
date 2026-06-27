@@ -1,6 +1,6 @@
-import { db } from "../config/db.js";
+import { db } from "../../config/db.js";
 
-import type { HabitLog } from "../types/habittracker.js";
+import type { HabitLog } from "../../types/habittracker.js";
 
 // export const addHabitLog = async (habitLog: HabitLog) => {
 //   const { data, error } = await db.from("habitlogs").insert(habitLog);

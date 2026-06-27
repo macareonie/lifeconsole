@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getAllTimeStats } from "../../services/habitstats";
+import { getAllTimeStats } from "../../services/habittracker/habitstats";
 
 export const useAllTimeStats = () => {
   return useQuery({

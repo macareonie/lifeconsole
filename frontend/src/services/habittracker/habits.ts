@@ -1,4 +1,4 @@
-import backendApi from "./http";
+import backendApi from "../http";
 
 export const addHabit = async (title: string, frequency: string) => {
   const { data } = await backendApi.post("/habits/", { title, frequency });

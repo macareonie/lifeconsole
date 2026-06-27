@@ -1,4 +1,4 @@
-import backendApi from "./http";
+import backendApi from "../http";
 
 import type { updateLayoutBody } from "@/hooks/kanban/useBoardMutations";
 

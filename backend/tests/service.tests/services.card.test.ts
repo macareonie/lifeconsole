@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ServiceError } from "../../src/errors/service.error.js";
 import * as cardService from "../../src/modules/kanban/cards/card.service.js";
-import * as cardRepo from "../../src/repositories/card.repository.js";
+import * as cardRepo from "../../src/repositories/kanban/card.repository.js";
 
-vi.mock("../../src/repositories/card.repository.js", () => ({
+vi.mock("../../src/repositories/kanban/card.repository.js", () => ({
   addCard: vi.fn(),
   getCardById: vi.fn(),
   updateCardById: vi.fn(),

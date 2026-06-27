@@ -1,4 +1,4 @@
-import { toggleHabitLog } from "@/services/habitlogs";
+import { toggleHabitLog } from "@/services/habittracker/habitlogs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useHabitLogMutations = () => {

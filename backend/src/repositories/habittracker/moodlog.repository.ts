@@ -1,6 +1,6 @@
-import { db } from "../config/db.js";
+import { db } from "../../config/db.js";
 
-import type { MoodLog } from "../types/habittracker.js";
+import type { MoodLog } from "../../types/habittracker.js";
 
 export const upsertMoodLog = async (moodLog: MoodLog, user_id: number) => {
   const { data, error } = await db

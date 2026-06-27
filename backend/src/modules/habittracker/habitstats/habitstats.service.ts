@@ -1,5 +1,5 @@
 import { ServiceError } from "../../../errors/service.error.js";
-import { getAllTimeCompletions } from "../../../repositories/habitlog.repository.js";
+import { getAllTimeCompletions } from "../../../repositories/habittracker/habitlog.repository.js";
 import { resolveUserId } from "../../../utils/email2userid.js";
 
 type AlltimeCompletionRow = {

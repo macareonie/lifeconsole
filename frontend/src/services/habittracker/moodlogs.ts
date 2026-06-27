@@ -1,4 +1,4 @@
-import backendApi from "./http";
+import backendApi from "../http";
 
 export const getMoodLog = async (moodlog_id: number) => {
   const { data } = await backendApi.get(`/moodlogs/${moodlog_id}/`);

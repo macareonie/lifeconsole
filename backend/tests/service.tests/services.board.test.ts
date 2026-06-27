@@ -9,12 +9,12 @@ import {
   getBoardContentById,
   updateBoardById,
 } from "../../src/modules/kanban/boards/board.service.js";
-import * as boardRepo from "../../src/repositories/board.repository.js";
-import * as cardRepo from "../../src/repositories/card.repository.js";
-import * as columnRepo from "../../src/repositories/column.repository.js";
+import * as boardRepo from "../../src/repositories/kanban/board.repository.js";
+import * as cardRepo from "../../src/repositories/kanban/card.repository.js";
+import * as columnRepo from "../../src/repositories/kanban/column.repository.js";
 import * as userRepo from "../../src/repositories/user.repository.js";
 
-vi.mock("../../src/repositories/board.repository.js", () => ({
+vi.mock("../../src/repositories/kanban/board.repository.js", () => ({
   addBoard: vi.fn(),
   getBoardById: vi.fn(),
   getAllBoards: vi.fn(),
@@ -23,11 +23,11 @@ vi.mock("../../src/repositories/board.repository.js", () => ({
   deleteBoardById: vi.fn(),
 }));
 
-vi.mock("../../src/repositories/column.repository.js", () => ({
+vi.mock("../../src/repositories/kanban/column.repository.js", () => ({
   getColumnsByBoardId: vi.fn(),
 }));
 
-vi.mock("../../src/repositories/card.repository.js", () => ({
+vi.mock("../../src/repositories/kanban/card.repository.js", () => ({
   getCardsByBoardId: vi.fn(),
 }));
 

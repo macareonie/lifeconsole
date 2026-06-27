@@ -8,11 +8,11 @@ import {
   createColumn,
   deleteColumn,
   updateColumn,
-} from "../../src/services/columns";
+} from "../../src/services/kanban/columns";
 import { createTestQueryClient } from "../test-utils";
 
 import type { ReactNode } from "react";
-vi.mock("../../src/services/columns", () => ({
+vi.mock("../../src/services/kanban/columns", () => ({
   createColumn: vi.fn(),
   updateColumn: vi.fn(),
   deleteColumn: vi.fn(),

@@ -1,4 +1,4 @@
-import backendApi from "./http";
+import backendApi from "../http";
 
 export const getColumnsFromBoardId = async (board_id: number) => {
   const { data } = await backendApi.get(`/columns/board/${board_id}/`);
