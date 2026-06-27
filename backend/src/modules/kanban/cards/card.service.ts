@@ -5,7 +5,7 @@ import {
   getCardById as getCardByIdRepo,
   getCardsByBoardId as getCardsByBoardIdRepo,
   updateCardById as updateCardByIdRepo,
-} from "../../../repositories/card.repository.js";
+} from "../../../repositories/kanban/card.repository.js";
 
 import type { JsonValue } from "../../../types/json.js";
 const cardNotFoundError = new ServiceError(

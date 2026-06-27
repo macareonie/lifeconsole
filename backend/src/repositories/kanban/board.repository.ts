@@ -1,4 +1,4 @@
-import { db } from "../config/db.js";
+import { db } from "../../config/db.js";
 
 export const addBoard = async (title: string, userId: number) => {
   const { data, error } = await db.from("boards").insert({

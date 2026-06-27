@@ -3,7 +3,7 @@ import {
   deleteBoard,
   updateBoard,
   updateBoardLayout,
-} from "@/services/boards";
+} from "@/services/kanban/boards";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export type updateLayoutBody = {

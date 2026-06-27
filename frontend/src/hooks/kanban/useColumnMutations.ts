@@ -1,4 +1,8 @@
-import { createColumn, deleteColumn, updateColumn } from "@/services/columns";
+import {
+  createColumn,
+  deleteColumn,
+  updateColumn,
+} from "@/services/kanban/columns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type CreateColumnVariables = {

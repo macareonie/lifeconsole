@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { ColumnEditForm } from "../../src/components/board/forms/ColumnEditForm";
+import { ColumnEditForm } from "../../src/components/kanban/forms/ColumnEditForm";
 import { renderWithProviders } from "../test-utils";
 
 describe("ColumnEditForm", () => {

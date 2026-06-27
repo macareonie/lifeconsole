@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getBoards } from "../../services/boards";
+import { getBoards } from "../../services/kanban/boards";
 
 import type { BoardSummary } from "../../types/kanban";
 

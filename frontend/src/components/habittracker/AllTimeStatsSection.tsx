@@ -4,7 +4,7 @@ import { useAllTimeStats } from "../../hooks/habittracker/useAllTimeStats";
 
 import type { Habit } from "@/types/habittracker";
 
-export function AllTimeSection({ habits }: { habits: Habit[] }) {
+export function AllTimeStatsSection({ habits }: { habits: Habit[] }) {
   const { data, isLoading } = useAllTimeStats();
 
   // Longest streak across all habits is free — already on each habit

@@ -1,6 +1,6 @@
-import { db } from "../config/db.js";
+import { db } from "../../config/db.js";
 
-import type { JsonValue } from "../types/json.ts";
+import type { JsonValue } from "../../types/json.js";
 
 export const addCard = async (
   title: string,

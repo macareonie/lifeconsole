@@ -4,7 +4,7 @@ import {
   deleteHabitById,
   getAllUserHabits,
   updateHabitById,
-} from "../../../repositories/habit.repository.js";
+} from "../../../repositories/habittracker/habit.repository.js";
 import { getUserIdByEmail } from "../../../repositories/user.repository.js";
 
 import type { Habit } from "../../../types/habittracker.js";

@@ -4,7 +4,7 @@ import {
   getMoodLogByDate,
   getMoodLogByDateRange,
   upsertMoodLog,
-} from "../../../repositories/moodlog.repository.js";
+} from "../../../repositories/habittracker/moodlog.repository.js";
 import { MOOD_MAX, MOOD_MIN } from "../../../types/habittracker.js";
 import { resolveUserId } from "../../../utils/email2userid.js";
 

@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ServiceError } from "../../src/errors/service.error.js";
 import * as colService from "../../src/modules/kanban/columns/column.service.js";
-import * as colRepo from "../../src/repositories/column.repository.js";
+import * as colRepo from "../../src/repositories/kanban/column.repository.js";
 
-vi.mock("../../src/repositories/column.repository.js", () => ({
+vi.mock("../../src/repositories/kanban/column.repository.js", () => ({
   addColumn: vi.fn(),
   getColumnById: vi.fn(),
   getAllColumns: vi.fn(),

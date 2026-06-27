@@ -5,7 +5,7 @@ import {
   getColumnById as getColumnByIdRepo,
   getColumnsByBoardId as getColumnsByBoardIdRepo,
   updateColumnById as updateColumnByIdRepo,
-} from "../../../repositories/column.repository.js";
+} from "../../../repositories/kanban/column.repository.js";
 
 const columnNotFoundError = new ServiceError(
   "ColumnServiceError",

@@ -1,4 +1,4 @@
-import { createCard, deleteCard, updateCard } from "@/services/cards";
+import { createCard, deleteCard, updateCard } from "@/services/kanban/cards";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { JsonValue } from "@/types/json";

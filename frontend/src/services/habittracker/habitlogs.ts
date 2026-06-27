@@ -1,4 +1,4 @@
-import backendApi from "./http";
+import backendApi from "../http";
 
 // export const getHabitLog = async (habitlog_id: number) => {
 //   const { data } = await backendApi.get(`/habitlogs/${habitlog_id}/`);

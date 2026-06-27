@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import { BoardItem } from "../components/board/BoardItem";
+import { BoardItem } from "../components/kanban/BoardItem";
 import { useBoardContent } from "../hooks/kanban/useBoardContent";
 
 const BoardPage = () => {
