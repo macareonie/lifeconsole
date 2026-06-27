@@ -3,10 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFreshClient } from "../../src/config/db.js";
 import { ServiceError } from "../../src/errors/service.error.js";
 import {
-  getUserFromAccessToken,
-  loginUser,
-  logoutUser,
-  registerUser,
+  getUserFromAccessTokenService,
+  loginUserService,
+  logoutUserService,
+  registerUserService,
 } from "../../src/modules/auth/auth.service.js";
 import {
   addUser,
@@ -45,7 +45,11 @@ describe("auth.service", () => {
     (createFreshClient as any).mockReturnValue(fakeAuth);
     (addUser as any).mockResolvedValue({ error: null });
 
-    const res = await registerUser("bob", "bob@example.com", "password123");
+    const res = await registerUserService(
+      "bob",
+      "bob@example.com",
+      "password123",
+    );
 
     expect(res.success).toBe(true);
     expect(res.session).toBeDefined();
@@ -58,7 +62,7 @@ describe("auth.service", () => {
     });
 
     await expect(
-      registerUser("bob", "bob@example.com", "password123"),
+      registerUserService("bob", "bob@example.com", "password123"),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -69,7 +73,7 @@ describe("auth.service", () => {
     });
 
     await expect(
-      registerUser("bob", "bob@example.com", "pw"),
+      registerUserService("bob", "bob@example.com", "pw"),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -89,7 +93,7 @@ describe("auth.service", () => {
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
     await expect(
-      registerUser("bob", "bob@example.com", "password123"),
+      registerUserService("bob", "bob@example.com", "password123"),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -110,7 +114,7 @@ describe("auth.service", () => {
     (addUser as any).mockResolvedValue({ error: { message: "insert failed" } });
 
     await expect(
-      registerUser("bob", "bob@example.com", "password123"),
+      registerUserService("bob", "bob@example.com", "password123"),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -129,7 +133,7 @@ describe("auth.service", () => {
     };
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
-    const res = await loginUser("bob", "password123");
+    const res = await loginUserService("bob", "password123");
     expect(res.success).toBe(true);
     expect(res.session).toBeDefined();
   });
@@ -140,7 +144,7 @@ describe("auth.service", () => {
       hasError: true,
     });
 
-    await expect(loginUser("bob", "password123")).rejects.toBeInstanceOf(
+    await expect(loginUserService("bob", "password123")).rejects.toBeInstanceOf(
       ServiceError,
     );
   });
@@ -151,7 +155,7 @@ describe("auth.service", () => {
       hasError: false,
     });
 
-    await expect(loginUser("bob", "password123")).rejects.toBeInstanceOf(
+    await expect(loginUserService("bob", "password123")).rejects.toBeInstanceOf(
       ServiceError,
     );
   });
@@ -171,7 +175,7 @@ describe("auth.service", () => {
     };
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
-    await expect(loginUser("bob", "password123")).rejects.toBeInstanceOf(
+    await expect(loginUserService("bob", "password123")).rejects.toBeInstanceOf(
       ServiceError,
     );
   });
@@ -186,7 +190,7 @@ describe("auth.service", () => {
     };
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
-    const out = await getUserFromAccessToken("token-abc");
+    const out = await getUserFromAccessTokenService("token-abc");
     expect(out.data.user).toBeDefined();
   });
 
@@ -200,9 +204,9 @@ describe("auth.service", () => {
     };
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
-    await expect(getUserFromAccessToken("token-abc")).rejects.toBeInstanceOf(
-      ServiceError,
-    );
+    await expect(
+      getUserFromAccessTokenService("token-abc"),
+    ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("logoutUser - success path", async () => {
@@ -213,7 +217,7 @@ describe("auth.service", () => {
     };
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
-    const res = await logoutUser();
+    const res = await logoutUserService();
     expect(res.success).toBe(true);
   });
 
@@ -225,6 +229,6 @@ describe("auth.service", () => {
     };
     (createFreshClient as any).mockReturnValue(fakeAuth);
 
-    await expect(logoutUser()).rejects.toBeInstanceOf(ServiceError);
+    await expect(logoutUserService()).rejects.toBeInstanceOf(ServiceError);
   });
 });

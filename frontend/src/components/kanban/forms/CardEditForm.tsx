@@ -4,13 +4,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import {
   metadataEntriesToJson,
   metadataJsonToEntries,
-} from "../../../utils/kanban/CardMetadataConversion";
+} from "../../../utils/kanban/cardMetadataConversion";
 import { MetadataFieldArray } from "../../MetadataFieldArray";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 
-import type { MetadataFormValues } from "../../../utils/kanban/CardMetadataConversion";
+import type { MetadataFormValues } from "../../../utils/kanban/cardMetadataConversion";
 import type { JsonValue } from "../../../types/json";
 
 type CardFormValues = {

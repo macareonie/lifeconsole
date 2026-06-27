@@ -6,7 +6,7 @@ import {
   getUserEmailByUsername,
 } from "../../repositories/user.repository.js";
 
-export const registerUser = async (
+export const registerUserService = async (
   username: string,
   email: string,
   password: string,
@@ -52,7 +52,7 @@ export const registerUser = async (
   };
 };
 
-export const loginUser = async (username: string, password: string) => {
+export const loginUserService = async (username: string, password: string) => {
   const { email, hasError } = await getUserEmailByUsername(username);
 
   if (hasError) {
@@ -89,7 +89,7 @@ export const loginUser = async (username: string, password: string) => {
   };
 };
 
-export const logoutUser = async () => {
+export const logoutUserService = async () => {
   const authClient = createFreshClient();
   const { error } = await authClient.auth.signOut();
   if (error) {
@@ -102,7 +102,7 @@ export const logoutUser = async () => {
   };
 };
 
-export const getUserFromAccessToken = async (accessToken: string) => {
+export const getUserFromAccessTokenService = async (accessToken: string) => {
   const authClient = createFreshClient();
   const { data, error } = await authClient.auth.getUser(accessToken);
   if (error) {

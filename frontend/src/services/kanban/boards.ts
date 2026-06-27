@@ -7,11 +7,6 @@ export const getBoards = async () => {
   return data.data;
 };
 
-export const getBoard = async (board_id: number) => {
-  const { data } = await backendApi.get(`/boards/${board_id}/`);
-  return data.data;
-};
-
 export const getBoardContent = async (board_id: number) => {
   const { data } = await backendApi.get(`/boards/${board_id}/content/`);
   return data.data;

@@ -6,10 +6,8 @@ import * as cardRepo from "../../src/repositories/kanban/card.repository.js";
 
 vi.mock("../../src/repositories/kanban/card.repository.js", () => ({
   addCard: vi.fn(),
-  getCardById: vi.fn(),
   updateCardById: vi.fn(),
   deleteCardById: vi.fn(),
-  getCardsByBoardId: vi.fn(),
 }));
 
 beforeEach(() => vi.clearAllMocks());
@@ -21,7 +19,7 @@ describe("card.service", () => {
       error: null,
     });
 
-    const result = await cardService.createCard("t", "s", 1, 1, {});
+    const result = await cardService.createCardService("t", "s", 1, 1, {});
 
     expect(result).toEqual({
       message: "Card created successfully",
@@ -36,53 +34,26 @@ describe("card.service", () => {
     });
 
     await expect(
-      cardService.createCard("t", "s", 1, 1, {}),
+      cardService.createCardService("t", "s", 1, 1, {}),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createCard - invalid position throws", async () => {
     await expect(
-      cardService.createCard("t", "s", 1, -5, {}),
+      cardService.createCardService("t", "s", 1, -5, {}),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createCard - missing position throws", async () => {
     await expect(
-      cardService.createCard("t", "s", 1, undefined as unknown as number, {}),
+      cardService.createCardService(
+        "t",
+        "s",
+        1,
+        undefined as unknown as number,
+        {},
+      ),
     ).rejects.toBeInstanceOf(ServiceError);
-  });
-
-  it("getCardById - returns row", async () => {
-    (cardRepo.getCardById as any).mockResolvedValue({
-      data: { id: 1, title: "A" },
-      error: null,
-    });
-
-    const result = await cardService.getCardById(1);
-
-    expect(result.success).toBe(true);
-    expect(result.data).toEqual({ id: 1, title: "A" });
-  });
-
-  it("getCardById - not found throws", async () => {
-    (cardRepo.getCardById as any).mockResolvedValue({
-      data: null,
-      error: null,
-    });
-    await expect(cardService.getCardById(10)).rejects.toBeInstanceOf(
-      ServiceError,
-    );
-  });
-
-  it("getCardById - repo error throws", async () => {
-    (cardRepo.getCardById as any).mockResolvedValue({
-      data: null,
-      error: { message: "query failed" },
-    });
-
-    await expect(cardService.getCardById(10)).rejects.toBeInstanceOf(
-      ServiceError,
-    );
   });
 
   it("updateCardById - success", async () => {
@@ -91,7 +62,14 @@ describe("card.service", () => {
       error: null,
     });
 
-    const result = await cardService.updateCardById(1, "t", "s", 1, 2, {});
+    const result = await cardService.updateCardByIdService(
+      1,
+      "t",
+      "s",
+      1,
+      2,
+      {},
+    );
 
     expect(result).toEqual({
       message: "Card updated successfully",
@@ -105,7 +83,7 @@ describe("card.service", () => {
       error: { message: "err" },
     });
     await expect(
-      cardService.updateCardById(1, "t", "s", 0, 1, {}),
+      cardService.updateCardByIdService(1, "t", "s", 0, 1, {}),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -115,7 +93,7 @@ describe("card.service", () => {
       error: null,
     });
 
-    const result = await cardService.deleteCardById(1);
+    const result = await cardService.deleteCardByIdService(1);
 
     expect(result).toEqual({
       message: "Card deleted successfully",
@@ -129,27 +107,7 @@ describe("card.service", () => {
       error: { message: "delete failed" },
     });
 
-    await expect(cardService.deleteCardById(1)).rejects.toBeInstanceOf(
-      ServiceError,
-    );
-  });
-
-  it("getAllCardsByBoardId - returns truncated data", async () => {
-    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
-      data: [{ id: 1, columns: { foo: "bar" } }],
-      error: null,
-    });
-    const res = await cardService.getAllCardsByBoardId(1);
-    expect(res.data).toEqual([{ id: 1 }]);
-  });
-
-  it("getAllCardsByBoardId - repo error throws", async () => {
-    (cardRepo.getCardsByBoardId as any).mockResolvedValue({
-      data: null,
-      error: { message: "query failed" },
-    });
-
-    await expect(cardService.getAllCardsByBoardId(1)).rejects.toBeInstanceOf(
+    await expect(cardService.deleteCardByIdService(1)).rejects.toBeInstanceOf(
       ServiceError,
     );
   });

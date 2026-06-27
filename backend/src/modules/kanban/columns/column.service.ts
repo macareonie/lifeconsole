@@ -1,24 +1,15 @@
 import { ServiceError } from "../../../errors/service.error.js";
 import {
   addColumn,
-  deleteColumnById as deleteColumnByIdRepo,
-  getColumnById as getColumnByIdRepo,
-  getColumnsByBoardId as getColumnsByBoardIdRepo,
-  updateColumnById as updateColumnByIdRepo,
+  deleteColumnById,
+  updateColumnById,
 } from "../../../repositories/kanban/column.repository.js";
 
-const columnNotFoundError = new ServiceError(
-  "ColumnServiceError",
-  "Column not found! Time to create one!",
-  404,
-);
-
-export const createColumn = async (
+export const createColumnService = async (
   title: string,
-  board_id: number,
+  boardId: number,
   position: number,
 ) => {
-  //title should probably be optional here? position should not though
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
@@ -26,7 +17,7 @@ export const createColumn = async (
       400,
     );
   }
-  const { data, error } = await addColumn(title, board_id, position);
+  const { data, error } = await addColumn(title, boardId, position);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
@@ -36,22 +27,7 @@ export const createColumn = async (
   };
 };
 
-export const getColumnById = async (id: number) => {
-  const { data, error } = await getColumnByIdRepo(id);
-  if (error) {
-    throw new ServiceError("ColumnServiceError", error.message, 400);
-  }
-  if (!data) {
-    throw columnNotFoundError;
-  }
-  return {
-    data: data,
-    message: "Column retrieved successfully",
-    success: true,
-  };
-};
-
-export const updateColumnById = async (
+export const updateColumnByIdService = async (
   id: number,
   title: string,
   position: number,
@@ -64,7 +40,7 @@ export const updateColumnById = async (
     );
   }
 
-  const { data, error } = await updateColumnByIdRepo(id, { title, position });
+  const { data, error } = await updateColumnById(id, { title, position });
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
@@ -74,25 +50,13 @@ export const updateColumnById = async (
   };
 };
 
-export const deleteColumnById = async (id: number) => {
-  const { data, error } = await deleteColumnByIdRepo(id);
+export const deleteColumnByIdService = async (id: number) => {
+  const { data, error } = await deleteColumnById(id);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
   return {
     message: "Column deleted successfully",
-    success: true,
-  };
-};
-
-export const getAllColumnsByBoardId = async (board_id: number) => {
-  const { data, error } = await getColumnsByBoardIdRepo(board_id);
-  if (error) {
-    throw new ServiceError("ColumnServiceError", error.message, 400);
-  }
-  return {
-    data: data,
-    message: `Columns in board ${board_id} retrieved successfully`,
     success: true,
   };
 };

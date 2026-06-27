@@ -1,11 +1,10 @@
 import {
-  createBoard,
-  deleteBoardById,
-  getAllBoards,
-  getBoardById,
-  getBoardContentById,
-  updateBoardById,
-  updateBoardLayoutById,
+  createBoardService,
+  deleteBoardByIdService,
+  getAllBoardsService,
+  getBoardContentByIdService,
+  updateBoardByIdService,
+  updateBoardLayoutByIdService,
 } from "./board.service.js";
 
 import type { NextFunction, Request, Response } from "express";
@@ -19,22 +18,8 @@ export const createNewBoard = async (
   const { title } = req.body;
   const user = req.user as User;
   try {
-    const result = await createBoard(title, user.email!);
+    const result = await createBoardService(title, user.email!);
     return res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getBoard = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { id } = req.params;
-  try {
-    const result = await getBoardById(Number(id));
-    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -46,7 +31,7 @@ export const getBoards = async (
   next: NextFunction,
 ) => {
   try {
-    const result = await getAllBoards();
+    const result = await getAllBoardsService();
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -60,7 +45,7 @@ export const getBoardContent = async (
 ) => {
   const { id } = req.params;
   try {
-    const result = await getBoardContentById(Number(id));
+    const result = await getBoardContentByIdService(Number(id));
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -75,7 +60,7 @@ export const updateBoardLayout = async (
   const { id } = req.params;
   const { layout } = req.body;
   try {
-    const result = await updateBoardLayoutById(Number(id), layout);
+    const result = await updateBoardLayoutByIdService(Number(id), layout);
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -90,7 +75,7 @@ export const updateBoard = async (
   const { id } = req.params;
   const { title } = req.body;
   try {
-    const result = await updateBoardById(Number(id), { title });
+    const result = await updateBoardByIdService(Number(id), { title });
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -104,7 +89,7 @@ export const deleteBoard = async (
 ) => {
   const { id } = req.params;
   try {
-    const result = await deleteBoardById(Number(id));
+    const result = await deleteBoardByIdService(Number(id));
     return res.status(200).json(result);
   } catch (error) {
     next(error);
