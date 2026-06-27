@@ -7,8 +7,8 @@ export const getBoards = async () => {
   return data.data;
 };
 
-export const getBoardContent = async (board_id: number) => {
-  const { data } = await backendApi.get(`/boards/${board_id}/content/`);
+export const getBoardContent = async (boardId: number) => {
+  const { data } = await backendApi.get(`/boards/${boardId}/content/`);
   return data.data;
 };
 
@@ -17,22 +17,22 @@ export const createBoard = async (title: string) => {
   return data;
 };
 
-export const updateBoard = async (board_id: number, title: string) => {
-  const { data } = await backendApi.put(`/boards/${board_id}/`, { title });
+export const updateBoard = async (boardId: number, title: string) => {
+  const { data } = await backendApi.put(`/boards/${boardId}/`, { title });
   return data;
 };
 
 export const updateBoardLayout = async (
-  board_id: number,
+  boardId: number,
   layout: updateLayoutBody,
 ) => {
-  const { data } = await backendApi.put(`/boards/${board_id}/layout/`, {
+  const { data } = await backendApi.put(`/boards/${boardId}/layout/`, {
     layout,
   });
   return data;
 };
 
-export const deleteBoard = async (board_id: number) => {
-  const { data } = await backendApi.delete(`/boards/${board_id}/`);
+export const deleteBoard = async (boardId: number) => {
+  const { data } = await backendApi.delete(`/boards/${boardId}/`);
   return data;
 };

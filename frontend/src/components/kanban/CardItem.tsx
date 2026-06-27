@@ -46,12 +46,12 @@ function CardContent({ card }: { card: Card }) {
 export function CardItem({
   card,
   index,
-  column_id,
+  columnId,
   onClick,
 }: {
   card: Card;
   index: number;
-  column_id: number;
+  columnId: number;
   onClick?: (card: Card) => void;
 }) {
   const { ref, isDragging, isDropTarget, handleRef } = useSortable({
@@ -62,7 +62,7 @@ export function CardItem({
     // group must be a string to match the keys of cardsByColumn
     // (Record<string, Card[]>) in BoardItem — used to find/transfer
     // the card between groups in handleDragEnd.
-    group: String(column_id),
+    group: String(columnId),
   });
 
   return (

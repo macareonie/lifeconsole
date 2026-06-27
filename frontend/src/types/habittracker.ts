@@ -10,15 +10,15 @@ export type Habit = {
   id: number;
   title: string;
   frequency: HabitFrequency;
-  user_id?: number;
-  current_streak: number;
-  longest_streak: number;
-  streak_updated_at: string | null;
+  userId?: number;
+  currentStreak: number;
+  longestStreak: number;
+  streakUpdatedAt: string | null;
 };
 
 export type HabitLog = {
   id: number;
-  habit_id: number;
+  habitId: number;
   date: string;
   completed: boolean;
 };
@@ -48,9 +48,9 @@ export type ToggleHabitLogResult = {
 };
 
 export type HabitCompletionCount = {
-  habit_id: number;
+  habitId: number;
   title: string;
-  completion_count: number;
+  completionCount: number;
 };
 
 export type AllTimeStats = {

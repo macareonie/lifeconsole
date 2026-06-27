@@ -11,13 +11,13 @@ export const getHabitLogsByDateRange = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { start_date, end_date } = req.query;
+  const { startDate, endDate } = req.query;
   const user = req.user as User;
   try {
     const result = await getLogsByDateRangeService(
       user.email!,
-      start_date as string,
-      end_date as string,
+      startDate as string,
+      endDate as string,
     );
     return res.status(200).json(result);
   } catch (error) {
@@ -30,12 +30,9 @@ export const toggleHabitLog = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { habit_id, date } = req.body;
+  const { habitId, date } = req.body;
   try {
-    const result = await toggleHabitLogService(
-      Number(habit_id),
-      date as string,
-    );
+    const result = await toggleHabitLogService(Number(habitId), date as string);
     return res.status(200).json(result);
   } catch (error) {
     next(error);

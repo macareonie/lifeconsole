@@ -2,38 +2,38 @@ import backendApi from "../http";
 
 export const createColumn = async ({
   title,
-  board_id,
+  boardId,
   position,
 }: {
   title: string;
-  board_id: number;
+  boardId: number;
   position: number;
 }) => {
   const { data } = await backendApi.post("/columns/", {
     title,
-    board_id,
+    boardId,
     position,
   });
   return data;
 };
 
 export const updateColumn = async ({
-  column_id,
+  columnId,
   title,
   position,
 }: {
-  column_id: number;
+  columnId: number;
   title: string;
   position: number;
 }) => {
-  const { data } = await backendApi.put(`/columns/${column_id}/`, {
+  const { data } = await backendApi.put(`/columns/${columnId}/`, {
     title,
     position,
   });
   return data;
 };
 
-export const deleteColumn = async (column_id: number) => {
-  const { data } = await backendApi.delete(`/columns/${column_id}/`);
+export const deleteColumn = async (columnId: number) => {
+  const { data } = await backendApi.delete(`/columns/${columnId}/`);
   return data;
 };

@@ -21,7 +21,7 @@ type CardSubmissionValues = {
 
 type CardCreateFormProps = {
   "aria-label": string;
-  column_id: number;
+  columnId: number;
   isPending: boolean;
   errorMessage?: string;
   onSubmit: (values: CardSubmissionValues) => Promise<void> | void;
@@ -30,7 +30,7 @@ type CardCreateFormProps = {
 
 export function CardCreateForm({
   "aria-label": ariaLabel,
-  column_id,
+  columnId,
   isPending,
   errorMessage,
   onSubmit,
@@ -68,9 +68,9 @@ export function CardCreateForm({
         className="space-y-3 rounded-xl border border-border bg-background p-3"
       >
         <div className="space-y-2">
-          <Label htmlFor={`card-title-${column_id}`}>Card title</Label>
+          <Label htmlFor={`card-title-${columnId}`}>Card title</Label>
           <Input
-            id={`card-title-${column_id}`}
+            id={`card-title-${columnId}`}
             placeholder="Add a task title"
             {...register("title", {
               required: "Card title is required",
@@ -82,15 +82,15 @@ export function CardCreateForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor={`card-subtitle-${column_id}`}>Subtitle</Label>
+          <Label htmlFor={`card-subtitle-${columnId}`}>Subtitle</Label>
           <Input
-            id={`card-subtitle-${column_id}`}
+            id={`card-subtitle-${columnId}`}
             placeholder="Short context for the card"
             {...register("subtitle")}
           />
         </div>
 
-        <MetadataFieldArray inputIdPrefix={`card-${column_id}`} />
+        <MetadataFieldArray inputIdPrefix={`card-${columnId}`} />
 
         <div className="flex gap-2">
           <Button type="submit" disabled={isPending}>

@@ -30,12 +30,12 @@ type ColumnTitleFormValues = {
 export function ColumnItem({
   column,
   index,
-  board_id,
+  boardId,
   onCardClick,
 }: {
   column: Column;
   index: number;
-  board_id: number;
+  boardId: number;
   onCardClick?: (card: Card) => void;
 }) {
   const [isEditingColumn, setIsEditingColumn] = useState(false);
@@ -70,8 +70,8 @@ export function ColumnItem({
 
   const onUpdateColumn = async ({ title, position }: ColumnTitleFormValues) => {
     await updateColumnMutation.mutateAsync({
-      column_id: column.id,
-      board_id,
+      columnId: column.id,
+      boardId,
       title,
       position,
     });
@@ -79,7 +79,7 @@ export function ColumnItem({
   };
 
   const onDeleteColumn = async () => {
-    await deleteColumnMutation.mutateAsync({ column_id: column.id, board_id });
+    await deleteColumnMutation.mutateAsync({ columnId: column.id, boardId });
   };
 
   const onCreateCard = async ({
@@ -88,10 +88,10 @@ export function ColumnItem({
     metadata,
   }: CardFormValues) => {
     await createCardMutation.mutateAsync({
-      board_id,
+      boardId,
       title,
       subtitle,
-      column_id: column.id,
+      columnId: column.id,
       position: column.cards.length,
       metadata,
     });
@@ -159,7 +159,7 @@ export function ColumnItem({
 
         {isEditingColumn && (
           <ColumnEditForm
-            column_id={column.id}
+            columnId={column.id}
             initialTitle={column.title}
             initialPosition={column.position}
             isPending={updateColumnMutation.isPending}
@@ -176,7 +176,7 @@ export function ColumnItem({
         {isCreatingCard && (
           <CardCreateForm
             aria-label={`Create card in column ${column.title}`}
-            column_id={column.id}
+            columnId={column.id}
             isPending={createCardMutation.isPending}
             errorMessage={
               createCardMutation.isError
@@ -205,7 +205,7 @@ export function ColumnItem({
             key={card.id}
             card={card}
             index={index}
-            column_id={column.id}
+            columnId={column.id}
             onClick={() => onCardClick?.(card)}
           />
         ))}

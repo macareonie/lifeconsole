@@ -55,7 +55,7 @@ describe("useBoardMutations", () => {
 
     await act(async () => {
       await result.current.updateBoardMutation.mutateAsync({
-        board_id: 3,
+        boardId: 3,
         title: "Renamed board",
       });
     });

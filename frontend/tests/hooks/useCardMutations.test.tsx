@@ -36,10 +36,10 @@ describe("useCardMutations", () => {
 
     await act(async () => {
       await result.current.createCardMutation.mutateAsync({
-        board_id: 9,
+        boardId: 9,
         title: "Card",
         subtitle: "Sub",
-        column_id: 3,
+        columnId: 3,
         position: 1,
         metadata: null,
       });
@@ -51,7 +51,7 @@ describe("useCardMutations", () => {
     ).toEqual({
       title: "Card",
       subtitle: "Sub",
-      column_id: 3,
+      columnId: 3,
       position: 1,
       metadata: null,
     });
@@ -61,11 +61,11 @@ describe("useCardMutations", () => {
 
     await act(async () => {
       await result.current.updateCardMutation.mutateAsync({
-        board_id: 9,
-        card_id: 11,
+        boardId: 9,
+        cardId: 11,
         title: "Updated",
         subtitle: "S",
-        column_id: 3,
+        columnId: 3,
         position: 2,
         metadata: null,
       });
@@ -77,8 +77,8 @@ describe("useCardMutations", () => {
 
     await act(async () => {
       await result.current.deleteCardMutation.mutateAsync({
-        board_id: 9,
-        card_id: 11,
+        boardId: 9,
+        cardId: 11,
       });
     });
 
