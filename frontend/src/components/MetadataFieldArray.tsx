@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-import type { MetadataFormValues } from "../utils/kanban/CardMetadataConversion";
+import type { MetadataFormValues } from "../utils/kanban/cardMetadataConversion";
 
 type MetadataFieldArrayProps = {
   inputIdPrefix: string;

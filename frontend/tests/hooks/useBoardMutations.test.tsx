@@ -8,11 +8,11 @@ import {
   createBoard,
   deleteBoard,
   updateBoard,
-} from "../../src/services/boards";
+} from "../../src/services/kanban/boards";
 import { createTestQueryClient } from "../test-utils";
 
 import type { ReactNode } from "react";
-vi.mock("../../src/services/boards", () => ({
+vi.mock("../../src/services/kanban/boards", () => ({
   createBoard: vi.fn(),
   updateBoard: vi.fn(),
   deleteBoard: vi.fn(),
@@ -55,7 +55,7 @@ describe("useBoardMutations", () => {
 
     await act(async () => {
       await result.current.updateBoardMutation.mutateAsync({
-        board_id: 3,
+        boardId: 3,
         title: "Renamed board",
       });
     });

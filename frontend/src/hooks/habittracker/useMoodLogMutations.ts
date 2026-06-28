@@ -1,4 +1,4 @@
-import { setMoodLog } from "@/services/moodlogs";
+import { setMoodLog } from "@/services/habittracker/moodlogs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useMoodLogMutations = () => {

@@ -3,13 +3,13 @@ import {
   deleteBoard,
   updateBoard,
   updateBoardLayout,
-} from "@/services/boards";
+} from "@/services/kanban/boards";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export type updateLayoutBody = {
   columns: {
     id: number;
-    card_ids: number[];
+    cardIds: number[];
   }[];
 };
 
@@ -26,13 +26,13 @@ export const useBoardMutations = () => {
   });
 
   const updateBoardMutation = useMutation({
-    mutationFn: ({ board_id, title }: { board_id: number; title: string }) =>
-      updateBoard(board_id, title),
+    mutationFn: ({ boardId, title }: { boardId: number; title: string }) =>
+      updateBoard(boardId, title),
     onSuccess: async (_data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["boards"] }),
         queryClient.invalidateQueries({
-          queryKey: ["boardContent", variables.board_id],
+          queryKey: ["boardContent", variables.boardId],
         }),
       ]);
     },
@@ -40,27 +40,27 @@ export const useBoardMutations = () => {
 
   const updateLayoutMutation = useMutation({
     mutationFn: ({
-      board_id,
+      boardId,
       layout,
     }: {
-      board_id: number;
+      boardId: number;
       layout: updateLayoutBody;
-    }) => updateBoardLayout(board_id, layout),
+    }) => updateBoardLayout(boardId, layout),
     onError(_error, variables) {
       queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.board_id],
+        queryKey: ["boardContent", variables.boardId],
       });
     },
   });
 
   const deleteBoardMutation = useMutation({
-    mutationFn: async (board_id: number) => {
-      return deleteBoard(board_id);
+    mutationFn: async (boardId: number) => {
+      return deleteBoard(boardId);
     },
-    onSuccess: async (_data, board_id) => {
+    onSuccess: async (_data, boardId) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["boards"] }),
-        queryClient.invalidateQueries({ queryKey: ["boardContent", board_id] }),
+        queryClient.invalidateQueries({ queryKey: ["boardContent", boardId] }),
       ]);
     },
   });

@@ -5,16 +5,16 @@ export const resolveUserId = async (email: string) => {
   if (!email) {
     throw new ServiceError(
       "UserServiceError",
+      "UNAUTHENTICATED",
       "User must be authenticated to perform this action",
-      400,
     );
   }
   const { userId, hasError } = await getUserIdByEmail(email);
   if (hasError) {
     throw new ServiceError(
       "UserServiceError",
-      "Internal server error: Getting user ID",
-      500,
+      "DATABASE_ERROR",
+      "Error getting user ID from email",
     );
   }
   return userId;

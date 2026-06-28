@@ -1,6 +1,6 @@
 import { ServiceError } from "../../../errors/service.error.js";
-import { getAllTimeCompletions } from "../../../repositories/habitlog.repository.js";
-import { resolveUserId } from "../../../utils/email2userid.js";
+import { getAllTimeCompletions } from "../../../repositories/habittracker/habitlog.repository.js";
+import { resolveUserId } from "../../../utils/email-to-userId.js";
 
 type AlltimeCompletionRow = {
   habit_id: number;
@@ -8,9 +8,9 @@ type AlltimeCompletionRow = {
 };
 
 type HabitCompletionCount = {
-  habit_id: number;
+  habitId: number;
   title: string;
-  completion_count: number;
+  completionCount: number;
 };
 
 function aggregateCompletions(
@@ -21,31 +21,35 @@ function aggregateCompletions(
   for (const row of rows) {
     const existing = counts.get(row.habit_id);
     if (existing) {
-      existing.completion_count += 1;
+      existing.completionCount += 1;
     } else {
       counts.set(row.habit_id, {
-        habit_id: row.habit_id,
+        habitId: row.habit_id,
         title: row.habits.title,
-        completion_count: 1,
+        completionCount: 1,
       });
     }
   }
 
   return [...counts.values()].sort(
-    (a, b) => b.completion_count - a.completion_count,
+    (a, b) => b.completionCount - a.completionCount,
   );
 }
 
 export const getAllTimeStatsService = async (email: string) => {
-  const user_id = await resolveUserId(email);
-  const { data, error } = await getAllTimeCompletions(user_id);
+  const userId = await resolveUserId(email);
+  const { data, error } = await getAllTimeCompletions(userId);
   if (error) {
-    throw new ServiceError("HabitStatsServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitStatsServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
 
   const completionCounts = aggregateCompletions(data ?? []);
   const totalCompletions = completionCounts.reduce(
-    (sum, h) => sum + h.completion_count,
+    (sum, h) => sum + h.completionCount,
     0,
   );
   const topHabit = completionCounts[0] ?? null;

@@ -21,7 +21,7 @@ export function HabitLogCheckbox({
 
   const onToggle = () => {
     toggleHabitLogMutation.mutate({
-      habit_id: habit.id,
+      habitId: habit.id,
       date,
     });
   };

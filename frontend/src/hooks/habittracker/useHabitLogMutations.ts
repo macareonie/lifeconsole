@@ -1,4 +1,4 @@
-import { toggleHabitLog } from "@/services/habitlogs";
+import { toggleHabitLog } from "@/services/habittracker/habitlogs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useHabitLogMutations = () => {
@@ -9,13 +9,13 @@ export const useHabitLogMutations = () => {
   // via POST with completed: true (first click always marks done).
   const toggleHabitLogMutation = useMutation({
     mutationFn: async ({
-      habit_id,
+      habitId,
       date,
     }: {
-      habit_id: number;
+      habitId: number;
       date: string;
     }) => {
-      return toggleHabitLog(habit_id, date);
+      return toggleHabitLog(habitId, date);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -23,6 +23,9 @@ export const useHabitLogMutations = () => {
       });
       await queryClient.invalidateQueries({
         queryKey: ["habits"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["allTimeHabitStats"],
       });
     },
   });

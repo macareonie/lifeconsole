@@ -4,13 +4,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import {
   metadataEntriesToJson,
   metadataJsonToEntries,
-} from "../../../utils/kanban/CardMetadataConversion";
+} from "../../../utils/kanban/cardMetadataConversion";
 import { MetadataFieldArray } from "../../MetadataFieldArray";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 
-import type { MetadataFormValues } from "../../../utils/kanban/CardMetadataConversion";
+import type { MetadataFormValues } from "../../../utils/kanban/cardMetadataConversion";
 import type { JsonValue } from "../../../types/json";
 
 type CardFormValues = {
@@ -25,7 +25,7 @@ export type CardSubmissionValues = {
 };
 
 type CardEditFormProps = {
-  card_id: number;
+  cardId: number;
   initialTitle: string;
   initialSubtitle: string;
   initialMetadata: JsonValue;
@@ -36,7 +36,7 @@ type CardEditFormProps = {
 };
 
 export function CardEditForm({
-  card_id,
+  cardId,
   initialTitle,
   initialSubtitle,
   initialMetadata,
@@ -80,9 +80,9 @@ export function CardEditForm({
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(handleSave)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor={`card-title-${card_id}`}>Title</Label>
+          <Label htmlFor={`card-title-${cardId}`}>Title</Label>
           <Input
-            id={`card-title-${card_id}`}
+            id={`card-title-${cardId}`}
             {...register("title", {
               required: "Card title is required",
             })}
@@ -93,11 +93,11 @@ export function CardEditForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor={`card-subtitle-${card_id}`}>Subtitle</Label>
-          <Input id={`card-subtitle-${card_id}`} {...register("subtitle")} />
+          <Label htmlFor={`card-subtitle-${cardId}`}>Subtitle</Label>
+          <Input id={`card-subtitle-${cardId}`} {...register("subtitle")} />
         </div>
 
-        <MetadataFieldArray inputIdPrefix={`card-${card_id}`} />
+        <MetadataFieldArray inputIdPrefix={`card-${cardId}`} />
 
         <div className="flex flex-wrap gap-2">
           <Button type="submit" disabled={isPending}>

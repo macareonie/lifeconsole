@@ -5,7 +5,6 @@ import validateInputs from "../../../utils/input-validation.js";
 import {
   createNewBoard,
   deleteBoard,
-  getBoard,
   getBoardContent,
   getBoards,
   updateBoard,
@@ -20,7 +19,6 @@ const validateTitleParam = [
 
 boardsRouter.post("/", validateInputs(validateTitleParam), createNewBoard);
 boardsRouter.get("/", getBoards);
-boardsRouter.get("/:id", getBoard);
 boardsRouter.get("/:id/content", getBoardContent);
 boardsRouter.put("/:id/layout", updateBoardLayout);
 boardsRouter.put("/:id", validateInputs(validateTitleParam), updateBoard);

@@ -8,11 +8,11 @@ import type { CardSubmissionValues } from "./forms/CardEditForm";
 
 export function CardDetailsModal({
   card,
-  board_id,
+  boardId,
   onClose,
 }: {
   card: Card;
-  board_id: number;
+  boardId: number;
   onClose: () => void;
 }) {
   const { updateCardMutation, deleteCardMutation } = useCardMutations();
@@ -23,11 +23,11 @@ export function CardDetailsModal({
     metadata,
   }: CardSubmissionValues) => {
     await updateCardMutation.mutateAsync({
-      board_id,
-      card_id: card.id,
+      boardId,
+      cardId: card.id,
       title,
       subtitle,
-      column_id: card.column_id,
+      columnId: card.columnId,
       position: card.position,
       metadata: metadata,
     });
@@ -35,7 +35,7 @@ export function CardDetailsModal({
   };
 
   const onDelete = async () => {
-    await deleteCardMutation.mutateAsync({ board_id, card_id: card.id });
+    await deleteCardMutation.mutateAsync({ boardId, cardId: card.id });
     onClose();
   };
 
@@ -54,7 +54,7 @@ export function CardDetailsModal({
 
         <div className="space-y-4">
           <CardEditForm
-            card_id={card.id}
+            cardId={card.id}
             initialTitle={card.title}
             initialSubtitle={card.subtitle ?? ""}
             initialMetadata={card.metadata ?? {}}

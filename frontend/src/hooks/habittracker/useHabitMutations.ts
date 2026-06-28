@@ -1,4 +1,8 @@
-import { addHabit, deleteHabit, updateHabit } from "@/services/habits";
+import {
+  addHabit,
+  deleteHabit,
+  updateHabit,
+} from "@/services/habittracker/habits";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { HabitFrequency } from "../../types/habittracker";

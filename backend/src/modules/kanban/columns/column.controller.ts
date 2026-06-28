@@ -1,9 +1,8 @@
+import type { ColumnUpdate } from "../../../types/kanban.js";
 import {
-  createColumn,
-  deleteColumnById,
-  getAllColumnsByBoardId,
-  getColumnById,
-  updateColumnById,
+  createColumnService,
+  deleteColumnByIdService,
+  updateColumnByIdService,
 } from "./column.service.js";
 
 import type { NextFunction, Request, Response } from "express";
@@ -13,24 +12,10 @@ export const createNewColumn = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, board_id, position } = req.body;
+  const columnData = req.body;
   try {
-    const result = await createColumn(title, board_id, position);
+    const result = await createColumnService(columnData as ColumnUpdate);
     res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getColumn = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { id } = req.params;
-  try {
-    const result = await getColumnById(Number(id));
-    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -42,10 +27,13 @@ export const updateColumn = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
-  const { title, position } = req.body;
+  const columnData = req.body;
 
   try {
-    const result = await updateColumnById(Number(id), title, position);
+    const result = await updateColumnByIdService(
+      Number(id),
+      columnData as ColumnUpdate,
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -59,21 +47,7 @@ export const deleteColumn = async (
 ) => {
   const { id } = req.params;
   try {
-    const result = await deleteColumnById(Number(id));
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getColumnsByBoardId = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { board_id } = req.params;
-  try {
-    const result = await getAllColumnsByBoardId(Number(board_id));
+    const result = await deleteColumnByIdService(Number(id));
     res.status(200).json(result);
   } catch (error) {
     next(error);

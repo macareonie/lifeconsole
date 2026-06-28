@@ -4,12 +4,9 @@ import * as colController from "../../src/modules/kanban/columns/column.controll
 import * as colService from "../../src/modules/kanban/columns/column.service.js";
 
 vi.mock("../../src/modules/kanban/columns/column.service.js", () => ({
-  createColumn: vi.fn(),
-  getColumnById: vi.fn(),
-  getAllColumns: vi.fn(),
-  updateColumnById: vi.fn(),
-  deleteColumnById: vi.fn(),
-  getAllColumnsByBoardId: vi.fn(),
+  createColumnService: vi.fn(),
+  updateColumnByIdService: vi.fn(),
+  deleteColumnByIdService: vi.fn(),
 }));
 
 beforeEach(() => vi.clearAllMocks());
@@ -21,26 +18,19 @@ const makeRes = () => {
 
 describe("column.controller", () => {
   it("createNewColumn calls service and returns 201", async () => {
-    (colService.createColumn as any).mockResolvedValue({ success: true });
-    const req = { body: { title: "t", board_id: 1, position: 0 } } as any;
+    (colService.createColumnService as any).mockResolvedValue({
+      success: true,
+    });
+    const req = { body: { title: "t", boardId: 1, position: 0 } } as any;
     const res = makeRes();
     await colController.createNewColumn(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("getColumn calls service and returns 200", async () => {
-    (colService.getColumnById as any).mockResolvedValue({
-      data: { id: 1 },
+  it("updateColumn calls service and returns 200", async () => {
+    (colService.updateColumnByIdService as any).mockResolvedValue({
       success: true,
     });
-    const req = { params: { id: "1" } } as any;
-    const res = makeRes();
-    await colController.getColumn(req, res, vi.fn());
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-
-  it("updateColumn calls service and returns 200", async () => {
-    (colService.updateColumnById as any).mockResolvedValue({ success: true });
     const req = {
       params: { id: "1" },
       body: { title: "x", position: 1 },
@@ -51,28 +41,19 @@ describe("column.controller", () => {
   });
 
   it("deleteColumn calls service and returns 200", async () => {
-    (colService.deleteColumnById as any).mockResolvedValue({ success: true });
+    (colService.deleteColumnByIdService as any).mockResolvedValue({
+      success: true,
+    });
     const req = { params: { id: "1" } } as any;
     const res = makeRes();
     await colController.deleteColumn(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("getColumnsByBoardId calls service and returns 200", async () => {
-    (colService.getAllColumnsByBoardId as any).mockResolvedValue({
-      data: [],
-      success: true,
-    });
-    const req = { params: { board_id: "1" } } as any;
-    const res = makeRes();
-    await colController.getColumnsByBoardId(req, res, vi.fn());
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-
   it("createNewColumn forwards errors to next", async () => {
     const error = new Error("boom");
-    (colService.createColumn as any).mockRejectedValue(error);
-    const req = { body: { title: "t", board_id: 1, position: 0 } } as any;
+    (colService.createColumnService as any).mockRejectedValue(error);
+    const req = { body: { title: "t", boardId: 1, position: 0 } } as any;
     const res = makeRes();
     const next = vi.fn();
 
@@ -81,21 +62,9 @@ describe("column.controller", () => {
     expect(next).toHaveBeenCalledWith(error);
   });
 
-  it("getColumn forwards errors to next", async () => {
-    const error = new Error("boom");
-    (colService.getColumnById as any).mockRejectedValue(error);
-    const req = { params: { id: "1" } } as any;
-    const res = makeRes();
-    const next = vi.fn();
-
-    await colController.getColumn(req, res, next);
-
-    expect(next).toHaveBeenCalledWith(error);
-  });
-
   it("updateColumn forwards errors to next", async () => {
     const error = new Error("boom");
-    (colService.updateColumnById as any).mockRejectedValue(error);
+    (colService.updateColumnByIdService as any).mockRejectedValue(error);
     const req = {
       params: { id: "1" },
       body: { title: "x", position: 1 },
@@ -110,24 +79,12 @@ describe("column.controller", () => {
 
   it("deleteColumn forwards errors to next", async () => {
     const error = new Error("boom");
-    (colService.deleteColumnById as any).mockRejectedValue(error);
+    (colService.deleteColumnByIdService as any).mockRejectedValue(error);
     const req = { params: { id: "1" } } as any;
     const res = makeRes();
     const next = vi.fn();
 
     await colController.deleteColumn(req, res, next);
-
-    expect(next).toHaveBeenCalledWith(error);
-  });
-
-  it("getColumnsByBoardId forwards errors to next", async () => {
-    const error = new Error("boom");
-    (colService.getAllColumnsByBoardId as any).mockRejectedValue(error);
-    const req = { params: { board_id: "1" } } as any;
-    const res = makeRes();
-    const next = vi.fn();
-
-    await colController.getColumnsByBoardId(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

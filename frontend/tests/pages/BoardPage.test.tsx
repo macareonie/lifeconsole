@@ -23,7 +23,7 @@ vi.mock("../../src/hooks/kanban/useBoardContent", () => ({
   useBoardContent: (board_id: number) => mockUseBoardContent(board_id),
 }));
 
-vi.mock("../../src/components/board/BoardItem", () => ({
+vi.mock("../../src/components/kanban/BoardItem", () => ({
   BoardItem: (props: unknown) => mockBoardItem(props as never),
 }));
 

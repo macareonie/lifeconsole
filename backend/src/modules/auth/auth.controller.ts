@@ -7,10 +7,10 @@ import {
   setAuthCookies,
 } from "../../utils/auth-cookies.js";
 import {
-  getUserFromAccessToken,
-  loginUser,
-  logoutUser,
-  registerUser,
+  getUserFromAccessTokenService,
+  loginUserService,
+  logoutUserService,
+  registerUserService,
 } from "./auth.service.js";
 
 export const register = async (
@@ -20,7 +20,7 @@ export const register = async (
 ) => {
   const { username, email, password } = req.body;
   try {
-    const result = await registerUser(username, email, password);
+    const result = await registerUserService(username, email, password);
 
     if (result.session) {
       setAuthCookies(res, result.session as Session);
@@ -39,7 +39,7 @@ export const login = async (
 ) => {
   const { username, password } = req.body;
   try {
-    const result = await loginUser(username, password);
+    const result = await loginUserService(username, password);
 
     if (result.session) {
       setAuthCookies(res, result.session as Session);
@@ -63,7 +63,7 @@ export const getSession = async (
       return res.status(401).json({ error: "Not authenticated" });
     }
 
-    const { data, error } = await getUserFromAccessToken(accessToken);
+    const { data, error } = await getUserFromAccessTokenService(accessToken);
 
     if (error || !data.user) {
       return res.status(401).json({ error: "Invalid or expired session" });
@@ -94,7 +94,7 @@ export const logout = async (
   next: NextFunction,
 ) => {
   try {
-    const result = await logoutUser();
+    const result = await logoutUserService();
     clearAuthCookies(res);
     console.log(result.message);
     return res.status(200).json(result);

@@ -2,42 +2,44 @@ import { ServiceError } from "../../../errors/service.error.js";
 import {
   getCompletedDatesForHabit,
   updateHabitStreak,
-} from "../../../repositories/habit.repository.js";
+} from "../../../repositories/habittracker/habit.repository.js";
 import {
-  deleteHabitLogById,
-  getAllLogsByHabitId,
   getHabitLogByHabitAndDate,
   getLogsByDateRange,
   upsertHabitLog,
-} from "../../../repositories/habitlog.repository.js";
+} from "../../../repositories/habittracker/habitlog.repository.js";
 import { toIsoDate } from "../../../utils/datetime-helpers.js";
-import { resolveUserId } from "../../../utils/email2userid.js";
+import { resolveUserId } from "../../../utils/email-to-userId.js";
 import { calculateStreaks } from "../../../utils/streaks-calc.js";
 
 export const getLogsByDateRangeService = async (
   email: string,
-  start_date: string,
-  end_date: string,
+  startDate: string,
+  endDate: string,
 ) => {
   const userId = await resolveUserId(email);
   if (!userId) {
-    throw new ServiceError("HabitLogServiceError", "User not found", 404);
-  }
-  if (!start_date || !end_date) {
     throw new ServiceError(
       "HabitLogServiceError",
+      "NOT_FOUND",
+      "User not found from email",
+    );
+  }
+  if (!startDate || !endDate) {
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "MISSING_REQUIRED_FIELD",
       "Start date and end date are required",
-      400,
     );
   }
 
-  const { data, error } = await getLogsByDateRange(
-    userId,
-    start_date,
-    end_date,
-  );
+  const { data, error } = await getLogsByDateRange(userId, startDate, endDate);
   if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     data: data ?? [],
@@ -46,26 +48,34 @@ export const getLogsByDateRangeService = async (
   };
 };
 
-export const toggleHabitLogService = async (habit_id: number, date: string) => {
+export const toggleHabitLogService = async (habitId: number, date: string) => {
   const { data: existing, error: lookupError } =
-    await getHabitLogByHabitAndDate(habit_id, date);
+    await getHabitLogByHabitAndDate(habitId, date);
   if (existing && lookupError) {
-    throw new ServiceError("HabitLogServiceError", lookupError.message, 400);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "DATABASE_ERROR",
+      lookupError.message,
+    );
   }
 
   const completed = existing ? !existing.completed : true;
   const { error } = await upsertHabitLog({
     id: existing?.id,
-    habit_id,
+    habitId,
     date,
     completed,
   });
   if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
 
   console.log("start streak recompute");
-  await recomputeHabitStreaksService(habit_id);
+  await recomputeHabitStreaksService(habitId);
   console.log("end streak recompute");
 
   return {
@@ -74,37 +84,14 @@ export const toggleHabitLogService = async (habit_id: number, date: string) => {
   };
 };
 
-export const getAllLogsByHabitIdService = async (habit_id: number) => {
-  const { data, error } = await getAllLogsByHabitId(habit_id);
-  if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
-  }
-  return {
-    data: data,
-    message: "Habit logs retrieved successfully",
-    success: true,
-  };
-};
-
-export const deleteHabitLogByIdService = async (habitLog_id: number) => {
-  const { data, error } = await deleteHabitLogById(habitLog_id);
-  if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
-  }
-  return {
-    message: "Habit log deleted successfully",
-    success: true,
-  };
-};
-
-export const recomputeHabitStreaksService = async (habit_id: number) => {
+const recomputeHabitStreaksService = async (habitId: number) => {
   const { data: completedDates, error: completedDatesError } =
-    await getCompletedDatesForHabit(habit_id);
+    await getCompletedDatesForHabit(habitId);
   if (completedDatesError) {
     throw new ServiceError(
       "HabitServiceError",
+      "DATABASE_ERROR",
       completedDatesError.message,
-      400,
     );
   }
   const today = new Date();
@@ -114,12 +101,16 @@ export const recomputeHabitStreaksService = async (habit_id: number) => {
   );
 
   const { error: updateStreakError } = await updateHabitStreak(
-    habit_id,
+    habitId,
     currentStreak,
     longestStreak,
     toIsoDate(today),
   );
   if (updateStreakError) {
-    throw new ServiceError("HabitServiceError", updateStreakError.message, 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "DATABASE_ERROR",
+      updateStreakError.message,
+    );
   }
 };

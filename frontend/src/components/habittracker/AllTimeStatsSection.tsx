@@ -4,13 +4,13 @@ import { useAllTimeStats } from "../../hooks/habittracker/useAllTimeStats";
 
 import type { Habit } from "@/types/habittracker";
 
-export function AllTimeSection({ habits }: { habits: Habit[] }) {
+export function AllTimeStatsSection({ habits }: { habits: Habit[] }) {
   const { data, isLoading } = useAllTimeStats();
 
   // Longest streak across all habits is free — already on each habit
   // object from useHabits(), no extra fetch needed for this one stat.
   const longestStreakHabit = habits.reduce<Habit | null>((best, h) => {
-    if (!best || h.longest_streak > best.longest_streak) return h;
+    if (!best || h.longestStreak > best.longestStreak) return h;
     return best;
   }, null);
 
@@ -25,8 +25,8 @@ export function AllTimeSection({ habits }: { habits: Habit[] }) {
         <div className="min-w-0">
           <p className="text-xs text-muted-foreground">Longest streak</p>
           <p className="truncate text-sm font-medium text-foreground">
-            {longestStreakHabit && longestStreakHabit.longest_streak > 0
-              ? `${longestStreakHabit.title} — ${longestStreakHabit.longest_streak} days`
+            {longestStreakHabit && longestStreakHabit.longestStreak > 0
+              ? `${longestStreakHabit.title} — ${longestStreakHabit.longestStreak} days`
               : "No streaks yet"}
           </p>
         </div>
@@ -38,7 +38,7 @@ export function AllTimeSection({ habits }: { habits: Habit[] }) {
           <p className="text-xs text-muted-foreground">Top habit</p>
           <p className="truncate text-sm font-medium text-foreground">
             {data?.topHabit
-              ? `${data.topHabit.title} — ${data.topHabit.completion_count} completions all time`
+              ? `${data.topHabit.title} — ${data.topHabit.completionCount} completions all time`
               : "No completions yet"}
           </p>
         </div>

@@ -1,29 +1,24 @@
-import backendApi from "./http";
+import backendApi from "../http.ts";
 
-import type { JsonValue } from "../types/json.ts";
-
-export const getCardsFromBoardId = async (board_id: number) => {
-  const { data } = await backendApi.get(`/cards/board/${board_id}/`);
-  return data.data;
-};
+import type { JsonValue } from "../../types/json.ts";
 
 export const createCard = async ({
   title,
   subtitle,
-  column_id,
+  columnId,
   position,
   metadata,
 }: {
   title: string;
   subtitle: string;
-  column_id: number;
+  columnId: number;
   position: number;
   metadata: JsonValue;
 }) => {
   const { data } = await backendApi.post("/cards/", {
     title,
     subtitle,
-    column_id,
+    columnId,
     position,
     metadata,
   });
@@ -31,31 +26,31 @@ export const createCard = async ({
 };
 
 export const updateCard = async ({
-  card_id,
+  cardId,
   title,
   subtitle,
-  column_id,
+  columnId,
   position,
   metadata,
 }: {
-  card_id: number;
+  cardId: number;
   title: string;
   subtitle: string;
-  column_id: number;
+  columnId: number;
   position: number;
   metadata: JsonValue;
 }) => {
-  const { data } = await backendApi.put(`/cards/${card_id}/`, {
+  const { data } = await backendApi.put(`/cards/${cardId}/`, {
     title,
     subtitle,
-    column_id,
+    columnId,
     position,
     metadata,
   });
   return data;
 };
 
-export const deleteCard = async (card_id: number) => {
-  const { data } = await backendApi.delete(`/cards/${card_id}/`);
+export const deleteCard = async (cardId: number) => {
+  const { data } = await backendApi.delete(`/cards/${cardId}/`);
   return data;
 };
