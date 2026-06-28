@@ -40,7 +40,11 @@ export const getAllTimeStatsService = async (email: string) => {
   const userId = await resolveUserId(email);
   const { data, error } = await getAllTimeCompletions(userId);
   if (error) {
-    throw new ServiceError("HabitStatsServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitStatsServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
 
   const completionCounts = aggregateCompletions(data ?? []);

@@ -13,8 +13,8 @@ function validateMood(mood: number) {
   if (typeof mood !== "number" || mood < MOOD_MIN || mood > MOOD_MAX) {
     throw new ServiceError(
       "MoodLogServiceError",
+      "INVALID_MOOD_VALUE",
       `Mood must be a number between ${MOOD_MIN} and ${MOOD_MAX}`,
-      400,
     );
   }
 }
@@ -23,12 +23,20 @@ export const setMoodLogService = async (email: string, moodLog: MoodLog) => {
   validateMood(moodLog.mood);
   const userId = await resolveUserId(email);
   if (!userId) {
-    throw new ServiceError("MoodLogServiceError", "User not found", 404);
+    throw new ServiceError(
+      "MoodLogServiceError",
+      "NOT_FOUND",
+      "User not found from email",
+    );
   }
 
   const { data, error } = await upsertMoodLog(moodLog, userId);
   if (error) {
-    throw new ServiceError("MoodLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "MoodLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     data,
@@ -41,7 +49,11 @@ export const getMoodLogByDateService = async (email: string, date: string) => {
   const userId = await resolveUserId(email);
   const { data, error } = await getMoodLogByDate(userId, date);
   if (error) {
-    throw new ServiceError("MoodLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "MoodLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     data,
@@ -59,8 +71,8 @@ export const getMoodLogByDateRangeService = async (
   if (!startDate || !endDate) {
     throw new ServiceError(
       "MoodLogServiceError",
+      "MISSING_REQUIRED_FIELD",
       "Start date and end date are required",
-      400,
     );
   }
 
@@ -70,7 +82,11 @@ export const getMoodLogByDateRangeService = async (
     endDate,
   );
   if (error) {
-    throw new ServiceError("MoodLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "MoodLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     data: data ?? [],

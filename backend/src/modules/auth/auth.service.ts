@@ -1,4 +1,5 @@
 import { createFreshClient } from "../../config/db.js";
+import { ERROR_CODES } from "../../errors/error-codes.js";
 import { ServiceError } from "../../errors/service.error.js";
 import {
   addUser,
@@ -14,15 +15,15 @@ export const registerUserService = async (
   const { exists, hasError } = await checkUserExists(email);
 
   if (hasError) {
-    throw new ServiceError(
-      "AuthServiceError",
-      "Internal server error: Checking user existence",
-      500,
-    );
+    throw new ServiceError("AuthServiceError", "DATABASE_ERROR", hasError);
   }
 
   if (exists) {
-    throw new ServiceError("AuthServiceError", "User already exists", 400);
+    throw new ServiceError(
+      "AuthServiceError",
+      "DUPLICATE_ENTRY",
+      `User with email ${email} already exists`,
+    );
   }
 
   const authClient = createFreshClient();
@@ -35,13 +36,17 @@ export const registerUserService = async (
   });
 
   if (error) {
-    throw new ServiceError("AuthServiceError", error.message, 400);
+    throw new ServiceError("AuthServiceError", "DATABASE_ERROR", error.message);
   }
 
   const { error: userError } = await addUser(username, email);
 
   if (userError) {
-    throw new ServiceError("AuthServiceError", userError.message, 400);
+    throw new ServiceError(
+      "AuthServiceError",
+      "DATABASE_ERROR",
+      userError.message,
+    );
   }
 
   return {
@@ -56,18 +61,14 @@ export const loginUserService = async (username: string, password: string) => {
   const { email, hasError } = await getUserEmailByUsername(username);
 
   if (hasError) {
-    throw new ServiceError(
-      "AuthServiceError",
-      "Internal server error: Getting user email",
-      500,
-    );
+    throw new ServiceError("AuthServiceError", "DATABASE_ERROR", hasError);
   }
 
   if (!email) {
     throw new ServiceError(
       "AuthServiceError",
-      "Invalid username or password",
-      400,
+      "DATABASE_ERROR",
+      `No user found with username ${username}`,
     );
   }
 
@@ -78,7 +79,7 @@ export const loginUserService = async (username: string, password: string) => {
   });
 
   if (error) {
-    throw new ServiceError("AuthServiceError", error.message, 400);
+    throw new ServiceError("AuthServiceError", "DATABASE_ERROR", error.message);
   }
 
   return {
@@ -93,7 +94,7 @@ export const logoutUserService = async () => {
   const authClient = createFreshClient();
   const { error } = await authClient.auth.signOut();
   if (error) {
-    throw new ServiceError("AuthServiceError", error.message, 500);
+    throw new ServiceError("AuthServiceError", "DATABASE_ERROR", error.message);
   }
   return {
     message: "User logged out successfully",
@@ -106,7 +107,7 @@ export const getUserFromAccessTokenService = async (accessToken: string) => {
   const authClient = createFreshClient();
   const { data, error } = await authClient.auth.getUser(accessToken);
   if (error) {
-    throw new ServiceError("AuthServiceError", error.message, 400);
+    throw new ServiceError("AuthServiceError", "DATABASE_ERROR", error.message);
   }
   return { data, error };
 };
