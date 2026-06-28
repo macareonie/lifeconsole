@@ -12,14 +12,8 @@ export const createNewCard = async (
   next: NextFunction,
 ) => {
   try {
-    const { title, subtitle, column_id, position, metadata } = req.body;
-    const result = await createCardService(
-      title,
-      subtitle,
-      column_id,
-      position,
-      metadata,
-    );
+    const cardData = req.body;
+    const result = await createCardService(cardData);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -32,16 +26,9 @@ export const updateCard = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
-  const { title, subtitle, column_id, position, metadata } = req.body;
+  const cardData = req.body;
   try {
-    const result = await updateCardByIdService(
-      Number(id),
-      title,
-      subtitle,
-      position,
-      column_id,
-      metadata,
-    );
+    const result = await updateCardByIdService(Number(id), cardData);
     res.status(200).json(result);
   } catch (error) {
     next(error);

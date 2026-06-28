@@ -1,3 +1,4 @@
+import type { ColumnUpdate } from "../../../types/kanban.js";
 import {
   createColumnService,
   deleteColumnByIdService,
@@ -11,9 +12,9 @@ export const createNewColumn = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, boardId, position } = req.body;
+  const columnData = req.body;
   try {
-    const result = await createColumnService(title, boardId, position);
+    const result = await createColumnService(columnData as ColumnUpdate);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -26,10 +27,13 @@ export const updateColumn = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
-  const { title, position } = req.body;
+  const columnData = req.body;
 
   try {
-    const result = await updateColumnByIdService(Number(id), title, position);
+    const result = await updateColumnByIdService(
+      Number(id),
+      columnData as ColumnUpdate,
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);

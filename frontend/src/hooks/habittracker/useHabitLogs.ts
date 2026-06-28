@@ -26,6 +26,8 @@ const useHabitLogsByWeek = (weekAnchor: Date) => {
 export const useHabitLogs = (weekAnchor: Date) => {
   const { data, isPending, isError } = useHabitLogsByWeek(weekAnchor);
 
+  // logs data is retrieved correctly but mismatch due to habitId vs habit_id
+
   const logsByHabit = useMemo(() => {
     const map = new Map<number, Map<string, HabitLog>>();
     const logs = data?.data ?? [];

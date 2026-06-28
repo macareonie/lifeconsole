@@ -5,11 +5,10 @@ import {
   updateColumnById,
 } from "../../../repositories/kanban/column.repository.js";
 
-export const createColumnService = async (
-  title: string,
-  boardId: number,
-  position: number,
-) => {
+import type { ColumnUpdate } from "../../../types/kanban.js";
+
+export const createColumnService = async (columnData: ColumnUpdate) => {
+  const { title, boardId, position } = columnData;
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
@@ -17,7 +16,7 @@ export const createColumnService = async (
       400,
     );
   }
-  const { data, error } = await addColumn(title, boardId, position);
+  const { error } = await addColumn(columnData);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
@@ -29,9 +28,9 @@ export const createColumnService = async (
 
 export const updateColumnByIdService = async (
   id: number,
-  title: string,
-  position: number,
+  columnData: ColumnUpdate,
 ) => {
+  const { title, position } = columnData;
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
@@ -40,7 +39,7 @@ export const updateColumnByIdService = async (
     );
   }
 
-  const { data, error } = await updateColumnById(id, { title, position });
+  const { error } = await updateColumnById(id, columnData);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }
@@ -51,7 +50,7 @@ export const updateColumnByIdService = async (
 };
 
 export const deleteColumnByIdService = async (id: number) => {
-  const { data, error } = await deleteColumnById(id);
+  const { error } = await deleteColumnById(id);
   if (error) {
     throw new ServiceError("ColumnServiceError", error.message, 400);
   }

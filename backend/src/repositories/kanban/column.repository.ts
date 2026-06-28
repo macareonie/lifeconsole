@@ -1,16 +1,11 @@
 import { db } from "../../config/db.js";
+import { camelToSnake, snakeToCamel } from "../../utils/case-convert.js";
 
-export const addColumn = async (
-  title: string,
-  boardId: number,
-  position: number,
-) => {
-  const { data, error } = await db.from("columns").insert({
-    title,
-    board_id: boardId,
-    position,
-  });
-  return { data, error };
+import type { ColumnUpdate } from "../../types/kanban.js";
+
+export const addColumn = async (columnData: ColumnUpdate) => {
+  const { error } = await db.from("columns").insert(camelToSnake(columnData));
+  return { error };
 };
 
 export const getColumnById = async (id: number) => {
@@ -19,20 +14,23 @@ export const getColumnById = async (id: number) => {
     .select("*")
     .eq("id", id)
     .maybeSingle();
-  return { data, error };
+  return { data: snakeToCamel(data), error };
 };
 
 export const updateColumnById = async (
   id: number,
-  updates: Partial<{ title: string; position: number }>,
+  updates: Partial<ColumnUpdate>,
 ) => {
-  const { data, error } = await db.from("columns").update(updates).eq("id", id);
-  return { data, error };
+  const { error } = await db
+    .from("columns")
+    .update(camelToSnake(updates))
+    .eq("id", id);
+  return { error };
 };
 
 export const deleteColumnById = async (id: number) => {
-  const { data, error } = await db.from("columns").delete().eq("id", id);
-  return { data, error };
+  const { error } = await db.from("columns").delete().eq("id", id);
+  return { error };
 };
 
 export const getColumnsByBoardId = async (boardId: number) => {
@@ -40,5 +38,5 @@ export const getColumnsByBoardId = async (boardId: number) => {
     .from("columns")
     .select("*")
     .eq("board_id", boardId);
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };

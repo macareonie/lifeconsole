@@ -3,7 +3,6 @@ import { Flame } from "lucide-react";
 import type { Habit } from "../../types/habittracker";
 
 export function StreakBadge({ habit }: { habit: Habit }) {
-  console.log("StreakBadge habit:", habit);
   if (habit.currentStreak <= 0) {
     return null;
   }

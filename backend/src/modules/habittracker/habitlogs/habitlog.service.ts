@@ -68,9 +68,9 @@ export const toggleHabitLogService = async (habitId: number, date: string) => {
   };
 };
 
-const recomputeHabitStreaksService = async (habit_id: number) => {
+const recomputeHabitStreaksService = async (habitId: number) => {
   const { data: completedDates, error: completedDatesError } =
-    await getCompletedDatesForHabit(habit_id);
+    await getCompletedDatesForHabit(habitId);
   if (completedDatesError) {
     throw new ServiceError(
       "HabitServiceError",
@@ -85,7 +85,7 @@ const recomputeHabitStreaksService = async (habit_id: number) => {
   );
 
   const { error: updateStreakError } = await updateHabitStreak(
-    habit_id,
+    habitId,
     currentStreak,
     longestStreak,
     toIsoDate(today),

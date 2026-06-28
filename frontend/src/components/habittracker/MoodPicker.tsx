@@ -12,9 +12,6 @@ export function MoodPicker() {
 
   const savedMood = data?.mood ?? null;
 
-  console.log("MoodWidget data:", data);
-  console.log("MoodWidget savedMood:", savedMood);
-
   // While a mutation is in flight, prefer showing the value just clicked
   // rather than the stale fetched value, mirroring the optimistic pattern
   // used in HabitLogCheckbox.

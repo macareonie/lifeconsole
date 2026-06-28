@@ -38,7 +38,7 @@ export const createBoardService = async (title: string, email: string) => {
     throw new ServiceError("BoardServiceError", "Title is required", 400);
   }
 
-  const { data, error } = await addBoard(title, userId);
+  const { error } = await addBoard(title, userId);
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }
@@ -73,7 +73,7 @@ function buildBoardContent(
   const columnsWithCards: Column[] = columnsData.map((column: Column) => ({
     ...column,
     cards: cardsData
-      .filter((card: Card) => card.columnId === column.id)
+      .filter((card) => card.columnId === column.id)
       .sort((a: Card, b: Card) => a.position - b.position),
   }));
 
@@ -119,7 +119,7 @@ export const getBoardContentByIdService = async (id: number) => {
 type updateLayoutRequestBody = {
   columns: {
     id: number;
-    card_ids: number[];
+    cardIds: number[];
   }[];
 };
 
@@ -136,7 +136,7 @@ export const updateBoardLayoutByIdService = async (
   }
 
   for (const [columnPosition, column] of layout.columns.entries()) {
-    if (typeof column.id !== "number" || !Array.isArray(column.card_ids)) {
+    if (typeof column.id !== "number" || !Array.isArray(column.cardIds)) {
       throw new ServiceError(
         "BoardServiceError",
         "Invalid column structure",
@@ -152,9 +152,9 @@ export const updateBoardLayoutByIdService = async (
       throw new ServiceError("BoardServiceError", columnError.message, 400);
     }
 
-    for (const [cardPosition, cardId] of column.card_ids.entries()) {
+    for (const [cardPosition, cardId] of column.cardIds.entries()) {
       const { error: cardError } = await updateCardById(cardId, {
-        column_id: column.id,
+        columnId: column.id,
         position: cardPosition,
       });
 
@@ -174,7 +174,7 @@ export const updateBoardByIdService = async (
   id: number,
   updates: Partial<{ title: string }>,
 ) => {
-  const { data, error } = await updateBoardById(id, updates);
+  const { error } = await updateBoardById(id, updates);
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }
@@ -185,7 +185,7 @@ export const updateBoardByIdService = async (
 };
 
 export const deleteBoardByIdService = async (id: number) => {
-  const { data, error } = await deleteBoardById(id);
+  const { error } = await deleteBoardById(id);
   if (error) {
     throw new ServiceError("BoardServiceError", error.message, 400);
   }

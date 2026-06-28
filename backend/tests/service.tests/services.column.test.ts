@@ -21,7 +21,11 @@ describe("column.service", () => {
       data: {},
       error: null,
     });
-    const res = await colService.createColumnService("T", 1, 1);
+    const res = await colService.createColumnService({
+      title: "Test Column",
+      position: 1,
+      boardId: 1,
+    });
     expect(res.success).toBe(true);
   });
 
@@ -32,19 +36,31 @@ describe("column.service", () => {
     });
 
     await expect(
-      colService.createColumnService("T", 1, 1),
+      colService.createColumnService({
+        title: "Test Column",
+        position: 1,
+        boardId: 1,
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createColumn - invalid position throws", async () => {
     await expect(
-      colService.createColumnService("T", 1, -1),
+      colService.createColumnService({
+        title: "Test Column",
+        position: -1,
+        boardId: 1,
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createColumn - missing position throws", async () => {
     await expect(
-      colService.createColumnService("T", 1, undefined as unknown as number),
+      colService.createColumnService({
+        title: "Test Column",
+        position: undefined as unknown as number,
+        boardId: 1,
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -54,7 +70,10 @@ describe("column.service", () => {
       error: null,
     });
 
-    const result = await colService.updateColumnByIdService(1, "Done", 2);
+    const result = await colService.updateColumnByIdService(1, {
+      title: "Done",
+      position: 2,
+    });
 
     expect(result).toEqual({
       message: "Column updated successfully",
@@ -68,13 +87,13 @@ describe("column.service", () => {
       error: { message: "err" },
     });
     await expect(
-      colService.updateColumnByIdService(1, "t", 0),
+      colService.updateColumnByIdService(1, { title: "t", position: 0 }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("updateColumnById - invalid negative position throws", async () => {
     await expect(
-      colService.updateColumnByIdService(1, "t", -1),
+      colService.updateColumnByIdService(1, { title: "t", position: -1 }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 

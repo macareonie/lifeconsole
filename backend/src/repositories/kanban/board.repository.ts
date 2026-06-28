@@ -1,11 +1,12 @@
 import { db } from "../../config/db.js";
+import { snakeToCamel } from "../../utils/case-convert.js";
 
 export const addBoard = async (title: string, userId: number) => {
-  const { data, error } = await db.from("boards").insert({
+  const { error } = await db.from("boards").insert({
     title: title,
     user_id: userId,
   });
-  return { data, error };
+  return { error };
 };
 
 export const getBoardById = async (id: number) => {
@@ -14,23 +15,23 @@ export const getBoardById = async (id: number) => {
     .select("id, title")
     .eq("id", id)
     .maybeSingle();
-  return { data, error };
+  return { data: data ? snakeToCamel(data) : null, error };
 };
 
 export const getAllBoards = async () => {
   const { data, error } = await db.from("boards").select("id, title");
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };
 
 export const updateBoardById = async (
   id: number,
   updates: Partial<{ title: string }>,
 ) => {
-  const { data, error } = await db.from("boards").update(updates).eq("id", id);
-  return { data, error };
+  const { error } = await db.from("boards").update(updates).eq("id", id);
+  return { error };
 };
 
 export const deleteBoardById = async (id: number) => {
-  const { data, error } = await db.from("boards").delete().eq("id", id);
-  return { data, error };
+  const { error } = await db.from("boards").delete().eq("id", id);
+  return { error };
 };
