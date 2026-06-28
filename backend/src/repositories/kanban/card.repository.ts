@@ -1,22 +1,11 @@
 import { db } from "../../config/db.js";
+import { camelToSnake, snakeToCamel } from "../../utils/case-convert.js";
 
-import type { JsonValue } from "../../types/json.js";
+import type { CardUpdate } from "../../types/kanban.js";
 
-export const addCard = async (
-  title: string,
-  subtitle: string,
-  columnId: number,
-  position: number,
-  metadata: JsonValue,
-) => {
-  const { data: result, error } = await db.from("cards").insert({
-    title,
-    subtitle,
-    column_id: columnId,
-    position,
-    metadata,
-  });
-  return { data: result, error };
+export const addCard = async (cardData: CardUpdate) => {
+  const { error } = await db.from("cards").insert(camelToSnake(cardData));
+  return { error };
 };
 
 export const getCardById = async (id: number) => {
@@ -25,26 +14,23 @@ export const getCardById = async (id: number) => {
     .select("*")
     .eq("id", id)
     .maybeSingle();
-  return { data, error };
+  return { data: snakeToCamel(data), error };
 };
 
 export const updateCardById = async (
   id: number,
-  updates: Partial<{
-    title: string;
-    column_id: number;
-    position: number;
-    subtitle: string;
-    metadata: JsonValue;
-  }>,
+  updates: Partial<CardUpdate>,
 ) => {
-  const { data, error } = await db.from("cards").update(updates).eq("id", id);
-  return { data, error };
+  const { error } = await db
+    .from("cards")
+    .update(camelToSnake(updates))
+    .eq("id", id);
+  return { error };
 };
 
 export const deleteCardById = async (id: number) => {
-  const { data, error } = await db.from("cards").delete().eq("id", id);
-  return { data, error };
+  const { error } = await db.from("cards").delete().eq("id", id);
+  return { error };
 };
 
 export const getCardsByBoardId = async (boardId: number) => {
@@ -52,5 +38,5 @@ export const getCardsByBoardId = async (boardId: number) => {
     .from("cards")
     .select("*, columns!inner(*)")
     .eq("columns.board_id", boardId);
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };

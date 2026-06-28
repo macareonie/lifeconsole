@@ -1,14 +1,14 @@
 import { db } from "../../config/db.js";
+import { camelToSnake, snakeToCamel } from "../../utils/case-convert.js";
 
 import type { HabitLog } from "../../types/habittracker.js";
-
 export const upsertHabitLog = async (habitLog: HabitLog) => {
   const { data, error } = await db
     .from("habitlogs")
-    .upsert(habitLog, { onConflict: "habit_id, date" })
+    .upsert(camelToSnake(habitLog), { onConflict: "habit_id, date" })
     .select()
     .maybeSingle();
-  return { data, error };
+  return { data: snakeToCamel(data), error };
 };
 
 export const getHabitLogById = async (habitLogId: number) => {
@@ -16,7 +16,7 @@ export const getHabitLogById = async (habitLogId: number) => {
     .from("habitlogs")
     .select("*")
     .eq("id", habitLogId);
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };
 
 export const getAllLogsByHabitId = async (habitId: number) => {
@@ -24,7 +24,7 @@ export const getAllLogsByHabitId = async (habitId: number) => {
     .from("habitlogs")
     .select("*")
     .eq("habit_id", habitId);
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };
 
 export const getLogsByDateRange = async (
@@ -38,7 +38,7 @@ export const getLogsByDateRange = async (
     .eq("habits.user_id", userId)
     .gte("date", startDate)
     .lte("date", endDate);
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };
 
 export const getHabitLogByHabitAndDate = async (
@@ -51,7 +51,7 @@ export const getHabitLogByHabitAndDate = async (
     .eq("habit_id", habitId)
     .eq("date", date)
     .maybeSingle();
-  return { data, error };
+  return { data: snakeToCamel(data), error };
 };
 
 export const deleteHabitLogById = async (habitLogId: number) => {
@@ -74,5 +74,8 @@ export const getAllTimeCompletions = async (userId: number) => {
     .eq("habits.user_id", userId)
     .eq("completed", true);
 
-  return { data: data as AlltimeCompletionRow[] | null, error };
+  return {
+    data: data?.map(snakeToCamel) as AlltimeCompletionRow[] | null,
+    error,
+  };
 };

@@ -6,14 +6,10 @@ import {
 } from "../../../repositories/kanban/card.repository.js";
 
 import type { JsonValue } from "../../../types/json.js";
+import type { CardUpdate } from "../../../types/kanban.js";
 
-export const createCardService = async (
-  title: string,
-  subtitle: string,
-  columnId: number,
-  position: number,
-  metadata: JsonValue,
-) => {
+export const createCardService = async (cardData: CardUpdate) => {
+  const { title, subtitle, columnId, position, metadata } = cardData;
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "CardServiceError",
@@ -21,13 +17,7 @@ export const createCardService = async (
       400,
     );
   }
-  const { data, error } = await addCard(
-    title,
-    subtitle,
-    columnId,
-    position,
-    metadata,
-  );
+  const { error } = await addCard(cardData);
   if (error) {
     throw new ServiceError("CardServiceError", error.message, 400);
   }
@@ -39,19 +29,9 @@ export const createCardService = async (
 
 export const updateCardByIdService = async (
   id: number,
-  title: string,
-  subtitle: string,
-  position: number,
-  columnId: number,
-  metadata: JsonValue,
+  cardData: Partial<CardUpdate>,
 ) => {
-  const { data: updatedData, error } = await updateCardById(id, {
-    title,
-    subtitle,
-    column_id: columnId,
-    position,
-    metadata,
-  });
+  const { error } = await updateCardById(id, cardData);
   if (error) {
     throw new ServiceError("CardServiceError", error.message, 400);
   }
@@ -62,7 +42,7 @@ export const updateCardByIdService = async (
 };
 
 export const deleteCardByIdService = async (id: number) => {
-  const { data, error } = await deleteCardById(id);
+  const { error } = await deleteCardById(id);
   if (error) {
     throw new ServiceError("CardServiceError", error.message, 400);
   }

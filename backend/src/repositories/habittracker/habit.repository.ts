@@ -1,11 +1,11 @@
 import { db } from "../../config/db.js";
+import { camelToSnake, snakeToCamel } from "../../utils/case-convert.js";
 
 import type { Habit } from "../../types/habittracker.js";
-
 export const addHabit = async (habit: Habit, userId: number) => {
   const { data, error } = await db
     .from("habits")
-    .insert({ ...habit, user_id: userId });
+    .insert(camelToSnake({ ...habit, userId }));
   return { data, error };
 };
 
@@ -14,16 +14,19 @@ export const getAllUserHabits = async (userId: number) => {
     .from("habits")
     .select("*")
     .eq("user_id", userId);
-  return { data, error };
+  return { data: data?.map(snakeToCamel), error };
 };
 
 export const updateHabitById = async (
   habitId: number,
-  updates: Partial<Habit>,
+  updates: Partial<{
+    title: string;
+    frequency: string;
+  }>,
 ) => {
   const { data, error } = await db
     .from("habits")
-    .update(updates)
+    .update(camelToSnake(updates))
     .eq("id", habitId);
   return { data, error };
 };
@@ -40,7 +43,7 @@ export const getCompletedDatesForHabit = async (habitId: number) => {
     .eq("habit_id", habitId)
     .eq("completed", true);
   return {
-    data: data?.map((log) => log.date as string) ?? null,
+    data: data?.map(snakeToCamel).map((log) => log.date as string) ?? null,
     error,
   };
 };
@@ -53,11 +56,13 @@ export const updateHabitStreak = async (
 ) => {
   const { data, error } = await db
     .from("habits")
-    .update({
-      current_streak: currentStreak,
-      longest_streak: longestStreak,
-      streak_updated_at: asOfDate,
-    })
+    .update(
+      camelToSnake({
+        currentStreak,
+        longestStreak,
+        streakUpdatedAt: asOfDate,
+      }),
+    )
     .eq("id", habitId);
   return { data, error };
 };

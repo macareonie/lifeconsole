@@ -19,7 +19,13 @@ describe("card.service", () => {
       error: null,
     });
 
-    const result = await cardService.createCardService("t", "s", 1, 1, {});
+    const result = await cardService.createCardService({
+      title: "Test Card",
+      subtitle: "Test Subtitle",
+      columnId: 1,
+      position: 1,
+      metadata: {},
+    });
 
     expect(result).toEqual({
       message: "Card created successfully",
@@ -34,25 +40,37 @@ describe("card.service", () => {
     });
 
     await expect(
-      cardService.createCardService("t", "s", 1, 1, {}),
+      cardService.createCardService({
+        title: "Test Card",
+        subtitle: "Test Subtitle",
+        columnId: 1,
+        position: 1,
+        metadata: {},
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createCard - invalid position throws", async () => {
     await expect(
-      cardService.createCardService("t", "s", 1, -5, {}),
+      cardService.createCardService({
+        title: "Test Card",
+        subtitle: "Test Subtitle",
+        columnId: 1,
+        position: -5,
+        metadata: {},
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
   it("createCard - missing position throws", async () => {
     await expect(
-      cardService.createCardService(
-        "t",
-        "s",
-        1,
-        undefined as unknown as number,
-        {},
-      ),
+      cardService.createCardService({
+        title: "Test Card",
+        subtitle: "Test Subtitle",
+        columnId: 1,
+        position: undefined as unknown as number,
+        metadata: {},
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 
@@ -62,14 +80,13 @@ describe("card.service", () => {
       error: null,
     });
 
-    const result = await cardService.updateCardByIdService(
-      1,
-      "t",
-      "s",
-      1,
-      2,
-      {},
-    );
+    const result = await cardService.updateCardByIdService(1, {
+      title: "t",
+      subtitle: "s",
+      columnId: 1,
+      position: 2,
+      metadata: {},
+    });
 
     expect(result).toEqual({
       message: "Card updated successfully",
@@ -83,7 +100,13 @@ describe("card.service", () => {
       error: { message: "err" },
     });
     await expect(
-      cardService.updateCardByIdService(1, "t", "s", 0, 1, {}),
+      cardService.updateCardByIdService(1, {
+        title: "t",
+        subtitle: "s",
+        columnId: 1,
+        position: 2,
+        metadata: {},
+      }),
     ).rejects.toBeInstanceOf(ServiceError);
   });
 

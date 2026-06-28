@@ -88,13 +88,16 @@ export const getAllUserHabitsService = async (email: string) => {
 };
 
 export const updateHabitByIdService = async (
-  habit_id: number,
-  updatedHabit: Partial<Habit>,
+  habitId: number,
+  updatedHabit: Partial<{
+    title: string;
+    frequency: string;
+  }>,
 ) => {
-  if (!habit_id) {
+  if (!habitId) {
     throw habitNotFoundError;
   }
-  const { data, error } = await updateHabitById(habit_id, updatedHabit);
+  const { data, error } = await updateHabitById(habitId, updatedHabit);
   if (error) {
     throw new ServiceError("HabitServiceError", error.message, 400);
   }
@@ -104,11 +107,11 @@ export const updateHabitByIdService = async (
   };
 };
 
-export const deleteHabitByIdService = async (habit_id: number) => {
-  if (!habit_id) {
+export const deleteHabitByIdService = async (habitId: number) => {
+  if (!habitId) {
     throw habitNotFoundError;
   }
-  const { data, error } = await deleteHabitById(habit_id);
+  const { data, error } = await deleteHabitById(habitId);
   if (error) {
     throw new ServiceError("HabitServiceError", error.message, 400);
   }

@@ -15,7 +15,6 @@ export const getMoodLogByDateRange = async (
       endDate,
     },
   });
-  console.log("getMoodLogByDateRange data:", data.data);
   return data.data;
 };
 
