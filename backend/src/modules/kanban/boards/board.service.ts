@@ -22,25 +22,32 @@ import type {
   Column,
   Card,
 } from "../../../types/kanban.js";
-const boardNotFoundError = new ServiceError(
-  "BoardServiceError",
-  "Board not found! Time to create one!",
-  404,
-);
 
 export const createBoardService = async (title: string, email: string) => {
   const userId = await resolveUserId(email);
   if (!userId) {
-    throw new ServiceError("BoardServiceError", "User not found", 404);
+    throw new ServiceError(
+      "BoardServiceError",
+      "NOT_FOUND",
+      "User not found from email",
+    );
   }
 
   if (!title) {
-    throw new ServiceError("BoardServiceError", "Title is required", 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "MISSING_REQUIRED_FIELD",
+      "Title is required",
+    );
   }
 
   const { error } = await addBoard(title, userId);
   if (error) {
-    throw new ServiceError("BoardServiceError", error.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
 
   return {
@@ -52,7 +59,11 @@ export const createBoardService = async (title: string, email: string) => {
 export const getAllBoardsService = async () => {
   let { data, error } = await getAllBoards();
   if (error) {
-    throw new ServiceError("BoardServiceError", error.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
 
   if (!data || data.length === 0) {
@@ -90,17 +101,33 @@ export const getBoardContentByIdService = async (id: number) => {
   const { data: cardsData, error: cardsError } = await getCardsByBoardId(id);
 
   if (boardError) {
-    throw new ServiceError("BoardServiceError", boardError.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      boardError.message,
+    );
   }
   if (columnsError) {
-    throw new ServiceError("BoardServiceError", columnsError.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      columnsError.message,
+    );
   }
   if (cardsError) {
-    throw new ServiceError("BoardServiceError", cardsError.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      cardsError.message,
+    );
   }
 
   if (!boardData) {
-    throw boardNotFoundError;
+    throw new ServiceError(
+      "BoardServiceError",
+      "NOT_FOUND",
+      "Board data not found",
+    );
   }
 
   const boardContent = buildBoardContent(
@@ -130,8 +157,8 @@ export const updateBoardLayoutByIdService = async (
   if (!layout || !Array.isArray(layout.columns)) {
     throw new ServiceError(
       "BoardServiceError",
+      "VALIDATION_ERROR",
       "Invalid layout structure",
-      400,
     );
   }
 
@@ -139,8 +166,8 @@ export const updateBoardLayoutByIdService = async (
     if (typeof column.id !== "number" || !Array.isArray(column.cardIds)) {
       throw new ServiceError(
         "BoardServiceError",
+        "VALIDATION_ERROR",
         "Invalid column structure",
-        400,
       );
     }
 
@@ -149,7 +176,11 @@ export const updateBoardLayoutByIdService = async (
     });
 
     if (columnError) {
-      throw new ServiceError("BoardServiceError", columnError.message, 400);
+      throw new ServiceError(
+        "BoardServiceError",
+        "DATABASE_ERROR",
+        columnError.message,
+      );
     }
 
     for (const [cardPosition, cardId] of column.cardIds.entries()) {
@@ -159,7 +190,11 @@ export const updateBoardLayoutByIdService = async (
       });
 
       if (cardError) {
-        throw new ServiceError("BoardServiceError", cardError.message, 400);
+        throw new ServiceError(
+          "BoardServiceError",
+          "DATABASE_ERROR",
+          cardError.message,
+        );
       }
     }
   }
@@ -176,7 +211,11 @@ export const updateBoardByIdService = async (
 ) => {
   const { error } = await updateBoardById(id, updates);
   if (error) {
-    throw new ServiceError("BoardServiceError", error.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Board updated successfully",
@@ -187,7 +226,11 @@ export const updateBoardByIdService = async (
 export const deleteBoardByIdService = async (id: number) => {
   const { error } = await deleteBoardById(id);
   if (error) {
-    throw new ServiceError("BoardServiceError", error.message, 400);
+    throw new ServiceError(
+      "BoardServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Board deleted successfully",

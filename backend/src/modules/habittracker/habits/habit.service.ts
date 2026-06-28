@@ -6,48 +6,34 @@ import {
   updateHabitById,
 } from "../../../repositories/habittracker/habit.repository.js";
 import { getUserIdByEmail } from "../../../repositories/user.repository.js";
+import { resolveUserId } from "../../../utils/email-to-userId.js";
 
 import type { Habit } from "../../../types/habittracker.js";
-
-const habitNotFoundError = new ServiceError(
-  "HabitServiceError",
-  "Habit not found! Time to create one!",
-  404,
-);
-
-const userNotFoundError = new ServiceError(
-  "HabitServiceError",
-  "User not found! Time to create one!",
-  404,
-);
-
 export const addHabitService = async (habit: Habit, email: string) => {
-  if (!email) {
+  const userId = await resolveUserId(email);
+  if (!userId) {
     throw new ServiceError(
       "HabitServiceError",
-      "User must be authenticated to create a habit",
-      400,
-    );
-  }
-
-  const { userId, hasError: userIdError } = await getUserIdByEmail(email);
-  if (userIdError) {
-    throw new ServiceError(
-      "HabitServiceError",
-      "Internal server error: Getting user ID",
-      500,
+      "NOT_FOUND",
+      "User not found from email",
     );
   }
   const { title } = habit;
-  if (!userId) {
-    throw userNotFoundError;
-  }
+
   if (!title) {
-    throw new ServiceError("HabitServiceError", "Title is required", 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "MISSING_REQUIRED_FIELD",
+      "Title is required",
+    );
   }
-  const { data, error } = await addHabit(habit, userId);
+  const { error } = await addHabit(habit, userId);
   if (error) {
-    throw new ServiceError("HabitServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Habit created successfully",
@@ -56,29 +42,21 @@ export const addHabitService = async (habit: Habit, email: string) => {
 };
 
 export const getAllUserHabitsService = async (email: string) => {
-  if (!email) {
-    throw new ServiceError(
-      "HabitServiceError",
-      "User must be authenticated to get habits",
-      400,
-    );
-  }
-
-  const { userId, hasError: userIdError } = await getUserIdByEmail(email);
-  if (userIdError) {
-    throw new ServiceError(
-      "HabitServiceError",
-      "Internal server error: Getting user ID",
-      500,
-    );
-  }
-
+  const userId = await resolveUserId(email);
   if (!userId) {
-    throw userNotFoundError;
+    throw new ServiceError(
+      "HabitServiceError",
+      "NOT_FOUND",
+      "User not found from email",
+    );
   }
   const { data, error } = await getAllUserHabits(userId);
   if (error) {
-    throw new ServiceError("HabitServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     data: data,
@@ -95,11 +73,15 @@ export const updateHabitByIdService = async (
   }>,
 ) => {
   if (!habitId) {
-    throw habitNotFoundError;
+    throw new ServiceError("HabitServiceError", "NOT_FOUND", "Habit not found");
   }
-  const { data, error } = await updateHabitById(habitId, updatedHabit);
+  const { error } = await updateHabitById(habitId, updatedHabit);
   if (error) {
-    throw new ServiceError("HabitServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Habit updated successfully",
@@ -109,11 +91,15 @@ export const updateHabitByIdService = async (
 
 export const deleteHabitByIdService = async (habitId: number) => {
   if (!habitId) {
-    throw habitNotFoundError;
+    throw new ServiceError("HabitServiceError", "NOT_FOUND", "Habit not found");
   }
-  const { data, error } = await deleteHabitById(habitId);
+  const { error } = await deleteHabitById(habitId);
   if (error) {
-    throw new ServiceError("HabitServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Habit deleted successfully",

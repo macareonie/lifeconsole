@@ -12,13 +12,17 @@ export const createColumnService = async (columnData: ColumnUpdate) => {
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
+      "VALIDATION_ERROR",
       "Position is required and must be a non-negative integer",
-      400,
     );
   }
   const { error } = await addColumn(columnData);
   if (error) {
-    throw new ServiceError("ColumnServiceError", error.message, 400);
+    throw new ServiceError(
+      "ColumnServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Column created successfully",
@@ -34,14 +38,18 @@ export const updateColumnByIdService = async (
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "ColumnServiceError",
-      "Position must be a non-negative integer",
-      400,
+      "VALIDATION_ERROR",
+      "Position  is required and must be a non-negative integer",
     );
   }
 
   const { error } = await updateColumnById(id, columnData);
   if (error) {
-    throw new ServiceError("ColumnServiceError", error.message, 400);
+    throw new ServiceError(
+      "ColumnServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Column updated successfully",
@@ -52,7 +60,11 @@ export const updateColumnByIdService = async (
 export const deleteColumnByIdService = async (id: number) => {
   const { error } = await deleteColumnById(id);
   if (error) {
-    throw new ServiceError("ColumnServiceError", error.message, 400);
+    throw new ServiceError(
+      "ColumnServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     message: "Column deleted successfully",

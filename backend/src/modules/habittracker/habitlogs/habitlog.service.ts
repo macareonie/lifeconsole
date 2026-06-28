@@ -19,19 +19,27 @@ export const getLogsByDateRangeService = async (
 ) => {
   const userId = await resolveUserId(email);
   if (!userId) {
-    throw new ServiceError("HabitLogServiceError", "User not found", 404);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "NOT_FOUND",
+      "User not found from email",
+    );
   }
   if (!startDate || !endDate) {
     throw new ServiceError(
       "HabitLogServiceError",
+      "MISSING_REQUIRED_FIELD",
       "Start date and end date are required",
-      400,
     );
   }
 
   const { data, error } = await getLogsByDateRange(userId, startDate, endDate);
   if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
   return {
     data: data ?? [],
@@ -44,7 +52,11 @@ export const toggleHabitLogService = async (habitId: number, date: string) => {
   const { data: existing, error: lookupError } =
     await getHabitLogByHabitAndDate(habitId, date);
   if (existing && lookupError) {
-    throw new ServiceError("HabitLogServiceError", lookupError.message, 400);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "DATABASE_ERROR",
+      lookupError.message,
+    );
   }
 
   const completed = existing ? !existing.completed : true;
@@ -55,7 +67,11 @@ export const toggleHabitLogService = async (habitId: number, date: string) => {
     completed,
   });
   if (error) {
-    throw new ServiceError("HabitLogServiceError", error.message, 400);
+    throw new ServiceError(
+      "HabitLogServiceError",
+      "DATABASE_ERROR",
+      error.message,
+    );
   }
 
   console.log("start streak recompute");
@@ -74,8 +90,8 @@ const recomputeHabitStreaksService = async (habitId: number) => {
   if (completedDatesError) {
     throw new ServiceError(
       "HabitServiceError",
+      "DATABASE_ERROR",
       completedDatesError.message,
-      400,
     );
   }
   const today = new Date();
@@ -91,6 +107,10 @@ const recomputeHabitStreaksService = async (habitId: number) => {
     toIsoDate(today),
   );
   if (updateStreakError) {
-    throw new ServiceError("HabitServiceError", updateStreakError.message, 400);
+    throw new ServiceError(
+      "HabitServiceError",
+      "DATABASE_ERROR",
+      updateStreakError.message,
+    );
   }
 };

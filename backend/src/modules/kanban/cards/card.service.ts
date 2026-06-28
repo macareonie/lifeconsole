@@ -5,7 +5,6 @@ import {
   updateCardById,
 } from "../../../repositories/kanban/card.repository.js";
 
-import type { JsonValue } from "../../../types/json.js";
 import type { CardUpdate } from "../../../types/kanban.js";
 
 export const createCardService = async (cardData: CardUpdate) => {
@@ -13,13 +12,13 @@ export const createCardService = async (cardData: CardUpdate) => {
   if (position === undefined || position < 0) {
     throw new ServiceError(
       "CardServiceError",
+      "VALIDATION_ERROR",
       "Position is required and must be a non-negative integer",
-      400,
     );
   }
   const { error } = await addCard(cardData);
   if (error) {
-    throw new ServiceError("CardServiceError", error.message, 400);
+    throw new ServiceError("CardServiceError", "DATABASE_ERROR", error.message);
   }
   return {
     message: "Card created successfully",
@@ -33,7 +32,7 @@ export const updateCardByIdService = async (
 ) => {
   const { error } = await updateCardById(id, cardData);
   if (error) {
-    throw new ServiceError("CardServiceError", error.message, 400);
+    throw new ServiceError("CardServiceError", "DATABASE_ERROR", error.message);
   }
   return {
     message: "Card updated successfully",
@@ -44,7 +43,7 @@ export const updateCardByIdService = async (
 export const deleteCardByIdService = async (id: number) => {
   const { error } = await deleteCardById(id);
   if (error) {
-    throw new ServiceError("CardServiceError", error.message, 400);
+    throw new ServiceError("CardServiceError", "DATABASE_ERROR", error.message);
   }
   return {
     message: "Card deleted successfully",
