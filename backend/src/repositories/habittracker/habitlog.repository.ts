@@ -55,16 +55,8 @@ export const getHabitLogByHabitAndDate = async (
 };
 
 export const deleteHabitLogById = async (habitLogId: number) => {
-  const { data, error } = await db
-    .from("habitlogs")
-    .delete()
-    .eq("id", habitLogId);
-  return { data, error };
-};
-
-type AlltimeCompletionRow = {
-  habit_id: number;
-  habits: { title: string };
+  const { error } = await db.from("habitlogs").delete().eq("id", habitLogId);
+  return { error };
 };
 
 export const getAllTimeCompletions = async (userId: number) => {
@@ -75,7 +67,7 @@ export const getAllTimeCompletions = async (userId: number) => {
     .eq("completed", true);
 
   return {
-    data: data?.map(snakeToCamel) as AlltimeCompletionRow[] | null,
+    data: data?.map(snakeToCamel),
     error,
   };
 };
