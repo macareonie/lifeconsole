@@ -51,7 +51,7 @@ export const getLogsByDateRangeService = async (
 export const toggleHabitLogService = async (habitId: number, date: string) => {
   const { data: existing, error: lookupError } =
     await getHabitLogByHabitAndDate(habitId, date);
-  if (existing && lookupError) {
+  if (lookupError) {
     throw new ServiceError(
       "HabitLogServiceError",
       "DATABASE_ERROR",
@@ -73,11 +73,7 @@ export const toggleHabitLogService = async (habitId: number, date: string) => {
       error.message,
     );
   }
-
-  console.log("start streak recompute");
   await recomputeHabitStreaksService(habitId);
-  console.log("end streak recompute");
-
   return {
     message: "Habit log toggled successfully",
     success: true,

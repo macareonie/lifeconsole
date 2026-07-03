@@ -10,7 +10,6 @@ export const getHabitLogsByDateRange = async (
       endDate,
     },
   });
-  console.log("data", data);
   return data;
 };
 
