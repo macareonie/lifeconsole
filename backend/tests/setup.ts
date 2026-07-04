@@ -9,7 +9,7 @@ const testEnv = {
   SUPABASE_KEY: "test-supabase-key",
   SUPABASE_URL_INTEGRATION_TEST: process.env.SUPABASE_URL,
   SUPABASE_KEY_INTEGRATION_TEST: process.env.SUPABASE_KEY,
-  TEST_USER_EMAIL: "macareonie@gmail.com",
+  TEST_USER_EMAIL: process.env.TEST_USER_EMAIL,
   FRONTEND_MODE: "dev",
   FRONTEND_DEV_URL: "http://localhost:5173",
   FRONTEND_PROD_URL: "https://test-frontend-url.com",
