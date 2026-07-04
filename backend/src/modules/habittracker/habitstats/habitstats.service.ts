@@ -3,7 +3,7 @@ import { getAllTimeCompletions } from "../../../repositories/habittracker/habitl
 import { resolveUserId } from "../../../utils/email-to-userId.js";
 
 type AlltimeCompletionRow = {
-  habit_id: number;
+  habitId: number;
   habits: { title: string };
 };
 
@@ -19,13 +19,15 @@ function aggregateCompletions(
   const counts = new Map<number, HabitCompletionCount>();
 
   for (const row of rows) {
-    const existing = counts.get(row.habit_id);
+    const id = row.habitId;
+    const title = row.habits?.title ?? "Unknown Habit";
+    const existing = counts.get(id);
     if (existing) {
       existing.completionCount += 1;
     } else {
-      counts.set(row.habit_id, {
-        habitId: row.habit_id,
-        title: row.habits.title,
+      counts.set(id, {
+        habitId: id,
+        title,
         completionCount: 1,
       });
     }

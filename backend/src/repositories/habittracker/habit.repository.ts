@@ -13,7 +13,8 @@ export const getAllUserHabits = async (userId: number) => {
   const { data, error } = await db
     .from("habits")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("id", { ascending: true });
   return { data: data?.map(snakeToCamel), error };
 };
 
