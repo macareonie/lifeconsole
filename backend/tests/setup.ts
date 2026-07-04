@@ -1,12 +1,14 @@
-import { env } from "../src/config/env.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const testEnv = {
   NODE_ENV: "test",
   PORT: "3001",
   SUPABASE_URL: "http://127.0.0.1:54321",
   SUPABASE_KEY: "test-supabase-key",
-  SUPABASE_URL_INTEGRATION_TEST: env.SUPABASE_URL,
-  SUPABASE_KEY_INTEGRATION_TEST: env.SUPABASE_KEY,
+  SUPABASE_URL_INTEGRATION_TEST: process.env.SUPABASE_URL,
+  SUPABASE_KEY_INTEGRATION_TEST: process.env.SUPABASE_KEY,
   TEST_USER_EMAIL: "macareonie@gmail.com",
   FRONTEND_MODE: "dev",
   FRONTEND_DEV_URL: "http://localhost:5173",

@@ -13,7 +13,7 @@ describe("ColumnEditForm", () => {
 
     renderWithProviders(
       <ColumnEditForm
-        column_id={3}
+        columnId={3}
         initialTitle="In Progress"
         isPending
         onSubmit={vi.fn()}

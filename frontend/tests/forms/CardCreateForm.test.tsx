@@ -13,7 +13,7 @@ describe("CardCreateForm", () => {
     renderWithProviders(
       <CardCreateForm
         aria-label="Create Card in Column 7"
-        column_id={7}
+        columnId={7}
         isPending={false}
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
@@ -39,7 +39,7 @@ describe("CardCreateForm", () => {
     renderWithProviders(
       <CardCreateForm
         aria-label="Create Card in Column 7"
-        column_id={7}
+        columnId={7}
         isPending={false}
         onSubmit={onSubmit}
         onCancel={onCancel}
