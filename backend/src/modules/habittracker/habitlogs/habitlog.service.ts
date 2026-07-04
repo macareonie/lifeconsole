@@ -61,7 +61,6 @@ export const toggleHabitLogService = async (habitId: number, date: string) => {
 
   const completed = existing ? !existing.completed : true;
   const { error } = await upsertHabitLog({
-    id: existing?.id,
     habitId,
     date,
     completed,
@@ -85,7 +84,7 @@ const recomputeHabitStreaksService = async (habitId: number) => {
     await getCompletedDatesForHabit(habitId);
   if (completedDatesError) {
     throw new ServiceError(
-      "HabitServiceError",
+      "HabitLogServiceError",
       "DATABASE_ERROR",
       completedDatesError.message,
     );
@@ -104,7 +103,7 @@ const recomputeHabitStreaksService = async (habitId: number) => {
   );
   if (updateStreakError) {
     throw new ServiceError(
-      "HabitServiceError",
+      "HabitLogServiceError",
       "DATABASE_ERROR",
       updateStreakError.message,
     );
