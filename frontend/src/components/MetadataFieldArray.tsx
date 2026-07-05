@@ -4,7 +4,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-import type { MetadataFormValues } from "../utils/kanban/cardMetadataConversion";
+import type {
+  MetadataField,
+  MetadataFormValues,
+} from "../utils/kanban/cardMetadataConversion";
 
 type MetadataFieldArrayProps = {
   inputIdPrefix: string;
@@ -67,7 +70,7 @@ export function MetadataFieldArray({ inputIdPrefix }: MetadataFieldArrayProps) {
 
                       const metadataEntries = getValues("metadataEntries");
                       const hasDuplicate = metadataEntries.some(
-                        (entry, entryIndex) =>
+                        (entry: MetadataField, entryIndex: number) =>
                           entryIndex !== index &&
                           entry.key.trim() === trimmedValue,
                       );
