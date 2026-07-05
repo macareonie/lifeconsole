@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { CardCreateForm } from "../../src/components/board/forms/CardCreateForm";
+import { CardCreateForm } from "../../src/components/kanban/forms/CardCreateForm";
 import { renderWithProviders } from "../test-utils";
 
 describe("CardCreateForm", () => {
@@ -12,7 +12,8 @@ describe("CardCreateForm", () => {
 
     renderWithProviders(
       <CardCreateForm
-        column_id={7}
+        aria-label="Create Card in Column 7"
+        columnId={7}
         isPending={false}
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
@@ -37,7 +38,8 @@ describe("CardCreateForm", () => {
 
     renderWithProviders(
       <CardCreateForm
-        column_id={7}
+        aria-label="Create Card in Column 7"
+        columnId={7}
         isPending={false}
         onSubmit={onSubmit}
         onCancel={onCancel}

@@ -1,22 +1,26 @@
-import { createColumn, deleteColumn, updateColumn } from "@/services/columns";
+import {
+  createColumn,
+  deleteColumn,
+  updateColumn,
+} from "@/services/kanban/columns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type CreateColumnVariables = {
   title: string;
-  board_id: number;
+  boardId: number;
   position: number;
 };
 
 type UpdateColumnVariables = {
-  column_id: number;
-  board_id: number;
+  columnId: number;
+  boardId: number;
   title: string;
   position: number;
 };
 
 type DeleteColumnVariables = {
-  column_id: number;
-  board_id: number;
+  columnId: number;
+  boardId: number;
 };
 
 export const useColumnMutations = () => {
@@ -26,7 +30,7 @@ export const useColumnMutations = () => {
     mutationFn: (variables: CreateColumnVariables) => createColumn(variables),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.board_id],
+        queryKey: ["boardContent", variables.boardId],
       });
     },
   });
@@ -34,23 +38,23 @@ export const useColumnMutations = () => {
   const updateColumnMutation = useMutation({
     mutationFn: (variables: UpdateColumnVariables) =>
       updateColumn({
-        column_id: variables.column_id,
+        columnId: variables.columnId,
         title: variables.title,
         position: variables.position,
       }),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.board_id],
+        queryKey: ["boardContent", variables.boardId],
       });
     },
   });
 
   const deleteColumnMutation = useMutation({
     mutationFn: (variables: DeleteColumnVariables) =>
-      deleteColumn(variables.column_id),
+      deleteColumn(variables.columnId),
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({
-        queryKey: ["boardContent", variables.board_id],
+        queryKey: ["boardContent", variables.boardId],
       });
     },
   });

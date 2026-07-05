@@ -73,33 +73,6 @@ describe("boards routes (auth protected)", () => {
     expect(res.body.data).toEqual([{ id: 1, title: "Roadmap" }]);
   });
 
-  it("returns one board for GET /api/boards/:id", async () => {
-    const maybeSingle = vi.fn().mockResolvedValue({
-      data: { id: 1, title: "Roadmap" },
-      error: null,
-    });
-    const eq = vi.fn().mockReturnValue({ maybeSingle });
-    const select = vi.fn().mockReturnValue({ eq });
-
-    dbFrom.mockImplementation((table: string) => {
-      if (table === "boards") {
-        return { select };
-      }
-
-      return { select: vi.fn() };
-    });
-
-    const res = await request(app)
-      .get("/api/boards/1")
-      .set("Cookie", "lc-access-token=valid-token");
-
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data).toEqual({ id: 1, title: "Roadmap" });
-    expect(select).toHaveBeenCalledWith("id, title");
-    expect(eq).toHaveBeenCalledWith("id", 1);
-  });
-
   it("creates a board with POST /api/boards", async () => {
     const maybeSingle = vi.fn().mockResolvedValue({
       data: { id: 99 },

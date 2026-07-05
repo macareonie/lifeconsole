@@ -8,7 +8,7 @@ import { MetadataFieldArray } from "../../src/components/MetadataFieldArray";
 import { renderWithProviders } from "../test-utils";
 
 import type { ReactNode } from "react";
-import type { MetadataFormValues } from "../../src/utils/kanban/CardMetadataConversion";
+import type { MetadataFormValues } from "../../src/utils/kanban/cardHelpers.ts";
 
 function MetadataTestForm({
   children,

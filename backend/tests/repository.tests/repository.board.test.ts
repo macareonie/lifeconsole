@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { db } from "../../src/config/db.js";
-import * as boardRepo from "../../src/repositories/board.repository.js";
+import * as boardRepo from "../../src/repositories/kanban/board.repository.js";
 
 vi.mock("../../src/config/db.js", () => ({ db: { from: vi.fn() } }));
 beforeEach(() => vi.clearAllMocks());

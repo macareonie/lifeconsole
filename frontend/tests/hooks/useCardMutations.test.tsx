@@ -4,11 +4,15 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook } from "@testing-library/react";
 
 import { useCardMutations } from "../../src/hooks/kanban/useCardMutations";
-import { createCard, deleteCard, updateCard } from "../../src/services/cards";
+import {
+  createCard,
+  deleteCard,
+  updateCard,
+} from "../../src/services/kanban/cards";
 import { createTestQueryClient } from "../test-utils";
 
 import type { ReactNode } from "react";
-vi.mock("../../src/services/cards", () => ({
+vi.mock("../../src/services/kanban/cards", () => ({
   createCard: vi.fn(),
   updateCard: vi.fn(),
   deleteCard: vi.fn(),
@@ -32,10 +36,10 @@ describe("useCardMutations", () => {
 
     await act(async () => {
       await result.current.createCardMutation.mutateAsync({
-        board_id: 9,
+        boardId: 9,
         title: "Card",
         subtitle: "Sub",
-        column_id: 3,
+        columnId: 3,
         position: 1,
         metadata: null,
       });
@@ -47,7 +51,7 @@ describe("useCardMutations", () => {
     ).toEqual({
       title: "Card",
       subtitle: "Sub",
-      column_id: 3,
+      columnId: 3,
       position: 1,
       metadata: null,
     });
@@ -57,11 +61,11 @@ describe("useCardMutations", () => {
 
     await act(async () => {
       await result.current.updateCardMutation.mutateAsync({
-        board_id: 9,
-        card_id: 11,
+        boardId: 9,
+        cardId: 11,
         title: "Updated",
         subtitle: "S",
-        column_id: 3,
+        columnId: 3,
         position: 2,
         metadata: null,
       });
@@ -73,8 +77,8 @@ describe("useCardMutations", () => {
 
     await act(async () => {
       await result.current.deleteCardMutation.mutateAsync({
-        board_id: 9,
-        card_id: 11,
+        boardId: 9,
+        cardId: 11,
       });
     });
 

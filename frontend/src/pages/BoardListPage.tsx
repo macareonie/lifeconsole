@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-import { BoardList } from "../components/board/BoardList";
+import { BoardList } from "../components/kanban/BoardList";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";

@@ -4,11 +4,11 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { useBoardContent } from "../../src/hooks/kanban/useBoardContent";
-import { getBoardContent } from "../../src/services/boards";
+import { getBoardContent } from "../../src/services/kanban/boards";
 import { createTestQueryClient } from "../test-utils";
 
 import type { ReactNode } from "react";
-vi.mock("../../src/services/boards", () => ({
+vi.mock("../../src/services/kanban/boards", () => ({
   getBoardContent: vi.fn(),
 }));
 

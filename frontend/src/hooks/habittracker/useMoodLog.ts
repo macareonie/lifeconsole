@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getMoodLogByDate,
   getMoodLogByDateRange,
-} from "../../services/moodlogs";
+} from "../../services/habittracker/moodlogs";
 import {
   endOfWeek,
   startOfWeek,

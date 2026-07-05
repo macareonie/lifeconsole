@@ -2,6 +2,7 @@ import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import app from "../../src/app.js";
+import { ERROR_CODES } from "../../src/errors/error-codes.js";
 
 const signOut = vi.fn();
 
@@ -59,6 +60,10 @@ describe("auth routes (validation and session)", () => {
     const res = await request(app).post("/api/auth/logout");
 
     expect(res.status).toBe(500);
-    expect(res.body).toEqual({ error: "logout failed" });
+    expect(res.body).toEqual({
+      success: false,
+      code: "DATABASE_ERROR",
+      message: ERROR_CODES.DATABASE_ERROR.message,
+    });
   });
 });
