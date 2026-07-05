@@ -7,7 +7,7 @@ import { Label } from "./ui/label";
 import type {
   MetadataField,
   MetadataFormValues,
-} from "../utils/kanban/cardMetadataConversion";
+} from "../utils/kanban/cardMetadataConversion.ts";
 
 type MetadataFieldArrayProps = {
   inputIdPrefix: string;
