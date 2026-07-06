@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
+    "test:integration": "vitest --config vitest.integration.config.ts",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "dev": "tsx watch src/server.ts",

@@ -1,6 +1,7 @@
 import request from "supertest";
-import app from "../../src/app.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import app from "../../src/app.js";
 
 const { dbFrom, getUser } = vi.hoisted(() => ({
   dbFrom: vi.fn(),
@@ -28,69 +29,22 @@ beforeEach(() => {
 
 describe("columns routes (auth protected)", () => {
   it("rejects unauthenticated calls", async () => {
-    const res = await request(app).get("/api/columns/board/1");
+    const insert = vi.fn().mockResolvedValue({ data: [], error: null });
+
+    dbFrom.mockImplementation((table: string) => {
+      if (table === "columns") {
+        return { insert };
+      }
+
+      return { insert: vi.fn() };
+    });
+
+    const res = await request(app)
+      .post("/api/columns")
+      .send({ title: "Todo", board_id: 1, position: 1 });
 
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ error: "Authentication token missing" });
-  });
-
-  it("returns columns for an authenticated board request", async () => {
-    dbFrom.mockImplementation((table: string) => {
-      if (table === "columns") {
-        return {
-          select: vi.fn().mockReturnThis(),
-          eq: vi.fn().mockResolvedValue({
-            data: [{ id: 11, title: "Todo", board_id: 1, position: 0 }],
-            error: null,
-          }),
-        };
-      }
-
-      return {
-        select: vi.fn().mockResolvedValue({ data: [], error: null }),
-      };
-    });
-
-    const res = await request(app)
-      .get("/api/columns/board/1")
-      .set("Cookie", "lc-access-token=valid-token");
-
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data).toEqual([
-      { id: 11, title: "Todo", board_id: 1, position: 0 },
-    ]);
-  });
-
-  it("returns a column for GET /api/columns/:id", async () => {
-    const maybeSingle = vi.fn().mockResolvedValue({
-      data: { id: 11, title: "Todo", board_id: 1, position: 0 },
-      error: null,
-    });
-    const eq = vi.fn().mockReturnValue({ maybeSingle });
-    const select = vi.fn().mockReturnValue({ eq });
-
-    dbFrom.mockImplementation((table: string) => {
-      if (table === "columns") {
-        return { select };
-      }
-
-      return { select: vi.fn() };
-    });
-
-    const res = await request(app)
-      .get("/api/columns/11")
-      .set("Cookie", "lc-access-token=valid-token");
-
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data).toEqual({
-      id: 11,
-      title: "Todo",
-      board_id: 1,
-      position: 0,
-    });
-    expect(eq).toHaveBeenCalledWith("id", 11);
   });
 
   it("creates a column with POST /api/columns", async () => {

@@ -1,7 +1,8 @@
+import { Moon, Sun } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../hooks/useTheme";
-import { Moon, Sun } from "lucide-react";
 
 const NavBar = () => {
   const { session, logout } = useAuth();
@@ -32,6 +33,12 @@ const NavBar = () => {
               className="text-muted-foreground transition hover:text-primary"
             >
               Board
+            </NavLink>
+            <NavLink
+              to="/habit-tracker"
+              className="text-muted-foreground transition hover:text-primary"
+            >
+              Habit Tracker
             </NavLink>
           </div>
         </div>

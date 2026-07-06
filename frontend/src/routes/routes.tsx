@@ -1,12 +1,12 @@
-// src/routes/routes.tsx
 import type { RouteObject } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
-import RequireAuth from "./RequireAuth";
-import LandingPage from "../pages/LandingPage";
-import LoginPage from "../pages/LoginPage";
+import BoardListPage from "../pages/BoardListPage";
 import BoardPage from "../pages/BoardPage";
 import ErrorPage from "../pages/ErrorPage";
-import BoardListPage from "../pages/BoardListPage";
+import HabitTrackerPage from "../pages/HabitTrackerPage";
+import LandingPage from "../pages/LandingPage";
+import LoginPage from "../pages/LoginPage";
+import RequireAuth from "./RequireAuth";
 
 const routes: RouteObject[] = [
   {
@@ -37,6 +37,10 @@ const routes: RouteObject[] = [
                 element: <BoardPage />,
               },
             ],
+          },
+          {
+            path: "habit-tracker",
+            element: <HabitTrackerPage />,
           },
         ],
       },

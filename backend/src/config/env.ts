@@ -2,25 +2,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const requireEnv = (value: string | undefined, name: string) => {
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-
-  return value;
-};
-
 export const env = {
-  PORT: requireEnv(process.env.PORT, "PORT"),
-  SUPABASE_URL: requireEnv(process.env.SUPABASE_URL, "SUPABASE_URL"),
-  SUPABASE_KEY: requireEnv(process.env.SUPABASE_KEY, "SUPABASE_KEY"),
-  FRONTEND_MODE: requireEnv(process.env.FRONTEND_MODE, "FRONTEND_MODE"),
-  FRONTEND_DEV_URL: requireEnv(
-    process.env.FRONTEND_DEV_URL,
-    "FRONTEND_DEV_URL",
-  ),
-  FRONTEND_PROD_URL: requireEnv(
-    process.env.FRONTEND_PROD_URL,
-    "FRONTEND_PROD_URL",
-  ),
+  PORT: process.env.PORT || 3000,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_KEY: process.env.SUPABASE_KEY,
+  FRONTEND_MODE: process.env.FRONTEND_MODE,
+  FRONTEND_DEV_URL: process.env.FRONTEND_DEV_URL,
+  FRONTEND_PROD_URL: process.env.FRONTEND_PROD_URL,
 };

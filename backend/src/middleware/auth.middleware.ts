@@ -1,6 +1,7 @@
-import { type Request, type Response, type NextFunction } from "express";
 import { createFreshClient } from "../config/db.js";
 import { getAuthCookieTokens } from "../utils/auth-cookies.js";
+
+import type { NextFunction, Request, Response } from "express";
 
 export const authMiddleware = async (
   req: Request,

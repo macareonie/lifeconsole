@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
-import { BoardList } from "../components/board/BoardList";
+
+import { BoardList } from "../components/kanban/BoardList";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -27,19 +28,6 @@ const BoardListPage = () => {
     reset();
   };
 
-  if (isPending) {
-    return <div>Loading boards...</div>;
-  }
-  if (isError) {
-    return <div>Error loading boards: {error.message}</div>;
-  }
-  if (!data || data.length === 0) {
-    return (
-      <div className="p-6 text-muted-foreground">
-        No boards yet, time to create one!
-      </div>
-    );
-  }
   return (
     <div className="min-h-screen bg-background p-6 text-foreground">
       <div className="mb-8 flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -82,7 +70,16 @@ const BoardListPage = () => {
         )}
       </div>
 
-      <BoardList boards={data} />
+      <div>
+        {isPending && <div>Loading boards...</div>}
+        {isError && <div>Error loading boards: {error.message}</div>}
+        {!data || data.length === 0 ? (
+          <div className="p-6 text-muted-foreground">
+            No boards yet, time to create one!
+          </div>
+        ) : null}
+        {data && data.length > 0 && <BoardList boards={data} />}
+      </div>
     </div>
   );
 };

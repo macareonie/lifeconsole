@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import LoginForm from "../components/auth/LoginForm";
 import SignupForm from "../components/auth/SignupForm";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 type SignupFormValues = {

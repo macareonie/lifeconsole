@@ -1,10 +1,12 @@
-import axios, { type AxiosError, type AxiosResponse } from "axios";
+import axios from "axios";
+
 import { env } from "../config/env";
+
+import type { AxiosError, AxiosResponse } from "axios";
 
 export const backendApi = axios.create({
   baseURL:
     env.BACKEND_MODE === "prod" ? env.BACKEND_PROD_API : env.BACKEND_DEV_API,
-  // Cookies carry the auth state, so every request must include credentials.
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

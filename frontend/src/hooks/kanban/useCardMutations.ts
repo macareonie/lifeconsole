@@ -1,6 +1,7 @@
+import { createCard, deleteCard, updateCard } from "@/services/kanban/cards";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type JsonValue } from "@/types/json";
-import { createCard, deleteCard, updateCard } from "@/services/cards";
+
+import type { JsonValue } from "@/types/json";
 
 type CreateCardVariables = {
   boardId: number;
@@ -38,7 +39,7 @@ export const useCardMutations = () => {
         position: variables.position,
         metadata: variables.metadata,
       }),
-    onSuccess: async (variables: CreateCardVariables) => {
+    onSuccess: async (_data, variables: CreateCardVariables) => {
       await queryClient.invalidateQueries({
         queryKey: ["boardContent", variables.boardId],
       });
@@ -55,7 +56,7 @@ export const useCardMutations = () => {
         position: variables.position,
         metadata: variables.metadata,
       }),
-    onSuccess: async (_, variables) => {
+    onSuccess: async (_data, variables: UpdateCardVariables) => {
       await queryClient.invalidateQueries({
         queryKey: ["boardContent", variables.boardId],
       });
@@ -65,7 +66,7 @@ export const useCardMutations = () => {
   const deleteCardMutation = useMutation({
     mutationFn: (variables: DeleteCardVariables) =>
       deleteCard(variables.cardId),
-    onSuccess: async (variables: DeleteCardVariables) => {
+    onSuccess: async (_data, variables: DeleteCardVariables) => {
       await queryClient.invalidateQueries({
         queryKey: ["boardContent", variables.boardId],
       });

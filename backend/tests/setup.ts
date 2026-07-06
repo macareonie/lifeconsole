@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const testEnv = {
   NODE_ENV: "test",
   PORT: "3001",

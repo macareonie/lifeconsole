@@ -1,10 +1,19 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import {
+  getSession,
+  login,
+  logout,
+  register,
+} from "../../src/modules/auth/auth.controller.js";
+import * as authService from "../../src/modules/auth/auth.service.js";
+import * as authCookies from "../../src/utils/auth-cookies.js";
 
 vi.mock("../../src/modules/auth/auth.service.js", () => ({
-  registerUser: vi.fn(),
-  loginUser: vi.fn(),
-  logoutUser: vi.fn(),
-  getUserFromAccessToken: vi.fn(),
+  registerUserService: vi.fn(),
+  loginUserService: vi.fn(),
+  logoutUserService: vi.fn(),
+  getUserFromAccessTokenService: vi.fn(),
 }));
 
 vi.mock("../../src/utils/auth-cookies.js", () => ({
@@ -12,15 +21,6 @@ vi.mock("../../src/utils/auth-cookies.js", () => ({
   getAuthCookieTokens: vi.fn(),
   clearAuthCookies: vi.fn(),
 }));
-
-import * as authService from "../../src/modules/auth/auth.service.js";
-import * as authCookies from "../../src/utils/auth-cookies.js";
-import {
-  register,
-  login,
-  getSession,
-  logout,
-} from "../../src/modules/auth/auth.controller.js";
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -33,7 +33,7 @@ const makeRes = () => {
 
 describe("auth.controller", () => {
   it("register calls service and sets cookies when session present", async () => {
-    (authService.registerUser as any).mockResolvedValue({
+    (authService.registerUserService as any).mockResolvedValue({
       session: { access_token: "t" },
       message: "ok",
     });
@@ -51,7 +51,7 @@ describe("auth.controller", () => {
   });
 
   it("register skips cookie setup when session is absent", async () => {
-    (authService.registerUser as any).mockResolvedValue({
+    (authService.registerUserService as any).mockResolvedValue({
       session: null,
       message: "ok",
     });
@@ -69,7 +69,7 @@ describe("auth.controller", () => {
 
   it("register forwards service errors to next", async () => {
     const error = new Error("boom");
-    (authService.registerUser as any).mockRejectedValue(error);
+    (authService.registerUserService as any).mockRejectedValue(error);
     const req = {
       body: { username: "bob", email: "b@b.com", password: "pw" },
     } as any;
@@ -99,7 +99,7 @@ describe("auth.controller", () => {
       refreshToken: "refresh",
       expiresAt: String(Math.floor(Date.now() / 1000) + 60),
     });
-    (authService.getUserFromAccessToken as any).mockResolvedValue({
+    (authService.getUserFromAccessTokenService as any).mockResolvedValue({
       data: { user: { id: 1, email: "bob@example.com" } },
       error: null,
     });
@@ -122,7 +122,7 @@ describe("auth.controller", () => {
       refreshToken: "refresh",
       expiresAt: String(Math.floor(Date.now() / 1000) + 60),
     });
-    (authService.getUserFromAccessToken as any).mockResolvedValue({
+    (authService.getUserFromAccessTokenService as any).mockResolvedValue({
       data: { user: null },
       error: null,
     });
@@ -154,7 +154,7 @@ describe("auth.controller", () => {
   });
 
   it("login calls service and sets cookies when session present", async () => {
-    (authService.loginUser as any).mockResolvedValue({
+    (authService.loginUserService as any).mockResolvedValue({
       session: { access_token: "t" },
       message: "ok",
     });
@@ -170,7 +170,7 @@ describe("auth.controller", () => {
   });
 
   it("login skips cookie setup when session is absent", async () => {
-    (authService.loginUser as any).mockResolvedValue({
+    (authService.loginUserService as any).mockResolvedValue({
       session: null,
       message: "ok",
     });
@@ -186,7 +186,7 @@ describe("auth.controller", () => {
 
   it("login forwards service errors to next", async () => {
     const error = new Error("boom");
-    (authService.loginUser as any).mockRejectedValue(error);
+    (authService.loginUserService as any).mockRejectedValue(error);
     const req = { body: { username: "bob", password: "pw" } } as any;
     const res = makeRes();
     const next = vi.fn();
@@ -197,7 +197,7 @@ describe("auth.controller", () => {
   });
 
   it("logout calls service and clears cookies", async () => {
-    (authService.logoutUser as any).mockResolvedValue({
+    (authService.logoutUserService as any).mockResolvedValue({
       message: "ok",
       success: true,
     });
@@ -214,7 +214,7 @@ describe("auth.controller", () => {
 
   it("logout forwards service errors to next", async () => {
     const error = new Error("boom");
-    (authService.logoutUser as any).mockRejectedValue(error);
+    (authService.logoutUserService as any).mockRejectedValue(error);
     const req = {} as any;
     const res = makeRes();
     const next = vi.fn();

@@ -1,15 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/modules/cards/card.service.js", () => ({
-  createCard: vi.fn(),
-  getCardById: vi.fn(),
-  updateCardById: vi.fn(),
-  deleteCardById: vi.fn(),
-  getAllCardsByBoardId: vi.fn(),
+import * as cardController from "../../src/modules/kanban/cards/card.controller.js";
+import * as cardService from "../../src/modules/kanban/cards/card.service.js";
+
+vi.mock("../../src/modules/kanban/cards/card.service.js", () => ({
+  createCardService: vi.fn(),
+  updateCardByIdService: vi.fn(),
+  deleteCardByIdService: vi.fn(),
 }));
-
-import * as cardController from "../../src/modules/cards/card.controller.js";
-import * as cardService from "../../src/modules/cards/card.service.js";
 
 beforeEach(() => vi.clearAllMocks());
 
@@ -20,7 +18,7 @@ const makeRes = () => {
 
 describe("card.controller", () => {
   it("createNewCard calls service and returns 201", async () => {
-    (cardService.createCard as any).mockResolvedValue({ success: true });
+    (cardService.createCardService as any).mockResolvedValue({ success: true });
     const req = {
       body: {
         title: "t",
@@ -35,19 +33,10 @@ describe("card.controller", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("getCard calls service and returns 200", async () => {
-    (cardService.getCardById as any).mockResolvedValue({
-      data: { id: 1 },
+  it("updateCard calls service and returns 200", async () => {
+    (cardService.updateCardByIdService as any).mockResolvedValue({
       success: true,
     });
-    const req = { params: { id: "1" } } as any;
-    const res = makeRes();
-    await cardController.getCard(req, res, vi.fn());
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-
-  it("updateCard calls service and returns 200", async () => {
-    (cardService.updateCardById as any).mockResolvedValue({ success: true });
     const req = { params: { id: "1" }, body: { title: "x" } } as any;
     const res = makeRes();
     await cardController.updateCard(req, res, vi.fn());
@@ -55,27 +44,18 @@ describe("card.controller", () => {
   });
 
   it("deleteCard calls service and returns 200", async () => {
-    (cardService.deleteCardById as any).mockResolvedValue({ success: true });
+    (cardService.deleteCardByIdService as any).mockResolvedValue({
+      success: true,
+    });
     const req = { params: { id: "1" } } as any;
     const res = makeRes();
     await cardController.deleteCard(req, res, vi.fn());
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("getCardsByBoardId calls service and returns 200", async () => {
-    (cardService.getAllCardsByBoardId as any).mockResolvedValue({
-      data: [],
-      success: true,
-    });
-    const req = { params: { boardId: "1" } } as any;
-    const res = makeRes();
-    await cardController.getCardsByBoardId(req, res, vi.fn());
-    expect(res.status).toHaveBeenCalledWith(200);
-  });
-
   it("createNewCard forwards errors to next", async () => {
     const error = new Error("boom");
-    (cardService.createCard as any).mockRejectedValue(error);
+    (cardService.createCardService as any).mockRejectedValue(error);
     const req = {
       body: {
         title: "t",
@@ -93,21 +73,9 @@ describe("card.controller", () => {
     expect(next).toHaveBeenCalledWith(error);
   });
 
-  it("getCard forwards errors to next", async () => {
-    const error = new Error("boom");
-    (cardService.getCardById as any).mockRejectedValue(error);
-    const req = { params: { id: "1" } } as any;
-    const res = makeRes();
-    const next = vi.fn();
-
-    await cardController.getCard(req, res, next);
-
-    expect(next).toHaveBeenCalledWith(error);
-  });
-
   it("updateCard forwards errors to next", async () => {
     const error = new Error("boom");
-    (cardService.updateCardById as any).mockRejectedValue(error);
+    (cardService.updateCardByIdService as any).mockRejectedValue(error);
     const req = { params: { id: "1" }, body: { title: "x" } } as any;
     const res = makeRes();
     const next = vi.fn();
@@ -119,24 +87,12 @@ describe("card.controller", () => {
 
   it("deleteCard forwards errors to next", async () => {
     const error = new Error("boom");
-    (cardService.deleteCardById as any).mockRejectedValue(error);
+    (cardService.deleteCardByIdService as any).mockRejectedValue(error);
     const req = { params: { id: "1" } } as any;
     const res = makeRes();
     const next = vi.fn();
 
     await cardController.deleteCard(req, res, next);
-
-    expect(next).toHaveBeenCalledWith(error);
-  });
-
-  it("getCardsByBoardId forwards errors to next", async () => {
-    const error = new Error("boom");
-    (cardService.getAllCardsByBoardId as any).mockRejectedValue(error);
-    const req = { params: { boardId: "1" } } as any;
-    const res = makeRes();
-    const next = vi.fn();
-
-    await cardController.getCardsByBoardId(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

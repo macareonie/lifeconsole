@@ -1,4 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { createFreshClient } from "../../src/config/db.js";
+import { authMiddleware } from "../../src/middleware/auth.middleware.js";
+import { getAuthCookieTokens } from "../../src/utils/auth-cookies.js";
 
 vi.mock("../../src/config/db.js", () => ({
   createFreshClient: vi.fn(),
@@ -7,10 +11,6 @@ vi.mock("../../src/config/db.js", () => ({
 vi.mock("../../src/utils/auth-cookies.js", () => ({
   getAuthCookieTokens: vi.fn(),
 }));
-
-import { authMiddleware } from "../../src/middleware/auth.middleware.js";
-import { createFreshClient } from "../../src/config/db.js";
-import { getAuthCookieTokens } from "../../src/utils/auth-cookies.js";
 
 beforeEach(() => {
   vi.clearAllMocks();

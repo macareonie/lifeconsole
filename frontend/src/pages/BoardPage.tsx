@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
+
+import { BoardItem } from "../components/kanban/BoardItem";
 import { useBoardContent } from "../hooks/kanban/useBoardContent";
-import { BoardItem } from "../components/board/BoardItem";
 
 const BoardPage = () => {
   const { id } = useParams();
   const boardId = Number(id);
-  const { data, isPending, isError, error } = useBoardContent(Number(boardId));
+  const { data, isPending, isError, error } = useBoardContent(boardId);
 
   if (!id || !Number.isFinite(boardId)) {
     return <div>Invalid Board ID</div>;
