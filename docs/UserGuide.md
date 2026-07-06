@@ -2,7 +2,10 @@
 
 ## Overview
 
-Life Console is a application where you can organize information into a board > column > card hierachical structure to better .
+Life Console is a application with multiple features
+
+- Organize infomation in a kanban style hierachical structure
+- Track daily habits and mood with an accompanying statistics dashboard
 
 ## Getting Started
 
@@ -64,23 +67,22 @@ Boards support basic CRUD actions:
 - Update boards
 - Delete boards
 
-## Columns
+### Columns
 
-Each board can contain columns to group work items.
+- Each board can contain columns to group work items
+- Columns can be dragged and dropped for easier rearrangment
 
 Columns support basic CRUD actions:
 
 - Create columns
 - View columns (Displayed as is)
 - Update columns
-
-![edit column](./images/editcolumn.png)
-
 - Delete columns
 
-## Cards
+### Cards
 
-Cards represent individual items inside a column.
+- Cards represent individual items inside a column
+- Cards can be dragged and dropped within and also across columns
 
 Cards support basic CRUD actions:
 
@@ -94,6 +96,34 @@ Cards support basic CRUD actions:
 - Update cards
 - Delete cards
 
-## Notes
+## Habit Tracker feature
 
-- Currently, card metadata can only be inputted in a valid JSON format. Should ideally be changed to a more user friendly format in the future
+The habit tracker page features a dashboard allowing habit tracking by the week, alongside a mood picker and an all-time statistics display
+
+![habit-tracker-page](./images/habittrackerpage.png)
+
+### Habit tracking
+
+Add multiple habits you wish to track via the `Add habit` button located at the top right of the page
+
+- habits are displayed in order of creation with checkboxes to mark completion on a weekly basis
+- Streaks indicate consecutive completions for each habit
+
+![habit-checkbox-grid](./images/habitcheckbox.png)
+
+### Mood tracking
+
+You can select a mood that best represents your day via the mood picker; a weekly summary of how your week has been is visualised via a bar chart
+
+![mood](./images/mood.png)
+
+### Habit statistics
+
+Statistics for all habit completions are aggregated and computed and displayed
+Current statistics available:
+
+- Total completions across all habits
+- Longest streak
+- Top habit
+
+![habit-stats](./images/stats.png)

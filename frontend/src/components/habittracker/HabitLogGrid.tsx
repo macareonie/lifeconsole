@@ -57,7 +57,7 @@ export function HabitLogGrid({
       </div>
 
       {/* Day-of-week header row */}
-      <div className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-4 border-b border-border px-4 py-2 sm:grid-cols-[12rem_repeat(7,2.5rem)]">
+      <div className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-4 border-b border-border px-4 py-2 sm:grid-cols-[16rem_repeat(7,2.5rem)]">
         <div />
         {weekDays.map((day) => {
           const { weekday, day: dayNum } = formatDayLabel(day);
@@ -89,7 +89,7 @@ export function HabitLogGrid({
           return (
             <div
               key={habit.id}
-              className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-4 px-4 py-3 sm:grid-cols-[12rem_repeat(7,2.5rem)]"
+              className="grid grid-cols-[1fr_repeat(7,2.5rem)] items-center gap-4 px-4 py-3 sm:grid-cols-[16rem_repeat(7,2.5rem)]"
             >
               <div className="flex items-center justify-between gap-2 pr-2">
                 <div className="min-w-0">

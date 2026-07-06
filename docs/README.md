@@ -9,11 +9,10 @@ Personal full-stack project built with React (Vite) + Typescript frontend and No
 - Dark Mode toggle button
 - Customizable KanBan style board
   - Drag-and-Droppable card entries
-  - ~~Search & Filter functionality~~ (does not seem as applicable now)
-- Customizable daily task tracker
-  - Visual streaks as an emotional incentive
-  - Multiple tracking capabilities
-- ??
+- Customizable habit tracker
+  - multiple habit tracking functionaility by the week
+  - daily mood tracking
+  - statistics dashboard
 
 ## Tech Stack
 
