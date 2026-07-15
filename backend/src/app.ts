@@ -36,7 +36,7 @@ app.use("/api/moodlogs", authMiddleware, moodLogsRouter);
 app.use("/api/habitstats", authMiddleware, habitStatsRouter);
 
 app.get("/", (req, res) => {
-  console.log("Received request for landing page");
+  console.log("Received request at /");
   res.send("Landing page");
 });
 

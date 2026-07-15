@@ -26,12 +26,12 @@ export function HabitCreateForm({
     reset,
     formState: { errors },
   } = useForm<HabitFormValues>({
-    defaultValues: { title: "", frequency: "daily" },
+    defaultValues: { title: "" },
   });
 
   const handleCreate = async (values: HabitFormValues) => {
     await onSubmit(values);
-    reset({ title: "", frequency: "daily" });
+    reset({ title: "" });
   };
 
   return (
@@ -50,18 +50,6 @@ export function HabitCreateForm({
         {errors.title && (
           <p className="text-sm text-destructive">{errors.title.message}</p>
         )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="habit-frequency">Frequency</Label>
-        <select
-          id="habit-frequency"
-          {...register("frequency", { required: true })}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-        </select>
       </div>
 
       <div className="flex gap-2">

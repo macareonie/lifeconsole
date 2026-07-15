@@ -40,14 +40,11 @@ export const calculateStreaks = (
   } else if (completedSet.has(yesterdayIso)) {
     anchorDate = addDays(today, -1);
   } else {
-    console.log("No current streak found. Longest streak:", longestStreak);
     return { currentStreak: 0, longestStreak };
   }
 
   let currentStreak = 0;
   let cursor = anchorDate;
-
-  console.log("Calculating current streak starting from:", cursor);
 
   while (completedSet.has(toIsoDate(cursor))) {
     currentStreak += 1;
