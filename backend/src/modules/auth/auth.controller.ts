@@ -25,7 +25,6 @@ export const register = async (
     if (result.session) {
       setAuthCookies(res, result.session as Session);
     }
-    console.log(result.message);
     return res.status(200).json(result);
   } catch (error) {
     return next(error);
@@ -44,7 +43,7 @@ export const login = async (
     if (result.session) {
       setAuthCookies(res, result.session as Session);
     }
-    console.log(result.message);
+
     return res.status(200).json(result);
   } catch (error) {
     return next(error);
@@ -96,7 +95,6 @@ export const logout = async (
   try {
     const result = await logoutUserService();
     clearAuthCookies(res);
-    console.log(result.message);
     return res.status(200).json(result);
   } catch (error) {
     return next(error);

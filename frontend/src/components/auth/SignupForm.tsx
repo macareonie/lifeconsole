@@ -77,7 +77,11 @@ const SignupForm = ({ onSubmit, loading, error }: SignupFormProps) => {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button type="submit" disabled={loading} className="w-full">
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full hover:cursor-pointer bg-primary-foreground text-primary hover:bg-primary-foreground/80"
+      >
         {loading ? "Signing up..." : "Sign up"}
       </Button>
     </form>

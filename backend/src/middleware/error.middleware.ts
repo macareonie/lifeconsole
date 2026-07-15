@@ -10,7 +10,6 @@ export const errorMiddleware = (
   next: NextFunction,
 ) => {
   if (err instanceof ServiceError) {
-    console.error(err.name, err.code, err.cause ?? err.message);
     res.status(err.statusCode).json({
       success: false,
       code: err.code,
@@ -18,7 +17,6 @@ export const errorMiddleware = (
     });
   }
 
-  console.error("Unexpected error:", err);
   res.status(500).json({
     success: false,
     code: "INTERNAL_ERROR",
